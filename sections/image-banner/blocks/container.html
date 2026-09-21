@@ -1,0 +1,162 @@
+<div
+  class="
+    image-banner__container
+    {{#if block.settings.show_background_color }}image-banner__container--show-bg{{/if}}
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_banner.blocks.container.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.image_banner.blocks.container.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.image_banner.blocks.container.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "switch",
+      "id": "show_background_color",
+      "label": "t:sections.image_banner.blocks.container.settings.show_background_color.label",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.image_banner.blocks.container.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "8px",
+        "column-gap": "8px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "align-items": "center",
+          "justify-content": "center",
+          "row-gap": "8px",
+          "column-gap": "8px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_banner.blocks.container.settings.spacing.label",
+      "default": {
+        "padding-block-start": "40px",
+        "padding-inline-end": "40px",
+        "padding-block-end": "40px",
+        "padding-inline-start": "40px",
+        "@media (--mobile)": {
+          "padding-block-start": "24px",
+          "padding-inline-end": "24px",
+          "padding-block-end": "24px",
+          "padding-inline-start": "24px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.image_banner.blocks.container.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "limit": 1
+    },
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "limit": 1
+    },
+    {
+      "type": "button-group",
+      "limit": 1
+    },
+    {
+      "type": "@blocks"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_banner.blocks.container.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "subheading",
+          "settings": {
+            "text": "Subtitle",
+            "typography": "body3"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Two Line\nTitle Slide",
+            "typography": "title3",
+            "spacing": {
+              "padding-block-start": "0",
+              "padding-block-end": "0"
+            }
+          }
+        },
+        {
+          "type": "description",
+          "settings": {
+            "content": "And optional subtext"
+          }
+        },
+        {
+          "type": "button-group",
+          "blocks": [
+            {
+              "type": "button",
+              "settings": {
+                "text": "Shop this",
+                "link": "",
+                "style": "primary"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "Shop all",
+                "link": "",
+                "style": "primary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

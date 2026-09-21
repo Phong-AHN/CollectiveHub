@@ -1,0 +1,78 @@
+{
+  "sections": {
+    "1759134284959a8602ca": {
+      "type": "apps",
+      "settings": {
+        "sync_margins_with_theme": true
+      },
+      "disabled": false,
+      "blocks": {
+        "1759134284960b368840": {
+          "type": "shopline://apps/订阅式电商/blocks/bundle/dc7225ea-8d91-400c-9a0c-7a168bb9ec98",
+          "settings": {
+            "addToCartButtonText": "Add To Cart",
+            "backgroundColor": "#FFFFFF",
+            "borderColor": "#D7DBE7",
+            "borderRadius": 0,
+            "borderSize": 1,
+            "buttonBackgroundColor": "#242833",
+            "buttonBorderColor": "#242833",
+            "buttonSelectorSelectedBackgroundColor": "#242833",
+            "buttonSelectorSelectedBorderColor": "#242833",
+            "buttonSelectorSelectedTextColor": "#FFFFFF",
+            "buttonSelectorUnselectedBackgroundColor": "#FFFFFF",
+            "buttonSelectorUnselectedBorderColor": "#242833",
+            "buttonSelectorUnselectedTextColor": "#242833",
+            "buttonTextColor": "#FFFFFF",
+            "cardBackgroundColor": "#FFFFFF",
+            "descriptionText": "",
+            "fontFamily": "Brygada 1918",
+            "isBoldDiscountFont": true,
+            "oneTimePurchaseText": "One-time Purchase",
+            "primaryTextColor": "#242833",
+            "productAddButtonText": "Add",
+            "productCardBorderRadius": 0,
+            "productCardColumn": 3,
+            "productPriceFontSize": 22,
+            "secondaryTextColor": "#474F5E",
+            "selectedProductBorderRadius": 0,
+            "selectedProductBorderSize": 1,
+            "subscribeAndSaveText": "Subscribe \u0026 Save",
+            "subscriptionBenefitText": "",
+            "titleFontSize": 70,
+            "titleText": "Build Your Box"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "1759134284960b368840"
+      ],
+      "custom_css": []
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-page",
+    "1759134284959a8602ca"
+  ]
+}

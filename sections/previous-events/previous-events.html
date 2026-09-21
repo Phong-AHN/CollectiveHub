@@ -1,0 +1,98 @@
+{{#component "stylesheet" src="vendor/swiper/swiper-bundle.min.css" | asset_url() /}}
+{{#component "stylesheet" src="./previous-events.css" | asset_url() /}}
+{{#component "script" src="vendor/swiper/swiper-bundle.min.js" | asset_url() /}}
+{{#component "script" src="./previous-events.js" | asset_url() /}}
+
+<div
+  class="previous-events {{ section.settings | class_list() }}"
+  style="
+    --previous-events-background: {{ section.settings.background_color.red }}, {{ section.settings.background_color.green }}, {{ section.settings.background_color.blue }};
+  "
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width previous-events__layout">
+    {{#blocks}}
+      {{#if forblock.type == "group" }}
+        {{#block class="previous-events__content" /}}
+      {{#else if forblock.type == "$slider" /}}
+        {{#block/}}
+      {{/if}}
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.previous_events.name",
+  "icon": "gallery",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.previous_events.settings.background_color.label",
+      "default": "#fdf7ef"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.previous_events.settings.layout.label",
+      "default": {}
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.previous_events.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.previous_events.settings.size.label",
+      "default": {}
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "limit": 1
+    },
+    {
+      "type": "$slider",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.previous_events.presets.presets_0.name",
+      "category": "t:sections.previous_events.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "group",
+          "blocks": [
+            {
+              "type": "heading"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "type": "$slider",
+          "blocks": [
+            {
+              "type": "$item"
+            },
+            {
+              "type": "$item"
+            },
+            {
+              "type": "$item"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

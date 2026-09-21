@@ -1,0 +1,84 @@
+
+
+{{#var tag = props.tag | default("div") /}}
+{{#var media = props.media /}}
+{{#var image_quality = props.image_quality /}}
+{{#var video_loop = props.video_loop /}}
+{{#var video_autoplay = props.video_autoplay /}}
+{{#var local_video_controls = !props.hidden_video_controls /}}
+{{#var external_video_controls = !props.youtube_simple_style /}}
+{{#var video_aspect_ratio = "var(--aspect-ratio)" /}}
+{{#var video_poster_image_fit_type = "var(--image-fill-type)" /}}
+{{#var show_zoom_icon = props.show_zoom_icon | default(false, allow_false = true) /}}
+{{#var enable_hover_zoom = props.enable_hover_zoom | default(false, allow_false = true) /}}
+{{#var image_lazy = props.image_lazy | default(false, allow_false = true) /}}
+
+<{{ tag }}
+  class="media-gallery__item {{ props.class }}"
+  data-media-id="{{ media.id }}"
+  data-media-type="{{ media.media_type }}"
+  data-variant-media="{{ media.variants && media.variants | size() > 0 }}"
+  data-aspect-ratio="{{ props.aspect_ratio | default(media.preview_image.aspect_ratio) }}"
+>
+  <div class="media-gallery__media">
+    {{#switch media.media_type }}
+      {{#case "video" /}}
+        {{#component
+          "media/video-media"
+          class="media-gallery__video"
+          local_media=media
+          loop=video_loop
+          muted=false
+          autoplay=video_autoplay
+          controls=local_video_controls
+          aspect_ratio=video_aspect_ratio
+          poster_image_lazy=image_lazy
+          poster_image_desktop_size="50vw"
+          poster_image_mobile_size="100vw"
+          poster_image_quality=image_quality
+          poster_image_fit_type=video_poster_image_fit_type
+        /}}
+      {{#case "external_video" /}}
+        {{#component
+          "media/video-media"
+          class="media-gallery__video"
+          external_media=media
+          loop=video_loop
+          muted=false
+          autoplay=video_autoplay
+          controls=external_video_controls
+          aspect_ratio=video_aspect_ratio
+          poster_image_lazy=image_lazy
+          poster_image_desktop_size="50vw"
+          poster_image_mobile_size="100vw"
+          poster_image_quality=image_quality
+          poster_image_fit_type=video_poster_image_fit_type
+        /}}
+      {{#else/}}
+        {{#capture image_content }}
+          {{#component
+            "image"
+            class="media-gallery__image"
+            data=media.preview_image
+            desktop_size="50vw"
+            mobile_size="100vw"
+            lazy=image_lazy
+            quality=image_quality
+          /}}
+        {{/capture}}
+        {{#if enable_hover_zoom }}
+          <theme-product-media-hover-preview data-src="{{ media.preview_image.src }}">
+            {{{ image_content }}}
+          </theme-product-media-hover-preview>
+        {{#else/}}
+          {{{ image_content }}}
+        {{/if}}
+    {{/switch}}
+
+    {{#if show_zoom_icon }}
+      <span class="media-gallery__preview-icon">
+        {{#component "icons/magnifiers" /}}
+      </span>
+    {{/if}}
+  </div>
+</{{ tag }}>

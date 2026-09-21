@@ -1,0 +1,244 @@
+{{#component "stylesheet" src="./featured-collection.css" | asset_url() /}}
+
+<div class="section-featured-collection color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#blocks}}
+        {{#if forblock.type == "heading" }}
+          {{#block/}}
+        {{#else if forblock.type == "$tabs" /}}
+          {{#block/}}
+        {{/if}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_collection.name",
+  "icon": "collection",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.featured_collection.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_collection.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "align-items": "center",
+        "row-gap": "40px",
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_collection.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-bottom": "60px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-bottom": "24px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "$tabs",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection.presets.presets_0.name",
+      "category": "t:sections.featured_collection.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "$tabs",
+          "blocks": [
+            {
+              "type": "$collection",
+              "blocks": [
+                {
+                  "type": "product-card/card",
+                  "blocks": [
+                    {
+                      "type": "product-image",
+                      "blocks": [
+                        {
+                          "type": "product-card/_layer",
+                          "blocks": [
+                            {
+                              "type": "product-card/_discount-tag"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "product-card/_layer",
+                          "settings": {
+                            "layout": {
+                              "justify-content": "flex-end"
+                            }
+                          },
+                          "blocks": [
+                            {
+                              "type": "product-card/_quick-add"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_info",
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description"
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$collection",
+              "blocks": [
+                {
+                  "type": "product-card/card",
+                  "blocks": [
+                    {
+                      "type": "product-image",
+                      "blocks": [
+                        {
+                          "type": "product-card/_layer",
+                          "blocks": [
+                            {
+                              "type": "product-card/_discount-tag"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "product-card/_layer",
+                          "settings": {
+                            "layout": {
+                              "justify-content": "flex-end"
+                            }
+                          },
+                          "blocks": [
+                            {
+                              "type": "product-card/_quick-add"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_info",
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description"
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$collection",
+              "blocks": [
+                {
+                  "type": "product-card/card",
+                  "blocks": [
+                    {
+                      "type": "product-image",
+                      "blocks": [
+                        {
+                          "type": "product-card/_layer",
+                          "blocks": [
+                            {
+                              "type": "product-card/_discount-tag"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "product-card/_layer",
+                          "settings": {
+                            "layout": {
+                              "justify-content": "flex-end"
+                            }
+                          },
+                          "blocks": [
+                            {
+                              "type": "product-card/_quick-add"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_info",
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description"
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

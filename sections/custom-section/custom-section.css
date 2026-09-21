@@ -1,0 +1,13 @@
+.custom-section {
+  background-color: rgb(var(--color-background));
+}
+
+.custom-section .block-heading,
+.custom-section .subheading {
+  width: 100%;
+}
+
+.custom-section .subheading,
+.custom-section .rte {
+  word-break: break-word;
+}

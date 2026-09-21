@@ -1,0 +1,49 @@
+{{#component "stylesheet" src="./main-cart.css" | asset_url() /}}
+
+{{#component "script" src="./main-cart.js" | asset_url() /}}
+
+<theme-main-cart data-section-id="{{ section.id }}">
+  <div
+    class="
+      main-cart__container
+      color-{{ settings.cart_color_scheme.id }}
+      {{ section.settings.spacing | class_list() }}
+    "
+  >
+    <div class="page-width">
+      {{#content "blocks" /}}
+    </div>
+  </div>
+</theme-main-cart>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.name",
+  "icon": "shoppingCart",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.settings.spacing.label",
+      "default": {}
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "$cart-header",
+      "limit": 1
+    },
+    {
+      "type": "$cart-items",
+      "limit": 1
+    },
+    {
+      "type": "$cart-footer",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}

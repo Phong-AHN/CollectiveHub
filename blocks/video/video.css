@@ -1,0 +1,12 @@
+.block-video .theme-video-media__poster {
+  background-color: rgb(var(--color-background));
+}
+.block-video .theme-video-media--empty {
+  width: 100%;
+  height: unset;
+}
+@media (max-width: 959px) {
+  .block-video .theme-video-media--empty {
+    height: unset;
+  }
+}

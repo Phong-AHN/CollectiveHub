@@ -1,0 +1,750 @@
+{{#component "stylesheet" src="./ingredient-display.css" | asset_url() /}}
+
+<div
+  class="
+    section-ingredient-display
+    {{ section.settings | class_list() }}
+    color-{{ section.settings.color_scheme.id }}
+  "
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.ingredient_display.name",
+  "icon": "textColumnsWithImages",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.ingredient_display.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.ingredient_display.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "0px",
+        "@media (--mobile)": {
+          "row-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.ingredient_display.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-start": "80px",
+        "padding-block-end": "60px",
+        "padding-inline-end": "80px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-start": "20px",
+          "padding-block-end": "40px",
+          "padding-inline-end": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.ingredient_display.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$image-text-area",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.ingredient_display.presets.presets_0.name",
+      "category": "t:sections.ingredient_display.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "INGREDIENTS"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "A water-attracting synthetic compound. It helps boost hydration levels without disrupting the skin barrier.",
+            "spacing": {
+              "padding-top": "0px",
+              "@media (--mobile)": {
+                "padding-top": "0px"
+              }
+            }
+          }
+        },
+        {
+          "type": "$image-text-area",
+          "blocks": [
+            {
+              "type": "$image-text-card-group",
+              "blocks": [
+                {
+                  "type": "$image-text-card",
+                  "blocks": [
+                    {
+                      "type": "image/image"
+                    },
+                    {
+                      "type": "$image-text-card-text-group",
+                      "blocks": [
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "popup-with-link",
+                          "settings": {
+                            "button_style": "link"
+                          },
+                          "blocks": [
+                            {
+                              "type": "group",
+                              "settings": {
+                                "layout": {
+                                  "flex-direction": "row",
+                                  "flex-wrap": "nowrap",
+                                  "align-items": "stretch",
+                                  "justify-content": "flex-start",
+                                  "row-gap": "0px",
+                                  "column-gap": "20px",
+                                  "@media (--mobile)": {
+                                    "flex-direction": "column",
+                                    "row-gap": "0px",
+                                    "column-gap": "0px"
+                                  }
+                                },
+                                "spacing": {
+                                  "padding-top": "0px",
+                                  "padding-right": "0px",
+                                  "padding-bottom": "0px",
+                                  "padding-left": "0px",
+                                  "@media (--mobile)": {
+                                    "padding-top": "0px",
+                                    "padding-right": "0px",
+                                    "padding-bottom": "0px",
+                                    "padding-left": "0px"
+                                  }
+                                },
+                                "size": {
+                                  "width": "733px"
+                                }
+                              },
+                              "blocks": [
+                                {
+                                  "type": "image/image",
+                                  "settings": {
+                                    "size": {
+                                      "width": "43%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "136px"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "group",
+                                  "settings": {
+                                    "spacing": {
+                                      "padding-top": "40px",
+                                      "padding-right": "40px",
+                                      "padding-bottom": "40px",
+                                      "padding-left": "0px",
+                                      "@media (--mobile)": {
+                                        "padding-top": "20px",
+                                        "padding-right": "20px",
+                                        "padding-bottom": "20px",
+                                        "padding-left": "20px"
+                                      }
+                                    },
+                                    "size": {
+                                      "width": "57%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "75%"
+                                      }
+                                    }
+                                  },
+                                  "blocks": [
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$image-text-card",
+                  "blocks": [
+                    {
+                      "type": "image/image"
+                    },
+                    {
+                      "type": "$image-text-card-text-group",
+                      "blocks": [
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "popup-with-link",
+                          "settings": {
+                            "button_style": "link"
+                          },
+                          "blocks": [
+                            {
+                              "type": "group",
+                              "settings": {
+                                "layout": {
+                                  "flex-direction": "row",
+                                  "flex-wrap": "nowrap",
+                                  "align-items": "stretch",
+                                  "justify-content": "flex-start",
+                                  "row-gap": "0px",
+                                  "column-gap": "20px",
+                                  "@media (--mobile)": {
+                                    "flex-direction": "column",
+                                    "row-gap": "0px",
+                                    "column-gap": "0px"
+                                  }
+                                },
+                                "spacing": {
+                                  "padding-top": "0px",
+                                  "padding-right": "0px",
+                                  "padding-bottom": "0px",
+                                  "padding-left": "0px",
+                                  "@media (--mobile)": {
+                                    "padding-top": "0px",
+                                    "padding-right": "0px",
+                                    "padding-bottom": "0px",
+                                    "padding-left": "0px"
+                                  }
+                                },
+                                "size": {
+                                  "width": "733px"
+                                }
+                              },
+                              "blocks": [
+                                {
+                                  "type": "image/image",
+                                  "settings": {
+                                    "size": {
+                                      "width": "43%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "136px"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "group",
+                                  "settings": {
+                                    "spacing": {
+                                      "padding-top": "40px",
+                                      "padding-right": "40px",
+                                      "padding-bottom": "40px",
+                                      "padding-left": "0px",
+                                      "@media (--mobile)": {
+                                        "padding-top": "20px",
+                                        "padding-right": "20px",
+                                        "padding-bottom": "20px",
+                                        "padding-left": "20px"
+                                      }
+                                    },
+                                    "size": {
+                                      "width": "57%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "75%"
+                                      }
+                                    }
+                                  },
+                                  "blocks": [
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "image/image"
+            },
+            {
+              "type": "$image-text-card-group",
+              "blocks": [
+                {
+                  "type": "$image-text-card",
+                  "blocks": [
+                    {
+                      "type": "image/image"
+                    },
+                    {
+                      "type": "$image-text-card-text-group",
+                      "blocks": [
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "popup-with-link",
+                          "settings": {
+                            "button_style": "link"
+                          },
+                          "blocks": [
+                            {
+                              "type": "group",
+                              "settings": {
+                                "layout": {
+                                  "flex-direction": "row",
+                                  "flex-wrap": "nowrap",
+                                  "align-items": "stretch",
+                                  "justify-content": "flex-start",
+                                  "row-gap": "0px",
+                                  "column-gap": "20px",
+                                  "@media (--mobile)": {
+                                    "flex-direction": "column",
+                                    "row-gap": "0px",
+                                    "column-gap": "0px"
+                                  }
+                                },
+                                "spacing": {
+                                  "padding-top": "0px",
+                                  "padding-right": "0px",
+                                  "padding-bottom": "0px",
+                                  "padding-left": "0px",
+                                  "@media (--mobile)": {
+                                    "padding-top": "0px",
+                                    "padding-right": "0px",
+                                    "padding-bottom": "0px",
+                                    "padding-left": "0px"
+                                  }
+                                },
+                                "size": {
+                                  "width": "733px"
+                                }
+                              },
+                              "blocks": [
+                                {
+                                  "type": "image/image",
+                                  "settings": {
+                                    "size": {
+                                      "width": "43%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "136px"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "group",
+                                  "settings": {
+                                    "spacing": {
+                                      "padding-top": "40px",
+                                      "padding-right": "40px",
+                                      "padding-bottom": "40px",
+                                      "padding-left": "0px",
+                                      "@media (--mobile)": {
+                                        "padding-top": "20px",
+                                        "padding-right": "20px",
+                                        "padding-bottom": "20px",
+                                        "padding-left": "20px"
+                                      }
+                                    },
+                                    "size": {
+                                      "width": "57%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "75%"
+                                      }
+                                    }
+                                  },
+                                  "blocks": [
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$image-text-card",
+                  "blocks": [
+                    {
+                      "type": "image/image"
+                    },
+                    {
+                      "type": "$image-text-card-text-group",
+                      "blocks": [
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "settings": {
+                            "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                            "text_align": "left",
+                            "spacing": {
+                              "padding-top": "0px",
+                              "padding-bottom": "0px",
+                              "@media (--mobile)": {
+                                "padding-top": "0px",
+                                "padding-bottom": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "popup-with-link",
+                          "settings": {
+                            "button_style": "link"
+                          },
+                          "blocks": [
+                            {
+                              "type": "group",
+                              "settings": {
+                                "layout": {
+                                  "flex-direction": "row",
+                                  "flex-wrap": "nowrap",
+                                  "align-items": "stretch",
+                                  "justify-content": "flex-start",
+                                  "row-gap": "0px",
+                                  "column-gap": "20px",
+                                  "@media (--mobile)": {
+                                    "flex-direction": "column",
+                                    "row-gap": "0px",
+                                    "column-gap": "0px"
+                                  }
+                                },
+                                "spacing": {
+                                  "padding-top": "0px",
+                                  "padding-right": "0px",
+                                  "padding-bottom": "0px",
+                                  "padding-left": "0px",
+                                  "@media (--mobile)": {
+                                    "padding-top": "0px",
+                                    "padding-right": "0px",
+                                    "padding-bottom": "0px",
+                                    "padding-left": "0px"
+                                  }
+                                },
+                                "size": {
+                                  "width": "733px"
+                                }
+                              },
+                              "blocks": [
+                                {
+                                  "type": "image/image",
+                                  "settings": {
+                                    "size": {
+                                      "width": "43%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "136px"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "group",
+                                  "settings": {
+                                    "spacing": {
+                                      "padding-top": "40px",
+                                      "padding-right": "40px",
+                                      "padding-bottom": "40px",
+                                      "padding-left": "0px",
+                                      "@media (--mobile)": {
+                                        "padding-top": "20px",
+                                        "padding-right": "20px",
+                                        "padding-bottom": "20px",
+                                        "padding-left": "20px"
+                                      }
+                                    },
+                                    "size": {
+                                      "width": "57%",
+                                      "height": "auto",
+                                      "@media (--mobile)": {
+                                        "width": "auto",
+                                        "height": "75%"
+                                      }
+                                    }
+                                  },
+                                  "blocks": [
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "<strong style='font-size: 22px'>Jojoba Oil</strong>",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "text",
+                                      "settings": {
+                                        "text": "A natural oil extracted from the seeds of the jojoba plant, rich in vitamins and fatty .",
+                                        "text_align": "left",
+                                        "spacing": {
+                                          "padding-top": "0px",
+                                          "padding-bottom": "0px",
+                                          "@media (--mobile)": {
+                                            "padding-top": "0px",
+                                            "padding-bottom": "0px"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

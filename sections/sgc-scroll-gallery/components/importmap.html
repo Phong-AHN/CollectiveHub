@@ -1,0 +1,13 @@
+{{#component "./script" src="https://cdn.myshopline.com/sl/slfs/sl-new/175816246864284/es-module-shims.v2.6.2.js" /}}
+
+{{!-- prettier-ignore --}}
+<script type="importmap">{
+  "imports": {
+    "sgc-scroll-gallery/@splidejs/splide": "https://cdn.myshopline.com/sl/slfs/sl-new/175816244521954/splide.v4.1.4.esm.js",
+    "sgc-scroll-gallery/@public/element": "{{ `../public/element.js` | asset_url() }}",
+    "sgc-scroll-gallery/@public/utils": "{{ `../public/utils.js` | asset_url() }}",
+    "sgc-scroll-gallery/@public/theme-editor": "{{ `../public/theme-editor.js` | asset_url() }}",
+    "sgc-scroll-gallery/@components/media/video-media": "{{ `./media/video-media.js` | asset_url() }}"
+  }
+}
+</script>

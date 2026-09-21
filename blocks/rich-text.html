@@ -1,0 +1,146 @@
+<div
+  class="
+    hidden-mobile rte {{ block.settings.typography }} text-{{ block.settings.text_align }} {{
+      block.settings |
+        class_list()
+    }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{{ block.settings.content }}}
+</div>
+<div
+  class="
+    hidden-desktop rte {{ block.settings.typography }} text-{{ block.settings.text_align }} {{
+      block.settings |
+        class_list()
+    }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.content_mobile }}
+    {{{ block.settings.content_mobile }}}
+  {{#else/}}
+    {{{ block.settings.content }}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.rich_text.name",
+  "icon": "generalSection",
+  "tag": "",
+  "settings": [
+    {
+      "type": "richtext",
+      "label": "t:blocks.rich_text.settings.content.label",
+      "id": "content",
+      "default": "A sentence or two introducing your brand, what you sell, and what makes your brand compelling to customers."
+    },
+    {
+      "type": "richtext",
+      "label": "t:blocks.rich_text.settings.content_mobile.label",
+      "id": "content_mobile"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.rich_text.settings.typography.label",
+      "id": "typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.rich_text.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.rich_text.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.rich_text.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.rich_text.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.rich_text.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.rich_text.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.rich_text.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.rich_text.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.rich_text.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.rich_text.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.rich_text.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.rich_text.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.rich_text.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.rich_text.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.rich_text.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "label": "t:blocks.rich_text.settings.text_align.label",
+      "id": "text_align",
+      "default": "center"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.rich_text.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.rich_text.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.rich_text.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

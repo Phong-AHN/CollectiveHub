@@ -1,0 +1,221 @@
+
+
+{{#capture aspect_ratio }}
+  {{#if block.settings.image_aspect_ratio == "circle" }}
+    1/1
+  {{#else/}}
+    {{ block.settings.image_aspect_ratio }}
+  {{/if}}
+{{/capture}}
+
+<theme-text-columns-with-image-slider>
+  <div
+    class="
+      text-columns-with-image__card-group-scroll
+      {{#if block.settings.enable_mobile_scroll }}mobile-scroll{{/if}}
+    "
+    data-role="slider"
+    {{{ block.shopline_attributes }}}
+  >
+    <div
+      class="
+        text-columns-with-image__card-group text-columns-with-image--full-with
+        {{#if block.settings.content_alignment }}
+          text-columns-with-image--content-align-{{ block.settings.content_alignment }}
+        {{/if}}
+      "
+      style="
+        --desktop-columns:{{ block.settings.desktop_columns }};
+        --card-group-image-aspect-ratio:{{ aspect_ratio }};
+        --card-group-image-border-radius:{{#if block.settings.image_aspect_ratio == "circle" }}50%{{/if}};
+        --card-group-content-align:{{ block.settings.content_alignment }};
+        --card-group-image-width:{{ block.settings.image_width }};
+      "
+    >
+      {{#blocks}}
+        {{#block/}}
+      {{/blocks}}
+    </div>
+  </div>
+
+  {{#if block.settings.enable_mobile_scroll }}
+    {{#if block.blocks_size > 0 }}
+      <div class="text-columns-with-image__controls body4 hidden-desktop">
+        <a class="text-columns-with-image__controls-prev" data-role="prev" href="javascript:;">
+          {{#component "icons/arrow" /}}
+        </a>
+        <span class="text-columns-with-image__controls-index" data-role="indicator">1/{{ block.blocks_size }}</span>
+        <a class="text-columns-with-image__controls-next" data-role="next" href="javascript:;">
+          {{#component "icons/arrow" /}}
+        </a>
+      </div>
+    {{/if}}
+  {{/if}}
+</theme-text-columns-with-image-slider>
+
+{{#schema}}
+{
+  "name": "t:sections.text_columns_with_image.blocks.card_group.name",
+  "icon": "textColumnsWithImages",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_width.label",
+      "default": "50%",
+      "options": [
+        {
+          "value": "100%",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_width.options_0.label"
+        },
+        {
+          "value": "50%",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_width.options_1.label"
+        },
+        {
+          "value": "33.33%",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_width.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_aspect_ratio.label",
+      "default": "unset",
+      "options": [
+        {
+          "value": "unset",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_aspect_ratio.options_0.label"
+        },
+        {
+          "value": "1/1",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_aspect_ratio.options_1.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "circle",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.image_aspect_ratio.options_3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "t:sections.text_columns_with_image.blocks.card_group.settings.content_alignment.label",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.content_alignment.options_0.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.content_alignment.options_1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.content_alignment.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "t:sections.text_columns_with_image.blocks.card_group.settings.desktop_columns.label",
+      "default": 3,
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.desktop_columns.options_0.label"
+        },
+        {
+          "value": 2,
+          "label": "2"
+        },
+        {
+          "value": 3,
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.desktop_columns.options_2.label"
+        },
+        {
+          "value": 4,
+          "label": "t:sections.text_columns_with_image.blocks.card_group.settings.desktop_columns.options_3.label"
+        },
+        {
+          "value": 5,
+          "label": "5"
+        },
+        {
+          "value": 6,
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "enable_mobile_scroll",
+      "label": "t:sections.text_columns_with_image.blocks.card_group.settings.enable_mobile_scroll.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$card",
+      "limit": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.text_columns_with_image.blocks.card_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$card",
+          "blocks": [
+            {
+              "type": "image/image"
+            },
+            {
+              "type": "$title"
+            },
+            {
+              "type": "$text"
+            }
+          ]
+        },
+        {
+          "type": "$card",
+          "blocks": [
+            {
+              "type": "image/image"
+            },
+            {
+              "type": "$title"
+            },
+            {
+              "type": "$text"
+            }
+          ]
+        },
+        {
+          "type": "$card",
+          "blocks": [
+            {
+              "type": "image/image"
+            },
+            {
+              "type": "$title"
+            },
+            {
+              "type": "$text"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

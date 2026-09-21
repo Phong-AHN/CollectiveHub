@@ -1,0 +1,200 @@
+{{#var button_style = block.settings.button_style | default("link") /}}
+{{#var style_secondary = false /}}
+{{#var style_link = false /}}
+{{#switch button_style }}
+  {{#case "secondary" /}}
+    {{#set style_secondary = true /}}
+    {{#set style_link = false /}}
+  {{#case "link" /}}
+    {{#set style_secondary = false /}}
+    {{#set style_link = true /}}
+{{/switch}}
+
+<div
+  class="text-columns-with-image__card {{ block.settings | class_list() }}"
+  {{{ block.shopline_attributes }}}
+  data-role="slide"
+>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+
+  {{#capture html }}
+    {{#if block.settings.button_text }}
+      {{ block.settings.button_text }}
+      {{#if style_link }}
+        <span class="text-columns-with-image__card-link-icon">{{#component "icons/caret-right" /}}</span>
+      {{/if}}
+    {{/if}}
+  {{/capture}}
+
+  {{#if block.settings.button_text }}
+    <div class="text-columns-with-image__card-link">
+      {{#component
+        "button"
+        type="link"
+        link_url=block.settings.link
+        style_secondary=style_secondary
+        style_link=style_link
+        html=html
+        class_name=block.settings.button_typography
+      /}}
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_columns_with_image.blocks.card.name",
+  "icon": "cardComponent",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:sections.text_columns_with_image.blocks.card.settings.button_text.label",
+      "default": "Optional button"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:sections.text_columns_with_image.blocks.card.settings.button_style.label",
+      "default": "link",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_typography",
+      "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.label",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.text_columns_with_image.blocks.card.settings.button_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.text_columns_with_image.blocks.card.settings.link.label"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.text_columns_with_image.blocks.card.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "flex-start",
+        "row-gap": "16px",
+        "column-gap": "16px",
+        "@media (--mobile)": {
+          "row-gap": "8px",
+          "column-gap": "8px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image/image",
+      "limit": 1
+    },
+    {
+      "type": "$title",
+      "limit": 1
+    },
+    {
+      "type": "$text",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.text_columns_with_image.blocks.card.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "image/image"
+        },
+        {
+          "type": "$title"
+        },
+        {
+          "type": "$text"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,179 @@
+{{#var link = props.link /}}
+{{#var level_2_menu_text_size = props.level_2_menu_text_size /}}
+{{#var level_2_menu_font_bold = props.level_2_menu_font_bold /}}
+{{#var level_3_menu_text_size = props.level_3_menu_text_size /}}
+{{#var enable_highlighted_menu_items = props.enable_highlighted_menu_items /}}
+{{#var highlighted_menu_items_pattern = props.highlighted_menu_items_pattern /}}
+{{#var replace_nav_image_items = props.replace_nav_image_items /}}
+{{#var keywords = highlighted_menu_items_pattern | split(",") /}}
+
+{{#var total = link.links | size() /}}
+
+<li class="header-nav__menu-item header-nav__underline-control">
+  <a
+    class="header-nav__underline"
+    {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+  >
+    <span class="header-nav__ellipsis">
+      {{#if enable_highlighted_menu_items && keywords | contains(link.title) }}
+        <mark class="lighthighted">{{ link.title }}</mark>
+      {{#else/}}
+        {{ link.title }}
+      {{/if}}
+    </span>
+  </a>
+
+  
+  {{#var divider = "--" | append(section.id) | append("-") | append(link.title) | append("--") /}}
+  {{#var has_nav_image_items = false /}}
+  {{#var nav_image_html = "" /}}
+
+  
+  {{#if replace_nav_image_items | contains(divider) }}
+    {{#set has_nav_image_items = true /}}
+    {{#var html = replace_nav_image_items | split(divider) /}}
+    {{#set nav_image_html = html[1] | trim() /}}
+  {{/if}}
+
+  
+  {{#if total > 0 }}
+    
+    {{#if link.levels == 1 }}
+      
+      {{#if has_nav_image_items == false }}
+        <theme-header-nav-dropdown class="header-nav-dropdown-menu-scope">
+          <div class="header-nav-dropdown-menu" aria-hidden="true">
+            <ul class="header-nav-dropdown-menu__menu">
+              {{#for link in link.links }}
+                <li>
+                  <a
+                    class="header-nav-dropdown-menu__hero header-nav__underline-control"
+                    {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+                  >
+                    <div class="header-nav__underline">
+                      <span
+                        class="
+                          header-nav__ellipsis
+                          {{#if level_2_menu_font_bold }}body-font-bold{{/if}}
+                          {{ level_2_menu_text_size }}
+                        "
+                      >
+                        {{ link.title }}
+                      </span>
+                    </div>
+                  </a>
+                </li>
+              {{/for}}
+            </ul>
+          </div>
+        </theme-header-nav-dropdown>
+      {{#else/}}
+        <div class="header-nav-dropdown-panel" aria-hidden="true">
+          <div class="header-nav-dropdown-panel__menu">
+            
+            <ul class="header-nav-dropdown-panel__submenu">
+              {{#for link in link.links }}
+                <li>
+                  <a
+                    class="header-nav-dropdown-panel__link"
+                    {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+                  >
+                    <div class="header-nav__underline">
+                      <span
+                        class="
+                          header-nav__ellipsis
+                          {{#if level_2_menu_font_bold }}body-font-bold{{/if}}
+                          {{ level_2_menu_text_size }}
+                        "
+                      >
+                        {{ link.title }}
+                      </span>
+                    </div>
+                  </a>
+                </li>
+              {{/for}}
+            </ul>
+
+            
+            {{{ nav_image_html }}}
+          </div>
+        </div>
+      {{/if}}
+    {{#else/}}
+      
+      <div class="header-nav-dropdown-panel" aria-hidden="true">
+        
+        <div class="header-nav-dropdown-panel__menu">
+          <ul class="{{#if has_nav_image_items }}has-image-items{{/if}}">
+            
+            {{#var total = link.links | size() /}}
+            {{#if total == 0 }}
+              <li>
+                <div class="header-nav__underline-control">
+                  <a
+                    class="
+                      header-nav-dropdown-panel__link
+                      header-nav__underline
+                      {{#if level_2_menu_font_bold }}body-font-bold{{/if}}
+                      {{ level_2_menu_text_size }}
+                    "
+                    {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+                  >
+                    {{ link.title }}
+                  </a>
+                </div>
+              </li>
+            {{#else/}}
+              
+              {{#for link in link.links }}
+                <li>
+                  <div class="header-nav__underline-scope">
+                    <a
+                      class="header-nav-dropdown-panel__hero header-nav__underline-control"
+                      {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+                    >
+                      <div class="header-nav__underline">
+                        <span
+                          class="
+                            header-nav__ellipsis
+                            {{#if level_2_menu_font_bold }}body-font-bold{{/if}}
+                            {{ level_2_menu_text_size }}
+                          "
+                        >
+                          {{ link.title }}
+                        </span>
+                      </div>
+                    </a>
+
+                    
+                    <ul class="header-nav-dropdown-panel__submenu">
+                      {{#for link in link.links }}
+                        <li>
+                          <a
+                            class="header-nav-dropdown-panel__link"
+                            {{#if link.url }}href="{{ link.url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+                          >
+                            <div class="header-nav__underline">
+                              <span class="header-nav__ellipsis {{ level_3_menu_text_size }}">
+                                {{ link.title }}
+                              </span>
+                            </div>
+                          </a>
+                        </li>
+                      {{/for}}
+                    </ul>
+                  </div>
+                </li>
+              {{/for}}
+            {{/if}}
+          </ul>
+
+          {{#if has_nav_image_items }}
+            
+            {{{ nav_image_html }}}
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+  {{/if}}
+</li>

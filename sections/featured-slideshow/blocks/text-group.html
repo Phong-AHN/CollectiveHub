@@ -1,0 +1,154 @@
+<div
+  class="
+    featured-slideshow__text-group {{ block.settings.size | class_list() }} color-{{ block.settings.color_scheme.id }}
+  "
+>
+  <div
+    class="
+      {{ block.settings.layout | class_list() }} {{ block.settings.spacing | class_list() }} featured-slideshow__text
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{#content "blocks" /}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_slideshow.blocks.text_group.name",
+  "icon": "general",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.featured_slideshow.blocks.text_group.settings.color_scheme.label",
+      "default": "scheme-3"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_slideshow.blocks.text_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "8px",
+        "column-gap": "8px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_slideshow.blocks.text_group.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-right": "0px",
+        "padding-bottom": "40px",
+        "padding-left": "0",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-bottom": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_slideshow.blocks.text_group.settings.size.label",
+      "default": {
+        "width": "30%",
+        "height": "100%",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "30%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$line",
+      "limit": 1
+    },
+    {
+      "type": "button",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_slideshow.blocks.text_group.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "Subtitle",
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            },
+            "size": {
+              "width": "auto"
+            }
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Two Line\nTitle Slide",
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "And optional subtext",
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            },
+            "size": {
+              "width": "auto"
+            }
+          }
+        },
+        {
+          "type": "$line"
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "Shop Now",
+            "style": "link"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

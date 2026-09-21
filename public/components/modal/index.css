@@ -1,0 +1,168 @@
+@layer component {
+  theme-modal:not([data-popup-container]) > details,
+  [data-mount-modal],
+  [data-theme-modal]:not([data-popup-container]) > details {
+    --z-index: var(--z-index-modal);
+  }
+  theme-modal:not([data-popup-container]) > details[open]::before,
+  [data-mount-modal][open]::before,
+  [data-theme-modal]:not([data-popup-container]) > details[open]::before {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index);
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    content: "";
+    background-color: rgb(var(--color-mask), 0.4);
+  }
+
+  theme-modal:not([data-popup-container])
+    > details:not([open])
+    > summary
+    + :not(details, summary),
+  [data-mount-modal]:not([open]) > summary + :not(details, summary),
+  [data-theme-modal]:not([data-popup-container])
+    > details:not([open])
+    > summary
+    + :not(details, summary) {
+    display: none !important;
+  }
+
+  theme-modal:not([data-popup-container])
+    > details
+    > summary
+    + :not(details, summary),
+  [data-mount-modal] > summary + :not(details, summary),
+  [data-theme-modal]:not([data-popup-container])
+    > details
+    > summary
+    + :not(details, summary) {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-index) + 1);
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    background-color: rgba(
+      var(--color-background, var(--color-page-background, 255, 255, 255))
+    );
+    animation-duration: 0.2s;
+    animation-timing-function: ease;
+  }
+
+  @media (max-width: 959px) {
+    theme-modal:not([data-popup-container])
+      > details
+      > summary
+      + :not(details, summary),
+    [data-mount-modal] > summary + :not(details, summary),
+    [data-theme-modal]:not([data-popup-container])
+      > details
+      > summary
+      + :not(details, summary) {
+      --modal-animation-name: animation-slide-in-bottom;
+
+      inset-block: auto 0;
+      width: 100vw;
+    }
+  }
+  :not([data-popup-container])[data-placement="left"]
+    > summary
+    + :not(details, summary),
+  :not([data-popup-container])[data-placement="left"]
+    > details
+    > summary
+    + :not(details, summary) {
+    --modal-animation-name: animation-slide-in-left;
+
+    inset-inline: 0 auto;
+    width: auto;
+    height: 100%;
+  }
+
+  :not([data-popup-container])[data-placement="right"],
+  :not([data-popup-container])[data-placement="right"] > details {
+    color: red;
+  }
+
+  :not([data-popup-container])[data-placement="right"]
+    > summary
+    + :not(details, summary),
+  :not([data-popup-container])[data-placement="right"]
+    > details
+    > summary
+    + :not(details, summary) {
+    --modal-animation-name: animation-slide-in-right;
+
+    inset-inline: auto 0;
+    width: auto;
+    height: 100%;
+  }
+  :not([data-popup-container])[data-placement="top"]
+    > summary
+    + :not(details, summary),
+  :not([data-popup-container])[data-placement="top"]
+    > details
+    > summary
+    + :not(details, summary) {
+    --modal-animation-name: animation-slide-in-top;
+
+    inset-block: 0 auto;
+    width: 100vw;
+  }
+  :not([data-popup-container])[data-placement="bottom"]
+    > summary
+    + :not(details, summary),
+  :not([data-popup-container])[data-placement="bottom"]
+    > details
+    > summary
+    + :not(details, summary) {
+    --modal-animation-name: animation-slide-in-bottom;
+
+    inset-block: auto 0;
+    width: 100vw;
+  }
+  .modal__content {
+    background-color: rgba(var(--color-background, --color-page-background));
+    border-color: rgba(var(--color-text), var(--modal-border-opacity));
+    border-style: solid;
+    border-width: var(--modal-border-thickness);
+    border-radius: var(--modal-border-radius);
+    box-shadow: var(--modal-shadow-offset-x) var(--modal-shadow-offset-y)
+      var(--modal-shadow-blur)
+      rgba(var(--color-shadow), var(--modal-shadow-opacity));
+  }
+
+  .modal__close-control {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: rgb(var(--color-light-text));
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid currentcolor;
+    border-radius: 50%;
+    transition: opacity 0.2s;
+  }
+
+  .modal__close-control:hover {
+    opacity: 0.6;
+  }
+
+  @media (min-width: 960px) {
+    .modal__close-control {
+      inset-block-start: 20px;
+      inset-inline-end: 20px;
+      width: 38px;
+      height: 38px;
+    }
+  }
+}

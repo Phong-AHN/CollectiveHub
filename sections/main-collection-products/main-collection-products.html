@@ -1,0 +1,307 @@
+{{#component "stylesheet" src="./main-collection-products.css" | asset_url() /}}
+
+{{#if section.settings.enable_infinite_scroll }}
+  {{#component "stylesheet" src="./components/infinite-scroll/index.css" | asset_url() /}}
+  {{#component "script" src="./components/infinite-scroll/index.js" | asset_url() /}}
+{{/if}}
+
+{{#component "script" src="./main-collection-products.js" | asset_url() /}}
+
+{{#capture main_collection }}
+  <theme-main-collection-products class="main-collection-container color-{{ section.settings.color_scheme.id }}">
+    <div
+      class="
+        page-width
+        main-collection
+        facets-layout-{{ section.settings.filter_layout }}
+        {{#if section.settings.enable_filtering }}enable-filtering{{/if}}
+      "
+      after-header-sticky
+    >
+      {{#component
+        "facets/form"
+        section=section
+        results=collection
+        enable_filtering=section.settings.enable_filtering
+        enable_sorting=section.settings.enable_sorting
+        filter_layout=section.settings.filter_layout
+        enable_position_sticky=section.settings.enable_position_sticky
+        enable_multi_column_switcher=section.settings.enable_multi_column_switcher
+        mobile_columns=section.settings.mobile_columns
+        mobile_columns_alternative=section.settings.mobile_columns_alternative
+      /}}
+      <div class="main-collection__products" id="ResultsContainer">
+        {{#var products_paginate = collection | get_product_pagination(section.settings.page_size) /}}
+        {{#var products = products_paginate.list /}}
+
+        {{#if (products | size()) == 0 }}
+          <div class="body3 main-collection__no-products-tips">{{ "products.product_list.no_product" | t() }}</div>
+        {{#else/}}
+          <ul
+            class="grid main-collection__list"
+            style="
+              --mobile-columns: {{ section.settings.mobile_columns }};
+              --desktop-columns: {{ section.settings.desktop_columns }};
+            "
+          >
+            {{#for product in products }}
+              {{#var lazy = forloop.index > 2 /}}
+              {{#blocks}}
+                {{#if
+                  forblock.type == "$promotion-card" &&
+                  forloop.index | to_float() == forblock.settings.list_position
+                }}
+                  <li class="promotion-card-item {{ forblock.settings.card_size }}">
+                    {{#block lazy=lazy /}}
+                  </li>
+                {{/if}}
+                {{#if forblock.type == "product-card/card" }}
+                  <li>
+                    {{#block
+                      product=product
+                      lazy=lazy
+                      mobile_columns=section.settings.mobile_columns
+                      desktop_columns=section.settings.desktop_columns
+                    /}}
+                  </li>
+                {{/if}}
+              {{/blocks}}
+            {{/for}}
+          </ul>
+
+          {{#if section.settings.enable_infinite_scroll }}
+            {{#if section.settings.enable_infinite_scroll_button }}
+              {{#var
+                scroll_button_last_current_offset = products_paginate.current_offset | plus(products_paginate.page_size)
+              /}}
+              {{#if products_paginate.current_page == products_paginate.pages }}
+                {{#set scroll_button_last_current_offset = products_paginate.items /}}
+              {{/if}}
+              <div class="infinite-scroll-button-tip body4">
+                {{
+                  "infinite_scroll.button_desc" |
+                    t(last_current_offset = scroll_button_last_current_offset, total = products_paginate.items)
+                }}
+              </div>
+              <div
+                class="
+                  infinite-scroll-button-wrapper
+                  {{#if section.settings.page_size >= collection.products_count }}hidden{{/if}}
+                "
+              >
+                <span id="infinite-scroll-button" class="button infinite-scroll-button-element">
+                  {{ "infinite_scroll.load_more" | t() }}
+                  {{#component "icons/loading-spinner" /}}
+                </span>
+              </div>
+            {{#else/}}
+              <div class="infinite-scroll-loading">
+                {{#component "icons/loading-spinner" /}}
+
+                {{#var
+                  last_current_offset = products_paginate.current_offset |
+                    plus(products_paginate.page_size) |
+                    plus(products_paginate.page_size)
+                /}}
+                {{#if last_current_offset >= products_paginate.items }}
+                  {{#set last_current_offset = products_paginate.items /}}
+                {{/if}}
+
+                {{#var
+                  current_offset = products_paginate.current_offset | plus(products_paginate.page_size) | plus(1)
+                /}}
+
+                <span class="infinite-scroll-loading-tip body3">
+                  {{
+                    "infinite_scroll.load_more_items" |
+                      t(current_offset = current_offset, last_current_offset = last_current_offset, total = products_paginate.items)
+                  }}
+                </span>
+              </div>
+            {{/if}}
+          {{/if}}
+
+          {{#if !section.settings.enable_infinite_scroll }}
+            {{#if section.settings.pagination_style == "simple" }}
+              {{#component "pagination/simple" paginate=products_paginate /}}
+            {{#else/}}
+              {{#component "pagination/standard" paginate=products_paginate /}}
+            {{/if}}
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </theme-main-collection-products>
+{{/capture}}
+
+{{#if section.settings.enable_infinite_scroll }}
+  <theme-infinite-scroll
+    data-section="{{ section.id }}"
+    data-page-size="{{ section.settings.page_size }}"
+    data-total="{{ collection.products_count }}"
+    data-button-wrapper-selector=".infinite-scroll-button-wrapper"
+    data-button-selector="#infinite-scroll-button"
+    data-enable-infinite-scroll-button="{{#if section.settings.enable_infinite_scroll_button && section.settings.enable_infinite_scroll }}true{{#else/}}false{{/if}}"
+    data-content-wrapper-selector=".main-collection__list"
+    data-loading-element-selector=".infinite-scroll-loading"
+    data-loading-btn-element-selector=".infinite-scroll-button-tip"
+    data-loading-active-class="loading"
+  >
+    {{{ main_collection }}}
+  </theme-infinite-scroll>
+{{#else/}}
+  {{{ main_collection }}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.main_collection_products.name",
+  "icon": "collection",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_collection_products.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "page_size",
+      "label": "t:sections.main_collection_products.settings.page_size.label",
+      "default": 16,
+      "min": 16,
+      "max": 48,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "t:sections.main_collection_products.settings.desktop_columns.label",
+      "default": 4,
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "type": "switch",
+      "id": "enable_multi_column_switcher",
+      "label": "t:sections.main_collection_products.settings.enable_multi_column_switcher.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "t:sections.main_collection_products.settings.mobile_columns.label",
+      "default": 2,
+      "options": [
+        {
+          "value": 2,
+          "label": "t:sections.main_collection_products.settings.mobile_columns.options_0.label"
+        },
+        {
+          "value": 1,
+          "label": "t:sections.main_collection_products.settings.mobile_columns.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns_alternative",
+      "label": "t:sections.main_collection_products.settings.mobile_columns_alternative.label",
+      "default": 1,
+      "options": [
+        {
+          "value": 2,
+          "label": "t:sections.main_collection_products.settings.mobile_columns_alternative.options_0.label"
+        },
+        {
+          "value": 1,
+          "label": "t:sections.main_collection_products.settings.mobile_columns_alternative.options_1.label"
+        }
+      ],
+      "visible_if": "{{ section.settings.enable_multi_column_switcher == true }}"
+    },
+    {
+      "type": "switch",
+      "id": "enable_infinite_scroll",
+      "label": "t:sections.main_collection_products.settings.enable_infinite_scroll.label",
+      "default": false
+    },
+    {
+      "id": "enable_infinite_scroll_button",
+      "type": "switch",
+      "label": "t:sections.main_collection_products.settings.enable_infinite_scroll_button.label",
+      "default": false
+    },
+    {
+      "id": "pagination_style",
+      "type": "select",
+      "label": "t:sections.main_collection_products.settings.pagination_style.label",
+      "options": [
+        {
+          "value": "simple",
+          "label": "t:sections.main_collection_products.settings.pagination_style.options_0.label"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main_collection_products.settings.pagination_style.options_1.label"
+        }
+      ],
+      "default": "simple"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main_collection_products.settings.group_header_0.label"
+    },
+    {
+      "type": "switch",
+      "id": "enable_position_sticky",
+      "label": "t:sections.main_collection_products.settings.enable_position_sticky.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "filter_layout",
+      "label": "t:sections.main_collection_products.settings.filter_layout.label",
+      "default": "vertical",
+      "options": [
+        {
+          "value": "drawer",
+          "label": "t:sections.main_collection_products.settings.filter_layout.options_0.label"
+        },
+        {
+          "value": "horizontal",
+          "label": "t:sections.main_collection_products.settings.filter_layout.options_1.label"
+        },
+        {
+          "value": "vertical",
+          "label": "t:sections.main_collection_products.settings.filter_layout.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "enable_filtering",
+      "label": "t:sections.main_collection_products.settings.enable_filtering.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "enable_sorting",
+      "label": "t:sections.main_collection_products.settings.enable_sorting.label",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-card/card",
+      "limit": 1
+    },
+    {
+      "type": "$promotion-card",
+      "limit": 6
+    }
+  ]
+}
+{{/schema}}

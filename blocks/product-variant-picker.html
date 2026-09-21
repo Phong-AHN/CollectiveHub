@@ -1,0 +1,333 @@
+{{#component "stylesheet" src="components/popover/index.css" | asset_url() /}}
+{{#component "script" src="components/popover/index.js" | asset_url() /}}
+
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+
+{{#component "stylesheet" src="./product-variant-picker.css" | asset_url() /}}
+{{#component "script" src="./product-variant-picker.js" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+{{#var current_variant /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+{{#var upcase_color_text = "products.general.variant_property_color" | t() | upcase() /}}
+
+{{#var has_color_swatch = false /}}
+{{#for option in product.options_with_values }}
+  {{#if (option.name | upcase()) == upcase_color_text }}
+    {{#set has_color_swatch = true /}}
+  {{/if}}
+{{/for}}
+
+{{#var is_color_swatch_one_row = block.settings.color_swatch_show_style == "one_row" /}}
+{{#var is_color_swatch_slider = block.settings.color_swatch_show_style == "slider" /}}
+<form>
+  <theme-variant-radio-picker
+    class="
+      block-product-variant-picker
+      {{#if !block.settings.show_desktop_other_option && !has_color_swatch }}hidden-desktop{{/if}}
+      {{#if !block.settings.show_mobile_other_option && !has_color_swatch }}hidden-mobile{{/if}}
+    "
+    data-variant-size="{{ product.options_with_values | size() }}"
+    data-product-id="{{ product.id }}"
+    {{{ block.shopline_attributes }}}
+  >
+    {{#for option in product.options_with_values }}
+      {{#var current_selected_option /}}
+      {{#if current_variant }}
+        {{#set current_selected_option = current_variant.options[forloop.index0] /}}
+      {{/if}}
+
+      {{#var is_color_swatch = false /}}
+      {{#if (option.name | upcase()) == upcase_color_text }}
+        {{#set is_color_swatch = true /}}
+      {{/if}}
+
+      {{#if is_color_swatch }}
+        <fieldset class="variant-picker__group" data-index="{{ forloop.index0 }}">
+          <theme-carousel class="variant-picker__swatch-carousel" data-direction="horizontal">
+            <div
+              class="
+                carousel__track
+                variant-picker__options
+                {{#if is_color_swatch_slider }}variant-picker__options--slider{{/if}}
+              "
+            >
+              {{#var color_swatch_count = option.option_values | size() /}}
+
+              {{#for item in option.option_values }}
+                {{#var is_selected = false /}}
+                {{#if current_selected_option == item.value }}
+                  {{#set is_selected = true /}}
+                {{/if}}
+
+                {{#var option_color = "" /}}
+                {{#if is_color_swatch }}
+                  {{#if item.color }}
+                    {{#set option_color = item.color.hex /}}
+                  {{#else/}}
+                    {{#set option_color = item.value /}}
+                  {{/if}}
+                {{/if}}
+
+                <label
+                  class="
+                    variant-picker__option
+                    body3
+                    variant-picker__option--swatch
+                    {{#if forloop.index0 >= block.settings.color_swatch_max_count && is_color_swatch_one_row }}
+                      hidden
+                    {{/if}}
+                  "
+                  style="--swatch-size: {{ block.settings.color_swatch_size }}px;"
+                >
+                  <input
+                    type="radio"
+                    name="{{ section.id }}_{{ product.id }}_{{ option.name }}"
+                    value="{{ item.value }}"
+                    {{#if is_selected }}checked{{/if}}
+                  />
+                  <span
+                    class="
+                      variant-picker__button
+                      variant-picker__button--swatch
+                      variant-picker__button--swatch-{{ block.settings.color_swatch_type }}
+                    "
+                    style="--swatch-background-color: {{ option_color }};"
+                    role="button"
+                  >
+                    <span class="variant-picker__swatch-inner"></span>
+                  </span>
+                </label>
+              {{/for}}
+
+              {{#if is_color_swatch_one_row }}
+                {{#var rest_color_swatch_count = color_swatch_count | minus(block.settings.color_swatch_max_count) /}}
+                {{#if rest_color_swatch_count > 0 }}
+                  <span class="body2 variant-picker__swatch-rest-count">
+                    +{{ rest_color_swatch_count }}
+                  </span>
+                {{/if}}
+              {{/if}}
+            </div>
+            {{#if is_color_swatch_slider && color_swatch_count > 0 }}
+              <button
+                name="previous"
+                class="variant-picker__swatch-carousel-button variant-picker__swatch-carousel-button--previous"
+              >
+                {{#component "icons/arrow" /}}
+              </button>
+              <button
+                name="next"
+                class="variant-picker__swatch-carousel-button variant-picker__swatch-carousel-button--next"
+              >
+                {{#component "icons/arrow" /}}
+              </button>
+            {{/if}}
+          </theme-carousel>
+        </fieldset>
+      {{#else/}}
+        <fieldset
+          class="
+            variant-picker__group
+            {{#if !block.settings.show_desktop_other_option }}hidden-desktop{{/if}}
+            {{#if !block.settings.show_mobile_other_option }}hidden-mobile{{/if}}
+          "
+          data-index="{{ forloop.index0 }}"
+        >
+          <div class="variant-picker__options">
+            {{#for item in option.values_images }}
+              {{#var is_selected = false /}}
+              {{#if current_selected_option == item.value }}
+                {{#set is_selected = true /}}
+              {{/if}}
+
+              <label
+                class="
+                  body3
+                  body-font-bold
+                  variant-picker__option
+                "
+              >
+                <input
+                  type="radio"
+                  name="{{ section.id }}_{{ product.id }}_{{ option.name }}"
+                  value="{{ item.value }}"
+                  {{#if is_selected }}checked{{/if}}
+                />
+                {{#if item.image }}
+                  <theme-popover
+                    data-trigger="hover"
+                    data-position="top"
+                    data-mode="tooltip"
+                    data-popup-container="body"
+                  >
+                    <span class="variant-picker__button variant-picker__button--image" role="button">
+                      {{#component
+                        "image"
+                        data=item.image
+                        class="variant-picker__image"
+                        breakpoints="40"
+                        sizes="40px"
+                        lazy=true
+                        fetchpriority="auto"
+                      /}}
+                    </span>
+                    <theme-popover-content class="body6">{{ item.value }}</theme-popover-content>
+                  </theme-popover>
+                {{#else/}}
+                  <span
+                    class="
+                      variant-picker__button
+                      variant-picker__button--{{ block.settings.option_size }}
+                    "
+                    role="button"
+                  >
+                    {{ item.value }}
+                  </span>
+                {{/if}}
+              </label>
+            {{/for}}
+          </div>
+        </fieldset>
+      {{/if}}
+    {{/for}}
+
+    <script name="variant-data" type="application/json">
+      [
+        {{#for variant in product | get_variants() ~}}
+          {{#component "product/variant-data" variant=variant /}}{{#if !forloop.last}},{{/if}}
+        {{/for}}
+      ]
+    </script>
+  </theme-variant-radio-picker>
+</form>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_variant_picker.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_variant_picker.settings.product.label",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "select",
+      "id": "color_swatch_type",
+      "label": "t:blocks.product_variant_picker.settings.color_swatch_type.label",
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_type.options_0.label"
+        },
+        {
+          "value": "circle",
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_type.options_1.label"
+        },
+        {
+          "value": "round-corner",
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_type.options_2.label"
+        }
+      ]
+    },
+    {
+      "id": "color_swatch_max_count",
+      "type": "range",
+      "label": "t:blocks.product_variant_picker.settings.color_swatch_max_count.label",
+      "default": 4,
+      "max": 6,
+      "min": 1,
+      "step": 1
+    },
+    {
+      "id": "color_swatch_show_style",
+      "type": "select",
+      "label": "t:blocks.product_variant_picker.settings.color_swatch_show_style.label",
+      "default": "one_row",
+      "options": [
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_show_style.options_0.label",
+          "value": "one_row"
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_show_style.options_1.label",
+          "value": "slider"
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_show_style.options_2.label",
+          "value": "tiling"
+        }
+      ]
+    },
+    {
+      "id": "color_swatch_size",
+      "type": "select",
+      "label": "t:blocks.product_variant_picker.settings.color_swatch_size.label",
+      "default": 30,
+      "options": [
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_size.options_0.label",
+          "value": 26
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_size.options_1.label",
+          "value": 30
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.color_swatch_size.options_2.label",
+          "value": 40
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "show_desktop_other_option",
+      "label": "t:blocks.product_variant_picker.settings.show_desktop_other_option.label",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "show_mobile_other_option",
+      "label": "t:blocks.product_variant_picker.settings.show_mobile_other_option.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "option_size",
+      "label": "t:blocks.product_variant_picker.settings.option_size.label",
+      "default": "medium",
+      "options": [
+        {
+          "label": "t:blocks.product_variant_picker.settings.option_size.options_0.label",
+          "value": "small"
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.option_size.options_1.label",
+          "value": "medium"
+        },
+        {
+          "label": "t:blocks.product_variant_picker.settings.option_size.options_2.label",
+          "value": "large"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_variant_picker.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

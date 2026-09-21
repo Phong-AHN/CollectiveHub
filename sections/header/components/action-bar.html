@@ -1,0 +1,177 @@
+{{#var class = props.class /}}
+{{#var desktop_menu_type = props.desktop_menu_type /}}
+{{#var show_search_entry = props.show_search_entry /}}
+{{#var show_cart_entry = props.show_cart_entry /}}
+{{#var show_user_entry = props.show_user_entry /}}
+{{#var show_locale_picker = props.show_locale_picker /}}
+{{#var show_country_picker = props.show_country_picker /}}
+{{#var user_mobile_layout = props.user_mobile_layout /}}
+{{#var enable_user_entry_dropdown = props.enable_user_entry_dropdown /}}
+{{#var user_entry_dropdown_text_1 = props.user_entry_dropdown_text_1 /}}
+{{#var user_entry_dropdown_text_2 = props.user_entry_dropdown_text_2 /}}
+{{#var user_entry_dropdown_text_3 = props.user_entry_dropdown_text_3 /}}
+{{#var user_entry_dropdown_link_1 = props.user_entry_dropdown_link_1 /}}
+{{#var user_entry_dropdown_link_2 = props.user_entry_dropdown_link_2 /}}
+{{#var user_entry_dropdown_link_3 = props.user_entry_dropdown_link_3 /}}
+{{#var search_entry_input_mode = props.search_entry_input_mode /}}
+
+<theme-action-bar class="header-action-bar {{ class }}">
+  
+  <a
+    class="
+      header-action-bar__menu button button--icon {{#if desktop_menu_type != "drawer" }}button--hidden-desktop{{/if}}
+    "
+    href="javascript:;"
+    role="button"
+    data-role="header-nav-drawer-switch"
+  >
+    {{#component "icons/menu" /}}
+  </a>
+
+  
+  {{#component "./locale-picker" show_locale_picker=show_locale_picker show_country_picker=show_country_picker /}}
+
+  
+  {{#if show_search_entry == true }}
+    {{#if search_entry_input_mode == true }}
+      <theme-action-bar-search class="header-action-bar__search-bar-container hidden-mobile">
+        <label class="header-action-bar__search-bar">
+          {{#component "icons/search" classes="header-action-bar__search-bar-icon" /}}
+          <input
+            class="header-action-bar__search-bar-input"
+            type="search"
+            name="keyword"
+            placeholder="{{ `general.search.search` | t() }}"
+          />
+        </label>
+
+        
+        <div class="header-action-bar__results" data-role="search-bar-result">
+          <div class="header-action-bar__results-loading">
+            {{#component "icons/loading" class="header-action-bar__results-spinner" /}}
+          </div>
+
+          <form
+            action="{{ routes.search_url }}"
+            method="get"
+            class="header-action-bar__results-list"
+            data-role="search-bar-result-list"
+          >
+
+          </form>
+        </div>
+      </theme-action-bar-search>
+    {{#else/}}
+      <a
+        class="header-action-bar__search button button--icon hidden-mobile"
+        href="javascript:;"
+        role="button"
+        aria-label="Search"
+        data-role="search-bar-switch"
+      >
+        {{#component "icons/search" /}}
+      </a>
+    {{/if}}
+  {{/if}}
+
+  
+  {{#if show_user_entry == true }}
+    
+    {{#if enable_user_entry_dropdown == true }}
+      <theme-dropdown-menu class="hover hidden-mobile">
+        <label class="dropdown-menu__label">
+          <span class="button button--icon">
+            {{#component "icons/user" /}}
+          </span>
+        </label>
+
+        <ul class="dropdown-menu__list body3">
+          {{#if customer }}
+            <li class="dropdown-menu__list-item">
+              <span>{{ customer.name }}</span>
+            </li>
+            <li class="dropdown-menu__divider"></li>
+            <li class="dropdown-menu__list-item">
+              <a href="{{ routes.account_order_list_url }}">{{ "customer.general.orders" | t() }}</a>
+            </li>
+            <li class="dropdown-menu__list-item">
+              <a href="{{ routes.account_url }}">{{ "customer.account.personal_information" | t() }}</a>
+            </li>
+          {{#else/}}
+            <li class="dropdown-menu__list-item">
+              <a href="{{ routes.account_login_url }}">{{ "general.header.login" | t() }}</a>
+            </li>
+            <li class="dropdown-menu__divider"></li>
+            <li class="dropdown-menu__list-item">
+              <a href="{{ routes.account_login_url }}">{{ "customer.general.orders" | t() }}</a>
+            </li>
+          {{/if}}
+
+          {{#if user_entry_dropdown_text_1 }}
+            <li class="dropdown-menu__list-item">
+              <a
+                href="{{#if user_entry_dropdown_link_1 }}{{ user_entry_dropdown_link_1 }}{{#else/}}javascript:;{{/if}}"
+              >
+                {{ user_entry_dropdown_text_1 }}
+              </a>
+            </li>
+          {{/if}}
+          {{#if user_entry_dropdown_text_2 }}
+            <li class="dropdown-menu__list-item">
+              <a
+                href="{{#if user_entry_dropdown_link_2 }}{{ user_entry_dropdown_link_2 }}{{#else/}}javascript:;{{/if}}"
+              >
+                {{ user_entry_dropdown_text_2 }}
+              </a>
+            </li>
+          {{/if}}
+          {{#if user_entry_dropdown_text_3 }}
+            <li class="dropdown-menu__list-item">
+              <a
+                href="{{#if user_entry_dropdown_link_3 }}{{ user_entry_dropdown_link_3 }}{{#else/}}javascript:;{{/if}}"
+              >
+                {{ user_entry_dropdown_text_3 }}
+              </a>
+            </li>
+          {{/if}}
+        </ul>
+      </theme-dropdown-menu>
+    {{#else/}}
+      <a
+        class="button button--icon hidden-mobile"
+        href="{{#if customer }}{{ routes.account_url }}{{#else/}}{{ routes.account_login_url }}{{/if}}"
+      >
+        {{#component "icons/user" /}}
+      </a>
+    {{/if}}
+
+    
+    {{#if user_mobile_layout == "home" }}
+      <a
+        class="button button--icon hidden-desktop"
+        href="{{#if customer }}{{ routes.account_url }}{{#else/}}{{ routes.account_login_url }}{{/if}}"
+      >
+        {{#component "icons/user" /}}
+      </a>
+    {{/if}}
+  {{/if}}
+
+  
+  {{#if show_cart_entry == true }}
+    <div class="button button--icon">{{#component "cart/cart-bubble" /}}</div>
+  {{/if}}
+
+  
+  {{#if show_search_entry == true }}
+    
+    <a
+      class="header-action-bar__search button button--icon hidden-desktop"
+      href="javascript:;"
+      role="button"
+      aria-label="Search"
+      data-role="search-bar-switch"
+    >
+      {{#component "icons/search" /}}
+    </a>
+  {{/if}}
+</theme-action-bar>

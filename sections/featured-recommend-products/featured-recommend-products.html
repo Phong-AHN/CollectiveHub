@@ -1,0 +1,199 @@
+{{#component "stylesheet" src="./featured-recommend-products.css" | asset_url() /}}
+
+<section class="featured-recommend-products color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#content "blocks" /}}
+    </div>
+  </div>
+</section>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_recommend_products.name",
+  "icon": "collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.featured_recommend_products.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured_recommend_products.settings.collection.label"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_recommend_products.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "row-gap": "80px",
+        "column-gap": "80px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "column-gap": "20px",
+          "row-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_recommend_products.settings.spacing.label",
+      "default": {
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-bottom": "40px"
+        },
+        "padding-top": "120px",
+        "padding-right": "0px",
+        "padding-bottom": "120px",
+        "padding-left": "0px"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$image",
+      "limit": 1
+    },
+    {
+      "type": "$group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.featured_recommend_products.presets.presets_0.category",
+      "name": "t:sections.featured_recommend_products.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$image",
+          "settings": {}
+        },
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "group",
+              "settings": {
+                "color_scheme": "color_scheme_1",
+                "layout": {
+                  "@media (--mobile)": {
+                    "row-gap": "12px"
+                  },
+                  "align-items": "flex-start",
+                  "column-gap": "0px",
+                  "flex-direction": "column",
+                  "flex-wrap": "nowrap",
+                  "justify-content": "space-between",
+                  "row-gap": "15px"
+                },
+                "spacing": {
+                  "padding-block-start": "0px",
+                  "padding-block-end": "0px",
+                  "padding-inline-start": "0px",
+                  "padding-inline-end": "0px"
+                }
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Two Line Title Slide",
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "description",
+                  "settings": {
+                    "content": "Pair large text with a full-width video to showcase your brand’s lifestyle video or to describe and showcase an important detail of your products.",
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "text": "Shop this",
+                    "style": "link",
+                    "spacing": {
+                      "padding-block-start": "0px",
+                      "padding-block-end": "0px",
+                      "padding-inline-start": "0px",
+                      "padding-inline-end": "0px"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "product-list/list",
+              "settings": {
+                "page_size": 12,
+                "desktop_columns": 3,
+                "mobile_columns": 2,
+                "desktop_enable_slider": true,
+                "mobile_enable_slider": true
+              },
+              "blocks": [
+                {
+                  "type": "product-card/card",
+                  "blocks": [
+                    {
+                      "type": "product-image",
+                      "blocks": [
+                        {
+                          "type": "product-card/_layer",
+                          "blocks": [
+                            {
+                              "type": "product-card/_discount-tag"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "product-card/_layer",
+                          "settings": {
+                            "layout": {
+                              "justify-content": "flex-end"
+                            }
+                          },
+                          "blocks": [
+                            {
+                              "type": "product-card/_quick-add"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_info",
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description"
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

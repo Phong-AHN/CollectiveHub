@@ -1,0 +1,145 @@
+{{#if props.current_block.id == block.id }}
+  {{#var mobile_columns /}}
+  {{~#var extra_columns = 0.0 /}}
+  {{~#if props.mobile_enable_slider }}
+    {{~#if (props.mobile_columns < props.limit) && (props.mobile_columns < props.products_size) }}
+      {{~#set extra_columns = 0.2 /}}
+    {{~/if}}
+  {{~/if}}
+  {{#set mobile_columns = props.mobile_columns | plus(extra_columns) /}}
+
+  <ul
+    class="grid carousel__track featured-collection__track"
+    style="
+      --mobile-columns: {{ mobile_columns }};
+      --mobile-gap-columns: {{ mobile_columns | ceil() }};
+      {{~#if props.mobile_enable_slider }}--mobile-auto-flow: column;{{~/if}}
+      --desktop-columns: {{ props.desktop_columns }};
+      {{#if props.desktop_enable_slider }}--desktop-auto-flow: column;{{/if}}
+    "
+    {{{ shopline_attributes }}}
+  >
+    {{#blocks}}
+      {{#for product in props.products }}
+        <li>
+          {{#block product=product mobile_columns=(mobile_columns | floor()) desktop_columns=props.desktop_columns /}}
+        </li>
+      {{#else/}}
+        {{#for _ in 1 | range(4) }}
+          <li>
+            {{#block/}}
+          </li>
+        {{/for}}
+      {{/for}}
+    {{/blocks}}
+
+    {{#if
+      props.view_more_text &&
+      props.mobile_enable_slider &&
+      props.view_more_location == "list-end" &&
+      props.show_view_more_button
+    }}
+      <li class="featured-collection__carousel-view-more product-card-border-shadow hidden-desktop">
+        <a
+          href="{{ props.current_block.settings.collection.url }}"
+          class="featured-collection__carousel-view-more-button {{ props.view_more_typography }}"
+        >
+          <div class="featured-collection__carousel-view-more-button-icon">
+            {{#component "icons/arrow" /}}
+          </div>
+          {{ props.view_more_text }}
+        </a>
+      </li>
+    {{/if}}
+  </ul>
+
+  {{#if props.desktop_enable_slider && (props.products_size > props.desktop_columns) }}
+    <button name="previous" class="featured-collection__button featured-collection__button--previous hidden-mobile">
+      {{#component "icons/arrow" /}}
+    </button>
+    <button name="next" class="featured-collection__button featured-collection__button--next hidden-mobile">
+      {{#component "icons/arrow" /}}
+    </button>
+  {{/if}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.featured_collection.blocks.collection.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured_collection.blocks.collection.settings.collection.label"
+    },
+    {
+      "id": "tab_title",
+      "type": "text",
+      "label": "t:sections.featured_collection.blocks.collection.settings.tab_title.label",
+      "default": "Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-card/card",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection.blocks.collection.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-card/card",
+          "blocks": [
+            {
+              "type": "product-image",
+              "blocks": [
+                {
+                  "type": "product-card/_layer",
+                  "blocks": [
+                    {
+                      "type": "product-card/_discount-tag"
+                    }
+                  ]
+                },
+                {
+                  "type": "product-card/_layer",
+                  "settings": {
+                    "layout": {
+                      "justify-content": "flex-end"
+                    }
+                  },
+                  "blocks": [
+                    {
+                      "type": "product-card/_quick-add"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "product-card/_info",
+              "blocks": [
+                {
+                  "type": "product-title"
+                },
+                {
+                  "type": "product-price"
+                },
+                {
+                  "type": "product-card/_description"
+                },
+                {
+                  "type": "product-buy-button"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

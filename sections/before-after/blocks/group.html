@@ -1,0 +1,104 @@
+<div
+  class="before-after__group {{#if block.settings.open_above }}before-after__group--above{{/if}}"
+  {{{ block.shopline_attributes }}}
+>
+  <div
+    class="
+      {{#if block.settings.open_above }}before-after__group--above-block{{/if}} {{ block.settings | class_list() }}
+    "
+  >
+    {{#content "blocks" /}}
+  </div>
+
+  {{#if block.settings.link }}
+    <a
+      class="before-after__link-element"
+      href="{{ block.settings.link }}"
+      {{#if block.settings.link_open_blank }}target="_blank"{{/if}}
+    >
+
+    </a>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "label": "t:sections.before_after.blocks.group.settings.open_above.label",
+      "id": "open_above",
+      "default": false
+    },
+    {
+      "type": "url",
+      "label": "t:sections.before_after.blocks.group.settings.link.label",
+      "id": "link"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.before_after.blocks.group.settings.link_open_blank.label",
+      "id": "link_open_blank",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.before_after.blocks.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "bottom",
+        "justify-content": "right",
+        "row-gap": "0px",
+        "column-gap": "0px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.before_after.blocks.group.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-right": "20px",
+        "padding-bottom": "20px",
+        "padding-left": "20px",
+        "@media (--mobile)": {
+          "padding-top": "10px",
+          "padding-right": "10px",
+          "padding-bottom": "10px",
+          "padding-left": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.before_after.blocks.group.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$group-title",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$group-title"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

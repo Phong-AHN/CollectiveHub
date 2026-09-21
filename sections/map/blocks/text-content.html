@@ -1,0 +1,149 @@
+<div
+  class="
+    map-block-text-content
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.map.blocks.text_content.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.map.blocks.text_content.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "id": "color_scheme",
+      "type": "color_scheme",
+      "label": "t:sections.map.blocks.text_content.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.map.blocks.text_content.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.map.blocks.text_content.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-right": "40px",
+        "padding-bottom": "40px",
+        "padding-left": "40px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-right": "20px",
+          "padding-bottom": 0,
+          "padding-left": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.map.blocks.text_content.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "100%",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "limit": 2
+    },
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "$btn-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.map.blocks.text_content.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "DEMURE",
+            "text_align": "left"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "OUR STORE",
+            "text_align": "left"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<div>\n<div>London, UK</div>\n<div>Mon - Fri, 10am - 9pm</div>\n<div>Saturday, 10am - 9pm</div>\n<div>Sunday, 11am - 5pm</div>\n</div>",
+            "text_align": "left",
+            "spacing": {
+              "padding-top": "168px",
+              "padding-bottom": 0,
+              "@media (--mobile)": {
+                "padding-top": "35px"
+              }
+            }
+          }
+        },
+        {
+          "type": "$btn-group",
+          "blocks": [
+            {
+              "type": "$custom-btn",
+              "settings": {
+                "text": "Get direcions"
+              }
+            },
+            {
+              "type": "$custom-btn",
+              "settings": {
+                "text": "LEARN MORE",
+                "style": "secondary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

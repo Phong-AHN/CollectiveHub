@@ -1,0 +1,28 @@
+<div class="section-breadcrumb page-width">
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.breadcrumb.name",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "breadcrumb/breadcrumb",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.breadcrumb.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "breadcrumb/breadcrumb"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

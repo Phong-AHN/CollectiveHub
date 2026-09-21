@@ -1,0 +1,87 @@
+.block-product-image__layer-wrapper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+@layer theme {
+  .block-product-image__layer-wrapper * {
+    pointer-events: auto;
+  }
+}
+.block-product-image__layer-image-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: var(--padding);
+  overflow: hidden;
+}
+.block-product-image__layer-image-wrapper > a {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+@media (min-width: 960px) {
+  .block-product-image__layer-image-wrapper.desktop-hover:hover
+    .block-product-image__image:nth-of-type(1) {
+    opacity: 0;
+  }
+
+  .block-product-image__layer-image-wrapper.desktop-hover:hover
+    .block-product-image__image:nth-of-type(2) {
+    opacity: 1;
+  }
+}
+@media (max-width: 959px) {
+  .block-product-image__layer-image-wrapper.mobile-hover:hover
+    .block-product-image__image:nth-of-type(1) {
+    opacity: 0;
+  }
+
+  .block-product-image__layer-image-wrapper.mobile-hover:hover
+    .block-product-image__image:nth-of-type(2) {
+    opacity: 1;
+  }
+}
+.block-product-image__image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: var(--aspect-ratio);
+  overflow: hidden;
+  pointer-events: none;
+  background-color: rgb(var(--color-media-background));
+  border-radius: var(--border-radius);
+}
+@layer theme {
+  .block-product-image__image-wrapper * {
+    pointer-events: auto;
+  }
+}
+.block-product-image__image-wrapper > svg {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.block-product-image__image-wrapper > .block-product-image__image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  object-fit: var(--fit-type);
+  transition: 1s;
+}
+.block-product-image__image-wrapper > .block-product-image__image * {
+  pointer-events: all;
+}
+.block-product-image__image-wrapper
+  > .block-product-image__image:nth-of-type(1) {
+  opacity: 1;
+}
+.block-product-image__image-wrapper
+  > .block-product-image__image:nth-of-type(2) {
+  opacity: 0;
+}

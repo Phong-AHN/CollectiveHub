@@ -1,0 +1,106 @@
+{{#component "stylesheet" src="./card.css" | asset_url() /}}
+{{#component "script" src="./card.js" | asset_url() /}}
+
+{{#var article = props.article /}}
+{{#var has_view_all_button = props.has_view_all_button /}}
+
+<theme-article-card>
+  <a
+    href="{{ article.url | default(`javascript:;`) }}"
+    class="
+      block-article-card {{#if settings.article_card_style == "card" }}article-card-border-shadow{{/if}}
+      text-center
+      {{ block.settings | class_list() }}
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{#blocks}}
+      {{#if forblock.type == "article/_cover" }}
+        <div
+          class="
+            block-article-card__cover {{#if settings.article_card_style != "card" }}article-card-border-shadow{{/if}}
+          "
+        >
+          {{#block image=article.image mobile_columns=props.mobile_columns desktop_columns=props.desktop_columns /}}
+        </div>
+      {{#else if forblock.type == "article/_info" /}}
+        {{#block article=article has_view_all_button=has_view_all_button /}}
+      {{/if}}
+    {{/blocks}}
+  </a>
+</theme-article-card>
+
+{{#schema}}
+{
+  "name": "t:blocks.article.card.name",
+  "icon": "blog",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.article.card.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "row-gap": "15px",
+          "column-gap": "15px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.article.card.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.article.card.settings.size.label",
+      "default": {
+        "width": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article/_cover",
+      "limit": 1
+    },
+    {
+      "type": "article/_info",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.article.card.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "article/_cover"
+        },
+        {
+          "type": "article/_info",
+          "blocks": [
+            {
+              "type": "article/_title"
+            },
+            {
+              "type": "article/_date-author"
+            },
+            {
+              "type": "article/_excerpt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

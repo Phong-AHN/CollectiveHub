@@ -1,0 +1,7 @@
+.block-product-buy-button {
+  white-space: normal !important;
+}
+
+.block-product-buy-button-wrapper {
+  padding: var(--button-border-thickness, 1px);
+}

@@ -1,0 +1,91 @@
+<div
+  class="sgc-rolling-parallax-banner__content-group {{ block.settings | class_list() }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_rolling_parallax_banner.blocks.content_group.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.sgc_rolling_parallax_banner.blocks.content_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "8px",
+        "column-gap": "8px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "align-items": "center",
+          "justify-content": "center",
+          "row-gap": "8px",
+          "column-gap": "8px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.sgc_rolling_parallax_banner.blocks.content_group.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-right": "0px",
+        "padding-bottom": "40px",
+        "padding-left": "0px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-right": "0px",
+          "padding-bottom": "20px",
+          "padding-left": "0px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.sgc_rolling_parallax_banner.blocks.content_group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "100%",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$title",
+      "limit": 1
+    },
+    {
+      "type": "$subtitle",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_rolling_parallax_banner.blocks.content_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$title"
+        },
+        {
+          "type": "$subtitle"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

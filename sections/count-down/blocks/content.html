@@ -1,0 +1,140 @@
+{{#component "stylesheet" src="./content.css" | asset_url() /}}
+
+<div
+  class="
+    count-down__content
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.count_down.blocks.content.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.count_down.blocks.content.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "id": "color_scheme",
+      "type": "color_scheme",
+      "label": "t:sections.count_down.blocks.content.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.count_down.blocks.content.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "center",
+        "row-gap": 0,
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "row-gap": 0,
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.count_down.blocks.content.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-right": "60px",
+        "padding-bottom": "60px",
+        "padding-left": "60px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-right": "20px",
+          "padding-bottom": "20px",
+          "padding-left": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "limit": 2,
+      "type": "heading"
+    },
+    {
+      "limit": 1,
+      "type": "description"
+    },
+    {
+      "limit": 1,
+      "type": "$divider"
+    },
+    {
+      "limit": 1,
+      "type": "$count-down-date"
+    },
+    {
+      "limit": 1,
+      "type": "button"
+    }
+  ],
+  "max_blocks": 7,
+  "presets": [
+    {
+      "category": "t:sections.count_down.blocks.content.presets.presets_0.category",
+      "name": "t:sections.count_down.blocks.content.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Countdown timer",
+            "text_align": "left"
+          }
+        },
+        {
+          "type": "description",
+          "settings": {
+            "content": "The most wanted styles is waiting for you. Find the best styles of modern outfits for you.",
+            "text_align": "left",
+            "typography": "body3"
+          }
+        },
+        {
+          "type": "$divider",
+          "settings": {
+            "show_divider": true
+          }
+        },
+        {
+          "type": "$count-down-date",
+          "settings": {
+            "deadline": "",
+            "deadline_font_size": "title1",
+            "result": "",
+            "result_font_size": "title1"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "Button",
+            "link": "",
+            "style": "link",
+            "typography": "body2"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

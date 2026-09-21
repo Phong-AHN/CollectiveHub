@@ -1,0 +1,106 @@
+<div
+  class="
+    shopping-video__product-text-group {{ block.settings.spacing | class_list() }}
+    {{#if block.settings.is_float }}
+      shopping-video__product-text-group--float
+    {{#else/}}
+      shopping-video__product-text-group--normal
+      {{#if !block.settings.inherit_color_scheme }}
+        color-{{ block.settings.color_scheme.id }}
+      {{/if}}
+    {{/if}}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div class="{{ block.settings.layout | class_list() }}">
+    {{#blocks}}
+      {{#block/}}
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.product_text_group.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.is_float.label",
+      "id": "is_float",
+      "info": "t:sections.shopping_video.blocks.product_text_group.settings.is_float.info",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "row-gap": "8px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.spacing.label",
+      "default": {
+        "padding-block-start": "15px",
+        "padding-block-end": "15px",
+        "padding-inline-start": "15px",
+        "padding-inline-end": "15px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.shopping_video.blocks.product_text_group.settings.size.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$heading",
+      "limit": 1
+    },
+    {
+      "type": "$description",
+      "limit": 1
+    },
+    {
+      "type": "$button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.blocks.product_text_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$heading"
+        },
+        {
+          "type": "$description"
+        },
+        {
+          "type": "$button"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

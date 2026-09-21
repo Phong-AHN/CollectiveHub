@@ -1,0 +1,198 @@
+{{#component "stylesheet" src="./product-price.css" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+
+{{#var use_variant = false /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set use_variant = true /}}
+{{/if}}
+
+<theme-product-price class="block-product-price" data-rerender-id="{{ block.id }}" {{{ block.shopline_attributes }}}>
+  {{#var layout_template /}}
+  {{#if !block.settings.show_origin_price }}
+    {{#set layout_template = "sale" /}}
+  {{/if}}
+
+  {{#component
+    "product/price"
+    product=product
+    use_variant=use_variant
+    sale_font_size=block.settings.sale_typography
+    origin_font_size=block.settings.origin_typography
+    sale_font_bold=block.settings.sale_price_bold
+    sale_style=props.sale_style | default(settings.product_card_price_show_type)
+    layout_template=layout_template
+  /}}
+</theme-product-price>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_price.name",
+  "icon": "money",
+  "tag": "",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_price.settings.product.label",
+      "info": "t:blocks.product_price.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product_price.settings.sale_typography.label",
+      "id": "sale_typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_price.settings.sale_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_price.settings.sale_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_price.settings.sale_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_price.settings.sale_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_price.settings.sale_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_price.settings.sale_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_price.settings.sale_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_price.settings.sale_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_price.settings.sale_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_price.settings.sale_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_price.settings.sale_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_price.settings.sale_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_price.settings.sale_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_price.settings.sale_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_price.settings.sale_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product_price.settings.origin_typography.label",
+      "id": "origin_typography",
+      "default": "body5",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_price.settings.origin_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_price.settings.origin_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_price.settings.origin_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_price.settings.origin_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_price.settings.origin_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_price.settings.origin_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_price.settings.origin_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_price.settings.origin_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_price.settings.origin_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_price.settings.origin_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_price.settings.origin_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_price.settings.origin_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_price.settings.origin_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_price.settings.origin_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_price.settings.origin_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "sale_price_bold",
+      "label": "t:blocks.product_price.settings.sale_price_bold.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_origin_price",
+      "label": "t:blocks.product_price.settings.show_origin_price.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_price.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

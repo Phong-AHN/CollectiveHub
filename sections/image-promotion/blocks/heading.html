@@ -1,0 +1,79 @@
+<style>
+  {{{ block.settings.heading_font | font_modify("weight", "400") | font_face() }}}
+  {{{ block.settings.heading_font | font_modify("weight", "500") | font_face() }}}
+  {{{ block.settings.heading_font | font_modify("weight", "600") | font_face() }}}
+  {{{ block.settings.heading_font | font_modify("weight", "700") | font_face() }}}
+  {{{ block.settings.heading_font | font_face() }}}
+</style>
+
+<div
+  class="image-promotion__heading"
+  {{{ block.shopline_attributes }}}
+  style="
+    --heading-size: {{ block.settings.heading_size }}px;
+    --heading-size-mobile: {{ block.settings.heading_size_mobile }}px;
+    --heading-font: {{ block.settings.heading_font.family }};
+    --heading-font-weight: {{ block.settings.heading_font.weight }};
+    --heading-color: {{ block.settings.heading_color.rgb }};
+    --heading-border-color: {{ block.settings.heading_border_color.rgb }};
+  "
+>
+  {{ block.settings.heading_text }}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_promotion.blocks.heading.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_text.label",
+      "default": "BUY 3 get"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_size.label",
+      "default": 70,
+      "min": 0,
+      "max": 120,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_size_mobile.label",
+      "default": 36,
+      "min": 0,
+      "max": 48,
+      "step": 1
+    },
+    {
+      "type": "font",
+      "id": "heading_font",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_font.label",
+      "default": "Mukta"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_color.label",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "heading_border_color",
+      "label": "t:sections.image_promotion.blocks.heading.settings.heading_border_color.label",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_promotion.blocks.heading.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

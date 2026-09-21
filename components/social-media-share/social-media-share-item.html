@@ -1,0 +1,41 @@
+{{#var social_media_name = props.social_media | trim() /}}
+{{#var share_link = props.share_link /}}
+{{#var share_title = props.share_title /}}
+{{#var share_image = props.share_image /}}
+{{#var typography = props.typography | default("body6") /}}
+
+{{#var href = "javascript:;" /}}
+
+{{#switch social_media_name }}
+  {{#case "facebook" /}}
+    {{#capture href }}https://www.facebook.com/sharer.php?u={{ share_link | url_encode() }}{{/capture}}
+  {{#case "twitter" /}}
+    {{#capture href ~}}
+      https://twitter.com/share?text={{ share_title | url_encode() }}&url={{ share_link | url_encode() }}
+    {{~/capture}}
+  {{#case "line" /}}
+    {{#capture href }}https://social-plugins.line.me/lineit/share?url={{ share_link | url_encode() }}{{/capture}}
+  {{#case "pinterest" /}}
+    {{#capture href ~}}
+      https://pinterest.com/pin/create/button/?url={{ share_link | url_encode() }}&media={{
+        share_image
+      }}&description={{ share_title | url_encode() }}
+    {{~/capture}}
+  {{#case "tumblr" /}}
+    {{#capture href ~}}
+      https://www.tumblr.com/widgets/share/tool?posttype=link&canonicalUrl={{ share_link | url_encode() }}
+    {{~/capture}}
+  {{#case "whatsapp" /}}
+    {{#capture href }}https://api.whatsapp.com/send/?text={{ share_link | url_encode() }}{{/capture}}
+{{/switch}}
+
+<a class="social-media-share__media" href="{{ href }}" target="_blank" rel="noreferrer">
+  {{#if settings.show_official_share_icon }}
+    {{#component "icons/" | append(social_media_name) | append("-official") class="social-media-share__icon" /}}
+  {{#else/}}
+    {{#component "icons/" | append(social_media_name) | append("-tiny") class="social-media-share__icon" /}}
+  {{/if}}
+  {{#if settings.show_share_name }}
+    <span class="{{ typography }}">{{ social_media_name | capitalize() }}</span>
+  {{/if}}
+</a>

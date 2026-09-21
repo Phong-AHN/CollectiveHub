@@ -1,0 +1,395 @@
+{{#component "stylesheet" src="./booth-checkout.css" | asset_url() /}}
+{{#component "script" src="./booth-checkout.js" | asset_url() /}}
+
+<div class="booth-checkout color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <theme-booth-checkout
+      class="booth-checkout__inner {{ section.settings | class_list() }}"
+      data-section-id="{{ section.id }}"
+      data-api-base="{{ section.settings.api_base_url }}"
+      data-param-booth="{{ section.settings.param_booth }}"
+      data-param-type="{{ section.settings.param_type }}"
+      data-param-size="{{ section.settings.param_size }}"
+      data-param-price="{{ section.settings.param_price }}"
+      data-param-currency="{{ section.settings.param_currency }}"
+      data-currency="{{ section.settings.currency }}"
+      data-floorplan-url="{{ section.settings.floorplan_url }}"
+      data-missing-text="{{ section.settings.missing_text }}"
+      data-required-text="{{ section.settings.required_text }}"
+      data-error-text="{{ section.settings.error_text }}"
+      data-cancel-text="{{ section.settings.cancel_text }}"
+      data-pending-text="{{ section.settings.pending_text }}"
+      data-success-text="{{ section.settings.success_text }}"
+      data-debug="{{ section.settings.show_debug }}"
+      data-state="loading"
+    >
+      {{#if section.settings.heading | trim() }}
+        <h1 class="booth-checkout__heading {{ section.settings.heading_typography }}">
+          {{{ section.settings.heading | newline_to_br() }}}
+        </h1>
+      {{/if}}
+
+      {{#if section.settings.description | trim() }}
+        <div class="booth-checkout__description rte body3">
+          {{{ section.settings.description }}}
+        </div>
+      {{/if}}
+
+      <p class="booth-checkout__message body3" data-role="message" role="status" hidden></p>
+
+      <div class="booth-checkout__layout" data-role="layout">
+        <aside class="booth-checkout__summary" data-role="summary">
+          <h2 class="booth-checkout__summary-title body1">{{ section.settings.summary_title }}</h2>
+          <dl class="booth-checkout__lines" data-role="lines"></dl>
+          <div class="booth-checkout__total" data-role="total" hidden>
+            <span class="body2">{{ section.settings.total_label }}</span>
+            <span class="booth-checkout__total-value body1" data-role="total-value"></span>
+          </div>
+          <p class="booth-checkout__hold-note body5">{{ section.settings.hold_note }}</p>
+        </aside>
+
+        <form class="booth-checkout__form" data-role="form" novalidate>
+          <h2 class="booth-checkout__form-title body1">{{ section.settings.form_title }}</h2>
+
+          <div class="field__group booth-checkout__row">
+            <label class="field">
+              <input class="field__input" type="text" name="company" data-required="true"
+                autocomplete="organization" placeholder="{{ section.settings.company_label }}" />
+              <span class="field__label">{{ section.settings.company_label }}</span>
+            </label>
+          </div>
+
+          <div class="field__group booth-checkout__row">
+            <label class="field">
+              <input class="field__input" type="text" name="contactName" data-required="true"
+                autocomplete="name" placeholder="{{ section.settings.contact_label }}" />
+              <span class="field__label">{{ section.settings.contact_label }}</span>
+            </label>
+          </div>
+
+          <div class="field__group booth-checkout__row booth-checkout__row--split">
+            <label class="field">
+              <input class="field__input" type="email" name="email" data-required="true"
+                autocomplete="email" spellcheck="false" placeholder="{{ section.settings.email_label }}" />
+              <span class="field__label">{{ section.settings.email_label }}</span>
+            </label>
+
+            <label class="field">
+              <input class="field__input" type="tel" name="phone"
+                autocomplete="tel" placeholder="{{ section.settings.phone_label }}" />
+              <span class="field__label">{{ section.settings.phone_label }}</span>
+            </label>
+          </div>
+
+          <div class="field__group booth-checkout__row">
+            <label class="field">
+              <input class="field__input" type="url" name="website"
+                spellcheck="false" placeholder="{{ section.settings.website_label }}" />
+              <span class="field__label">{{ section.settings.website_label }}</span>
+            </label>
+          </div>
+
+          <button class="button booth-checkout__submit" type="submit" data-role="submit">
+            {{ section.settings.button_text }}
+          </button>
+
+          {{#if section.settings.note | trim() }}
+            <p class="booth-checkout__note body5">{{ section.settings.note }}</p>
+          {{/if}}
+        </form>
+      </div>
+
+      <div class="booth-checkout__empty" data-role="empty" hidden>
+        <p class="body2" data-role="empty-text"></p>
+        {{#if section.settings.floorplan_url }}
+          <a class="button booth-checkout__back" href="{{ section.settings.floorplan_url }}">
+            {{ section.settings.back_text }}
+          </a>
+        {{/if}}
+      </div>
+
+      <details class="booth-checkout__debug" data-role="debug" hidden>
+        <summary class="body4">{{ section.settings.debug_label }}</summary>
+        <pre class="booth-checkout__debug-output body5" data-role="debug-output"></pre>
+      </details>
+    </theme-booth-checkout>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.booth_checkout.name",
+  "icon": "currency",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.booth_checkout.settings.heading.label",
+      "default": "Complete Your Booth Booking"
+    },
+    {
+      "type": "select",
+      "id": "heading_typography",
+      "label": "t:sections.booth_checkout.settings.heading_typography.label",
+      "default": "title2",
+      "options": [
+        { "value": "title0", "label": "Title 0" },
+        { "value": "title1", "label": "Title 1" },
+        { "value": "title2", "label": "Title 2" },
+        { "value": "title3", "label": "Title 3" },
+        { "value": "title4", "label": "Title 4" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.booth_checkout.settings.description.label",
+      "default": "<p>Tell us who you are, then pay to lock in the booth you picked on the floor plan.</p>"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.booth_checkout.settings.group_header_0.label",
+      "info": "t:sections.booth_checkout.settings.group_header_0.info"
+    },
+    {
+      "type": "text",
+      "id": "api_base_url",
+      "label": "t:sections.booth_checkout.settings.api_base_url.label",
+      "info": "t:sections.booth_checkout.settings.api_base_url.info",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "floorplan_url",
+      "label": "t:sections.booth_checkout.settings.floorplan_url.label",
+      "default": "https://collectivehub9-20.expofp.com"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.booth_checkout.settings.group_header_1.label",
+      "info": "t:sections.booth_checkout.settings.group_header_1.info"
+    },
+    {
+      "type": "text",
+      "id": "param_booth",
+      "label": "t:sections.booth_checkout.settings.param_booth.label",
+      "default": "booth"
+    },
+    {
+      "type": "text",
+      "id": "param_type",
+      "label": "t:sections.booth_checkout.settings.param_type.label",
+      "default": "type"
+    },
+    {
+      "type": "text",
+      "id": "param_size",
+      "label": "t:sections.booth_checkout.settings.param_size.label",
+      "default": "size"
+    },
+    {
+      "type": "text",
+      "id": "param_price",
+      "label": "t:sections.booth_checkout.settings.param_price.label",
+      "default": "price"
+    },
+    {
+      "type": "text",
+      "id": "param_currency",
+      "label": "t:sections.booth_checkout.settings.param_currency.label",
+      "default": "currency"
+    },
+    {
+      "type": "text",
+      "id": "currency",
+      "label": "t:sections.booth_checkout.settings.currency.label",
+      "info": "t:sections.booth_checkout.settings.currency.info",
+      "default": "USD"
+    },
+    {
+      "type": "switch",
+      "id": "show_debug",
+      "label": "t:sections.booth_checkout.settings.show_debug.label",
+      "info": "t:sections.booth_checkout.settings.show_debug.info",
+      "default": true
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.booth_checkout.settings.group_header_2.label"
+    },
+    {
+      "type": "text",
+      "id": "summary_title",
+      "label": "t:sections.booth_checkout.settings.summary_title.label",
+      "default": "Your booth"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "t:sections.booth_checkout.settings.total_label.label",
+      "default": "Total"
+    },
+    {
+      "type": "text",
+      "id": "hold_note",
+      "label": "t:sections.booth_checkout.settings.hold_note.label",
+      "default": "We hold this booth for you while you complete payment."
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "t:sections.booth_checkout.settings.form_title.label",
+      "default": "Exhibitor details"
+    },
+    {
+      "type": "text",
+      "id": "company_label",
+      "label": "t:sections.booth_checkout.settings.company_label.label",
+      "default": "Company name"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "t:sections.booth_checkout.settings.contact_label.label",
+      "default": "Contact name"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "t:sections.booth_checkout.settings.email_label.label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "t:sections.booth_checkout.settings.phone_label.label",
+      "default": "Phone (optional)"
+    },
+    {
+      "type": "text",
+      "id": "website_label",
+      "label": "t:sections.booth_checkout.settings.website_label.label",
+      "default": "Website (optional)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:sections.booth_checkout.settings.button_text.label",
+      "default": "Continue to payment"
+    },
+    {
+      "type": "text",
+      "id": "back_text",
+      "label": "t:sections.booth_checkout.settings.back_text.label",
+      "default": "Back to the floor plan"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "t:sections.booth_checkout.settings.note.label",
+      "default": "You will be redirected to our payment provider to finish the purchase."
+    },
+    {
+      "type": "text",
+      "id": "debug_label",
+      "label": "t:sections.booth_checkout.settings.debug_label.label",
+      "default": "Data received from the floor plan"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.booth_checkout.settings.group_header_3.label"
+    },
+    {
+      "type": "text",
+      "id": "missing_text",
+      "label": "t:sections.booth_checkout.settings.missing_text.label",
+      "default": "We could not tell which booth you picked. Please choose a booth on the floor plan first."
+    },
+    {
+      "type": "text",
+      "id": "required_text",
+      "label": "t:sections.booth_checkout.settings.required_text.label",
+      "default": "Please fill in every required field."
+    },
+    {
+      "type": "text",
+      "id": "error_text",
+      "label": "t:sections.booth_checkout.settings.error_text.label",
+      "default": "We could not start the payment. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "cancel_text",
+      "label": "t:sections.booth_checkout.settings.cancel_text.label",
+      "default": "Payment was cancelled. The booth is still available - you can try again."
+    },
+    {
+      "type": "text",
+      "id": "pending_text",
+      "label": "t:sections.booth_checkout.settings.pending_text.label",
+      "info": "t:sections.booth_checkout.settings.pending_text.info",
+      "default": "Your payment went through and we are confirming your booth. You will get an email shortly."
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "t:sections.booth_checkout.settings.success_text.label",
+      "default": "Payment received. Your booth is confirmed and a receipt is on its way."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.booth_checkout.settings.color_scheme.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.booth_checkout.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "stretch",
+        "justify-content": "flex-start",
+        "row-gap": "24px",
+        "column-gap": "24px",
+        "@media (--mobile)": {
+          "row-gap": "16px",
+          "column-gap": "16px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.booth_checkout.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "0",
+        "padding-inline-end": "0",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-block-end": "40px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.booth_checkout.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.booth_checkout.presets.presets_0.name",
+      "category": "t:sections.booth_checkout.presets.presets_0.category",
+      "settings": {}
+    }
+  ]
+}
+{{/schema}}

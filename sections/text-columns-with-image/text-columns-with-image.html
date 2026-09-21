@@ -1,0 +1,172 @@
+{{#component "stylesheet" src="./text-columns-with-image.css" | asset_url() /}}
+
+{{#component "script" src="./blocks/card-group.js" | asset_url() /}}
+
+<div
+  class="
+    text-columns-with-image-section color-{{ section.settings.color_scheme.id }}
+    {{#if section.settings.show_card_background == "shown" }}with-card-background{{/if}}
+  "
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#content "blocks" /}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_columns_with_image.name",
+  "icon": "textColumnsWithImages",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.text_columns_with_image.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "show_card_background",
+      "label": "t:sections.text_columns_with_image.settings.show_card_background.label",
+      "options": [
+        {
+          "value": "hidden",
+          "label": "t:sections.text_columns_with_image.settings.show_card_background.options_0.label"
+        },
+        {
+          "value": "shown",
+          "label": "t:sections.text_columns_with_image.settings.show_card_background.options_1.label"
+        }
+      ],
+      "default": "hidden"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.text_columns_with_image.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "30px",
+        "column-gap": "30px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.text_columns_with_image.settings.spacing.label",
+      "default": {
+        "padding-block-start": "80px",
+        "padding-inline-start": "0",
+        "padding-block-end": "80px",
+        "padding-inline-end": "0",
+        "@media (--mobile)": {
+          "padding-block-start": "24px",
+          "padding-block-end": "24px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.text_columns_with_image.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$card-group",
+      "limit": 3
+    },
+    {
+      "type": "$view-more",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.text_columns_with_image.presets.presets_0.category",
+      "name": "t:sections.text_columns_with_image.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Text columns with images",
+            "text_align": "left"
+          }
+        },
+        {
+          "type": "$card-group",
+          "blocks": [
+            {
+              "type": "$card",
+              "blocks": [
+                {
+                  "type": "image/image"
+                },
+                {
+                  "type": "$title"
+                },
+                {
+                  "type": "$text"
+                }
+              ]
+            },
+            {
+              "type": "$card",
+              "blocks": [
+                {
+                  "type": "image/image"
+                },
+                {
+                  "type": "$title"
+                },
+                {
+                  "type": "$text"
+                }
+              ]
+            },
+            {
+              "type": "$card",
+              "blocks": [
+                {
+                  "type": "image/image"
+                },
+                {
+                  "type": "$title"
+                },
+                {
+                  "type": "$text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$view-more"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

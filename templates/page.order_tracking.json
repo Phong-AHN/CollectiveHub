@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main-order-tracking": {
+      "type": "main-order-tracking",
+      "settings": {
+        "btn_text": "View Order",
+        "color_scheme": "scheme-1",
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-top": "80px"
+        },
+        "title": "Order Tracking"
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-order-tracking"
+  ]
+}

@@ -1,0 +1,46 @@
+{{#var current_variant = props.current_variant /}}
+
+{{#capture class }}quantity-selector__input {{ block.settings | class_list() }}{{/capture}}
+
+{{#capture input_attributes }}
+  data-rerender-id="{{ block.id }}-quantity-input"
+  data-rerender-attrs="min,max,step"
+{{/capture}}
+
+{{#component
+  "input/input-number"
+  class=class
+  name="quantity"
+  value=current_variant.quantity_rule.min
+  min=current_variant.quantity_rule.min
+  max=current_variant.quantity_rule.max
+  step=current_variant.quantity_rule.increment
+  input_attributes=input_attributes
+/}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product_buy_button_group..quantity_selector.name",
+  "tag": "",
+  "icon": "number",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_buy_button_group..quantity_selector.settings.size.label",
+      "default": {
+        "width": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_buy_button_group..quantity_selector.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

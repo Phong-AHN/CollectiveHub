@@ -1,0 +1,157 @@
+{{#var variants = product | get_variants() /}}
+{{#var has_default_variant = section.settings.has_default_variant | default(true, allow_false = true) /}}
+
+{{#if product.has_only_default_variant }}
+  {{#set has_default_variant = true /}}
+{{/if}}
+
+{{#var current_variant /}}
+{{#if has_default_variant }}
+  {{#var first_variant = variants | first() /}}
+  {{#set current_variant = product.selected_or_first_available_variant | default(first_variant) /}}
+{{#else/}}
+  {{#set current_variant = product.selected_variant /}}
+{{/if}}
+
+{{#capture content }}
+  {{#blocks}}
+    {{#block product=product current_variant=current_variant /}}
+  {{/blocks}}
+{{/capture}}
+
+{{#component
+  "product/detail"
+  product=product
+  current_variant=current_variant
+  can_update_url=true
+  content=content
+  section_type="main-product"
+/}}
+
+{{#var seo_media = current_variant.featured_media | default(product.featured_media) /}}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "{{product.title}}",
+    "url": "{{{request.origin | append(product.url)}}}",
+    {{#if seo_media}}
+      "image": [
+        "{{{seo_media.preview_image.src}}}"
+      ],
+    {{/if}}
+    {{#if product.description}}
+      "description": {{{product.description | strip_html() | json()}}},
+    {{/if}}
+    {{#if current_variant.sku}}
+      "sku": "{{current_variant.sku}}",
+    {{/if}}
+    {{#if product.vendor}}
+    "brand": {
+      "@type": "Brand",
+      "name": "{{product.vendor}}"
+    },
+    {{/if}}
+    "offers": [
+      {{#for variant in variants}}
+        {
+          "@type" : "Offer",
+          {{#if variant.sku}}
+            "sku": "{{variant.sku}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 12}}
+            "gtin12": "{{variant.barcode}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 13}}
+            "gtin13": "{{variant.barcode}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 14}}
+            "gtin14": "{{variant.barcode}}",
+          {{/if}}
+          "availability" : "https://schema.org/{{#if variant.available}}InStock{{#else/}}OutOfStock{{/if}}",
+          "price" : "{{variant.price | divided_by(100, integer=false)}}",
+          "priceCurrency" : "{{localization.country.currency.iso_code}}",
+          "url": "{{{request.origin | append(variant.url)}}}"
+        }{{#if !forloop.last}},{{/if}}
+      {{/for}}
+    ]
+  }
+</script>
+
+{{#schema}}
+{
+  "name": "t:sections.main_product.name",
+  "icon": "products",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_product.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main_product.settings.group_header_0.label"
+    },
+    {
+      "id": "has_default_variant",
+      "type": "switch",
+      "label": "t:sections.main_product.settings.has_default_variant.label",
+      "default": true
+    },
+    {
+      "id": "hide_other_variants",
+      "type": "switch",
+      "label": "t:sections.main_product.settings.hide_other_variants.label",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.main_product.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "row-gap": "20px",
+        "column-gap": "60px",
+        "@media (--mobile)": {
+          "row-gap": "10px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_product.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-block-end": "60px",
+        "@media (--mobile)": {
+          "padding-block-start": "10px",
+          "padding-block-end": "10px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-main",
+      "limit": 1
+    },
+    {
+      "type": "product/_detail-breadcrumb",
+      "limit": 1
+    },
+    {
+      "type": "product-description",
+      "limit": 1
+    },
+    {
+      "type": "breadcrumb/breadcrumb",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}

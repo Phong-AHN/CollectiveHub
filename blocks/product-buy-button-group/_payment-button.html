@@ -1,0 +1,30 @@
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+
+{{#component "script" src="product/form.js" | asset_url() /}}
+
+<theme-product-form
+  class="product-form payment-button-wrapper {{#if !current_variant.available }}is-disabled{{/if}}"
+  data-use-error-toast="true"
+  {{{ block.shopline_attributes }}}
+>
+  {{#product_form product id=block.id }}
+    <input type="hidden" name="id" value="{{ current_variant.id }}"/>
+    <input type="hidden" required name="quantity" value="1"/>
+    {{#payment_button/}}
+  {{/product_form}}
+</theme-product-form>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_buy_button_group..payment_button.name",
+  "tag": "",
+  "deletable": false,
+  "icon": "button",
+  "presets": [
+    {
+      "name": "t:blocks.product_buy_button_group..payment_button.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

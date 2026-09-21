@@ -1,0 +1,100 @@
+.previous-events {
+  background-color: rgb(var(--previous-events-background, 253, 247, 239));
+}
+
+.previous-events__layout {
+  width: 100%;
+}
+
+.previous-events__content {
+  width: 100%;
+}
+
+.previous-events__slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--previous-events-pagination-gap, 0px);
+  width: 100%;
+}
+
+.previous-events__swiper.swiper {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.previous-events__swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.previous-events__slide {
+  height: auto;
+  box-sizing: border-box;
+}
+
+.previous-events__card {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  background-color: #000;
+  aspect-ratio: 1 / 1;
+}
+
+.previous-events__card-media,
+.previous-events__card-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.previous-events__card-image,
+.previous-events__card-placeholder svg,
+.previous-events__card-placeholder img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.previous-events__card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111;
+  color: #666;
+}
+
+.previous-events .previous-events__pagination.swiper-pagination {
+  position: static !important;
+  inset: auto !important;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  transform: none !important;
+}
+
+.previous-events .previous-events__pagination .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  margin: 0 !important;
+  background: transparent;
+  border: 1.5px solid rgb(var(--previous-events-dot-color, 0, 0, 0));
+  border-radius: 50%;
+  opacity: 1;
+  transition: background-color 0.2s ease;
+}
+
+.previous-events .previous-events__pagination .swiper-pagination-bullet-active {
+  background: rgb(var(--previous-events-dot-color, 0, 0, 0));
+}
+
+.previous-events .previous-events__pagination.swiper-pagination-lock,
+.previous-events .previous-events__pagination .swiper-pagination-bullet:only-child {
+  display: flex !important;
+}

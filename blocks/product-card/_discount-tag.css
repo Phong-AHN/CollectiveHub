@@ -1,0 +1,15 @@
+.block-product-card__discount-tag,
+.block-product-card__sold-out {
+  padding: 0.1em 0.4em;
+  line-height: 1.4;
+  color: rgb(var(--color-tag-text));
+  background-color: rgba(
+    var(--color-tag-background),
+    var(--product-card-discount-background-opacity)
+  );
+  border-radius: var(--product-card-discount-radius);
+}
+.block-product-card__sold-out {
+  color: rgb(0 0 0 / 100%);
+  background-color: rgb(255 255 255 / 100%);
+}

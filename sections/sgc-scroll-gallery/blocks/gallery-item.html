@@ -1,0 +1,164 @@
+{{#capture gallery_item_content }}
+  <div
+    class="
+      sgc-scroll-gallery__gallery-item-image {{#if block.settings.link_url }}
+        sgc-scroll-gallery__gallery-item-image--link
+      {{/if}}
+    "
+    style="--image-display-area: {{ block.settings.image_display_area }};"
+  >
+    {{#if block.settings.image }}
+      {{#component "../components/image" data=block.settings.image /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </div>
+  <div class="sgc-scroll-gallery__gallery-item-content">
+    {{#blocks}}
+      {{#block/}}
+    {{/blocks}}
+  </div>
+{{/capture}}
+
+<div
+  class="
+    sgc-scroll-gallery__gallery-item
+    {{#if props.text_display_mode == "hover" }}
+      sgc-scroll-gallery__gallery-item--hover
+    {{/if}}
+    {{#if props.enable_hover_zoom }}
+      sgc-scroll-gallery__gallery-item--hover-zoom
+    {{/if}}
+  "
+  style="
+    --image-opacity: {{ block.settings.image_opacity }}%;
+    --radius: {{ block.settings.radius }}px;
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.link_url }}
+    <a href="{{ block.settings.link_url }}">
+      {{{ gallery_item_content }}}
+    </a>
+  {{#else/}}
+    {{{ gallery_item_content }}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_gallery.blocks.gallery_item.name",
+  "icon": "image",
+  "settings": [
+    {
+      "type": "image",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image.label",
+      "id": "image"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.label",
+      "id": "image_display_area",
+      "default": "center",
+      "options": [
+        {
+          "value": "top left",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_0.label"
+        },
+        {
+          "value": "top center",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_1.label"
+        },
+        {
+          "value": "top right",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_2.label"
+        },
+        {
+          "value": "center left",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_3.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_4.label"
+        },
+        {
+          "value": "center right",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_5.label"
+        },
+        {
+          "value": "bottom left",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_6.label"
+        },
+        {
+          "value": "bottom center",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_7.label"
+        },
+        {
+          "value": "bottom right",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_display_area.options_8.label"
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.link_url.label",
+      "id": "link_url"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.radius.label",
+      "id": "radius",
+      "default": 0,
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_opacity.label",
+      "id": "image_opacity",
+      "info": "t:sections.sgc_scroll_gallery.blocks.gallery_item.settings.image_opacity.info",
+      "default": 20,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$content-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_gallery.blocks.gallery_item.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$content-group",
+          "blocks": [
+            {
+              "type": "$subtitle",
+              "settings": {
+                "text_align": "left",
+                "desktop_title": "Improved",
+                "font_family": "Montserrat 600",
+                "desktop_font_size": 16,
+                "mobile_font_size": 14,
+                "letter_spacing": 300,
+                "line_height": 1,
+                "color": "#FFFFFF"
+              }
+            },
+            {
+              "type": "$description"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

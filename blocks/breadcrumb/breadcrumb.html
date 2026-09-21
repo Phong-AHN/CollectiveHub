@@ -1,0 +1,219 @@
+{{#component "script" src="./breadcrumb.js" | asset_url() /}}
+{{#component "stylesheet" src="./breadcrumb.css" | asset_url() /}}
+
+{{#var separator_of_part = "\u241E" /}}
+
+{{#var path = request.path | url_decode() | remove_first("/") /}}
+{{#var path_parts = path | split("/") /}}
+
+{{#var page_type = request.page_type /}}
+{{#var third_part = "" /}}
+{{#var fourth_part = "" /}}
+
+{{#for part in path_parts }}
+  {{#if forloop.index0 == 2 }}
+    {{#set third_part = part /}}
+  {{#else if forloop.index0 == 3 /}}
+    {{#set fourth_part = part /}}
+  {{/if}}
+{{/for}}
+
+{{#var display_names = "" /}}
+{{#var links = "" /}}
+
+{{#switch page_type }}
+  {{#case "product" /}}
+    {{#set display_names = product.title /}}
+    {{#set links = product.url /}}
+
+    {{#if collection }}
+      
+      {{#set display_names = display_names | prepend(separator_of_part) | prepend(collection.title) /}}
+      {{#set links = links | prepend(separator_of_part) | prepend(collection.url) /}}
+    {{/if}}
+  {{#case "collection" /}}
+    
+    {{#set display_names = "general.general.all_products" | t() /}}
+    {{#set links = collection.url /}}
+
+    {{#if collection.handle }}
+      
+      {{#set display_names = collection.title /}}
+      {{#set links = collection.url /}}
+    {{/if}}
+  {{#case "blog" /}}
+    
+    {{#set display_names = blog.title /}}
+    {{#set links = blog.url /}}
+
+    {{#if third_part == "tagged" }}
+      
+      {{#set display_names = display_names | append(separator_of_part) | append(fourth_part) /}}
+      {{#set links = links | append(separator_of_part) | append(request.path) /}}
+    {{/if}}
+  {{#case "article" /}}
+    
+    {{#set display_names = blog.title | append(separator_of_part) | append(article.title) /}}
+    {{#set links = blog.url | append(separator_of_part) | append(article.url) /}}
+  {{#case "collections_all" /}}
+    
+    {{#set display_names = "general.general.collections" | t() /}}
+    {{#set links = "/collections-all" /}}
+  {{#case "page" /}}
+    
+    {{#set display_names = page.title /}}
+    {{#set links = page.url /}}
+{{/switch}}
+
+{{#var home_name = "general.general.home" | t() /}}
+{{#set display_names = display_names | prepend(separator_of_part) | prepend(home_name) /}}
+{{#set links = links | prepend(separator_of_part) | prepend(routes.root_url) /}}
+
+<theme-breadcrumb
+  data-display-names="{{{ display_names | url_escape()}}}"
+  data-links="{{{ links | url_escape()}}}"
+  {{#if collection }}
+    data-has-collection-handle="true"
+  {{/if}}
+  class="{{ block.settings.typography }} {{ block.settings.layout | class_list() }}"
+  {{{ block.shopline_attributes }}}
+>
+  <ul
+    class="
+      block-breadcrumb
+      {{#if !block.settings.show_breadcrumb_desktop }}hidden-desktop{{/if}}
+      {{#if !block.settings.show_breadcrumb_mobile }}hidden-mobile{{/if}}
+      color-{{ block.settings.color_scheme.id }}
+      {{ block.settings | class_list() }}
+    "
+    style="
+      --breadcrumb-column-gap: {{ block.settings.layout | css_var(`column-gap`) }};
+      --breadcrumb-row-gap: {{ block.settings.layout | css_var(`row-gap`) }};
+    "
+  >
+    <div class="block-breadcrumb-hoverable-parts-wrapper">
+      <div class="block-breadcrumb-hoverable-parts-wrapper-content"></div>
+    </div>
+  </ul>
+</theme-breadcrumb>
+
+{{#schema}}
+{
+  "name": "t:blocks.breadcrumb.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:blocks.breadcrumb.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "switch",
+      "id": "show_breadcrumb_desktop",
+      "label": "t:blocks.breadcrumb.settings.show_breadcrumb_desktop.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_breadcrumb_mobile",
+      "label": "t:blocks.breadcrumb.settings.show_breadcrumb_mobile.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.breadcrumb.settings.typography.label",
+      "id": "typography",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.breadcrumb.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.breadcrumb.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.breadcrumb.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.breadcrumb.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.breadcrumb.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.breadcrumb.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.breadcrumb.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.breadcrumb.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.breadcrumb.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.breadcrumb.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.breadcrumb.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.breadcrumb.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.breadcrumb.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.breadcrumb.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.breadcrumb.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.breadcrumb.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "flex-start",
+        "row-gap": "0px",
+        "column-gap": "5px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.breadcrumb.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.breadcrumb.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

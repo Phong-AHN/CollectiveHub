@@ -1,0 +1,14 @@
+{{#component "script" src="./expander.js" | asset_url() /}}
+
+<theme-product-expander style="--expander-max-height: {{ props.max_height | default(`150px`) }};">
+  <div class="product-expander__content">
+    {{{ props.content }}}
+  </div>
+  <button
+    class="product-expander__trigger button button--link"
+    data-show-text="{{ "products.product_details.expander_view_more" | t() }}"
+    data-less-text="{{ "products.product_details.expander_view_less" | t() }}"
+  >
+    {{#component "icons/arrow-thin" class="product-expander__arrow" /}}
+  </button>
+</theme-product-expander>

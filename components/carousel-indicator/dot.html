@@ -1,0 +1,9 @@
+{{#component "stylesheet" src="./dot.css" | asset_url() /}}
+
+<div class="theme-carousel-indicator__dot {{ props.class }}">
+  {{#for index in 1 | range(props.size) }}
+    <div class="theme-carousel-indicator__dot-item-wrapper">
+      <button class="theme-carousel-indicator__dot-item" name="pager" data-index="{{ index | minus(1) }}"></button>
+    </div>
+  {{/for}}
+</div>

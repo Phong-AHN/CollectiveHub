@@ -1,0 +1,465 @@
+{{#component "script" src="../product-variant-picker.js" | asset_url() /}}
+
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+{{#var picker_type = block.settings.picker_type /}}
+{{#var flatten_unavailable_style = block.settings.flatten_unavailable_style /}}
+{{#var flatten_selected_style = block.settings.flatten_selected_style /}}
+{{#var upcase_color_text = "products.general.variant_property_color" | t() | upcase() /}}
+
+{{#if block.settings.enabled_color_swatch }}
+  {{#set picker_type = "flatten" /}}
+{{/if}}
+
+{{#capture variant_data }}
+  <script name="variant-data" type="application/json">
+    [
+      {{#for variant in product | get_variants() ~}}
+        {{#component "product/variant-data" variant=variant /}}{{#if !forloop.last}},{{/if}}
+      {{/for}}
+    ]
+  </script>
+{{/capture}}
+
+{{#switch picker_type }}
+  {{#case "select" /}}
+    {{#component "stylesheet" src="components/select/index.css" | asset_url() /}}
+    {{#component "script" src="components/select/index.js" | asset_url() /}}
+
+    <theme-variant-select-picker
+      class="product-detail__variant-picker"
+      data-size="{{ product.options_with_values | size() }}"
+      data-unavailable-style="{{ block.settings.select_unavailable_style }}"
+      data-unavailable-text="{{ "products.general.suffix.unavailable" | t() }}"
+      {{{ block.shopline_attributes }}}
+    >
+      {{#for option in product.options_with_values }}
+        {{#var current_selected_option /}}
+        {{#if current_variant }}
+          {{#set current_selected_option = current_variant.options[forloop.index0] /}}
+        {{/if}}
+
+        <div
+          class="
+            product-detail__row
+            product-detail__row--desktop-direction-{{ block.settings.desktop_layout_direction }}
+            product-detail__row--mobile-direction-{{ block.settings.mobile_layout_direction }}
+          "
+        >
+          <div class="variant-picker__group-head">
+            <div class="variant-picker__group-label {{ block.settings.title_typography }} title-font-bold">
+              {{ option.name }}
+            </div>
+          </div>
+
+          <theme-select data-size="{{ block.settings.size }}">
+            <select
+              class="variant-picker__select"
+              name="{{ block.id }}-{{ option.name }}"
+              title="{{ option.name }}"
+              data-index="{{ forloop.index0 }}"
+            >
+              {{#for item in option.values_images }}
+                {{#var is_selected = false /}}
+                {{#if current_selected_option == item.value }}
+                  {{#set is_selected = true /}}
+                {{/if}}
+
+                {{#if !current_variant }}
+                  <option value="" selected hidden disabled>
+                    {{~ "products.product_details.default_placeholder" | t(attrName = option.name) ~}}
+                  </option>
+                {{/if}}
+
+                <option value="{{ item.value }}" {{#if is_selected }}selected{{/if}}>
+                  <span class="variant-picker__label">
+                    {{ item.value }}
+                  </span>
+
+                  <template>
+                    <div class="variant-picker__select-option">
+                      {{#if item.image }}
+                        {{#component
+                          "image"
+                          data=item.image
+                          class="variant-picker__image"
+                          breakpoints="40"
+                          sizes="40px"
+                          lazy=true
+                          fetchpriority="auto"
+                        /}}
+                      {{/if}}
+                      <span class="variant-picker__label">
+                        {{ item.value }}
+                      </span>
+                    </div>
+                  </template>
+                </option>
+              {{/for}}
+            </select>
+
+            {{#component "icons/arrow-thin" class="theme-select__arrow" /}}
+          </theme-select>
+        </div>
+      {{/for}}
+
+      {{{ variant_data }}}
+    </theme-variant-select-picker>
+  {{#case "flatten" /}}
+    {{#component "stylesheet" src="components/popover/index.css" | asset_url() /}}
+    {{#component "script" src="components/popover/index.js" | asset_url() /}}
+
+    <theme-variant-radio-picker
+      class="product-detail__variant-picker"
+      data-size="{{ block.settings.size }}"
+      data-variant-size="{{ product.options_with_values | size() }}"
+      data-unavailable-style="{{ flatten_unavailable_style }}"
+      data-selected-style="{{ flatten_selected_style }}"
+      {{{ block.shopline_attributes }}}
+    >
+      {{#for option in product.options_with_values }}
+        {{#var current_selected_option /}}
+        {{#if current_variant }}
+          {{#set current_selected_option = current_variant.options[forloop.index0] /}}
+        {{/if}}
+
+        {{#var is_color_swatch = false /}}
+        {{#if (option.name | upcase()) == upcase_color_text }}
+          {{#set is_color_swatch = true /}}
+        {{/if}}
+
+        <fieldset class="variant-picker__group" data-index="{{ forloop.index0 }}">
+          <div
+            class="
+              product-detail__row
+              product-detail__row--desktop-direction-{{ block.settings.desktop_layout_direction }}
+              product-detail__row--mobile-direction-{{ block.settings.mobile_layout_direction }}
+            "
+          >
+            <div class="variant-picker__group-head">
+              <legend class="variant-picker__group-label {{ block.settings.title_typography }} title-font-bold">
+                {{ option.name }}
+              </legend>
+            </div>
+
+            <div class="variant-picker__options product-detail__row-main">
+              {{#for item in option.option_values }}
+                {{#var is_selected = false /}}
+                {{#if current_selected_option == item.value }}
+                  {{#set is_selected = true /}}
+                {{/if}}
+
+                {{#var option_color = "" /}}
+                {{#if is_color_swatch }}
+                  {{#if item.color }}
+                    {{#set option_color = item.color.hex /}}
+                  {{#else/}}
+                    {{#set option_color = item.value /}}
+                  {{/if}}
+                {{/if}}
+
+                <label class="variant-picker__option body3">
+                  <input
+                    class="variant-picker__input"
+                    type="radio"
+                    name="{{ block.id }}_{{ option.name }}"
+                    value="{{ item.value }}"
+                    {{#if is_selected }}checked{{/if}}
+                  />
+                  {{#if block.settings.enabled_color_swatch && is_color_swatch }}
+                    <span
+                      class="
+                        variant-picker__button
+                        variant-picker__button--swatch
+                        variant-picker__button--swatch-{{ block.settings.color_swatch_type }}
+                      "
+                      style="--swatch-background-color: {{ option_color }};"
+                      role="button"
+                    >
+                      <span class="variant-picker__swatch-inner"></span>
+                    </span>
+                  {{#else if item.image /}}
+                    <theme-popover
+                      class="variant-picker__image-popover"
+                      data-trigger="hover"
+                      data-position="top"
+                      data-mode="tooltip"
+                    >
+                      <span class="variant-picker__button variant-picker__button--image" role="button">
+                        {{#component
+                          "image"
+                          data=item.image
+                          class="variant-picker__image"
+                          breakpoints="40"
+                          sizes="40px"
+                          lazy=true
+                          fetchpriority="auto"
+                        /}}
+                      </span>
+                      <theme-popover-content class="body6 hidden-mobile">{{ item.value }}</theme-popover-content>
+                    </theme-popover>
+                  {{#else/}}
+                    <span class="variant-picker__button variant-picker__button--text" role="button">
+                      {{ item.value }}
+                    </span>
+                  {{/if}}
+                  <span class="variant-picker__slash"></span>
+                </label>
+              {{/for}}
+            </div>
+          </div>
+        </fieldset>
+      {{/for}}
+
+      {{{ variant_data }}}
+    </theme-variant-radio-picker>
+{{/switch}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_variant_picker.name",
+  "tag": "",
+  "icon": "productSku",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "enabled_color_swatch",
+      "label": "t:blocks.product..detail_variant_picker.settings.enabled_color_swatch.label",
+      "info": "t:blocks.product..detail_variant_picker.settings.enabled_color_swatch.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_swatch_type",
+      "label": "t:blocks.product..detail_variant_picker.settings.color_swatch_type.label",
+      "visible_if": "{{ block.settings.enabled_color_swatch == true }}",
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "label": "t:blocks.product..detail_variant_picker.settings.color_swatch_type.options_0.label"
+        },
+        {
+          "value": "circle",
+          "label": "t:blocks.product..detail_variant_picker.settings.color_swatch_type.options_1.label"
+        },
+        {
+          "value": "round-corner",
+          "label": "t:blocks.product..detail_variant_picker.settings.color_swatch_type.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product..detail_variant_picker.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_variant_picker.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "picker_type",
+      "label": "t:blocks.product..detail_variant_picker.settings.picker_type.label",
+      "visible_if": "{{ block.settings.enabled_color_swatch == false }}",
+      "default": "flatten",
+      "options": [
+        {
+          "value": "flatten",
+          "label": "t:blocks.product..detail_variant_picker.settings.picker_type.options_0.label"
+        },
+        {
+          "value": "select",
+          "label": "t:blocks.product..detail_variant_picker.settings.picker_type.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "flatten_unavailable_style",
+      "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.label",
+      "info": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.info",
+      "visible_if": "{{ block.settings.enabled_color_swatch == true || block.settings.picker_type == `flatten` }}",
+      "default": "short-slash-disabled",
+      "options": [
+        {
+          "value": "disabled",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.options_0.label"
+        },
+        {
+          "value": "long-slash",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.options_1.label"
+        },
+        {
+          "value": "long-slash-disabled",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.options_2.label"
+        },
+        {
+          "value": "short-slash",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.options_3.label"
+        },
+        {
+          "value": "short-slash-disabled",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_unavailable_style.options_4.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "select_unavailable_style",
+      "label": "t:blocks.product..detail_variant_picker.settings.select_unavailable_style.label",
+      "visible_if": "{{ block.settings.enabled_color_swatch == false && block.settings.picker_type == `select` }}",
+      "default": "text",
+      "options": [
+        {
+          "value": "text",
+          "label": "t:blocks.product..detail_variant_picker.settings.select_unavailable_style.options_0.label"
+        },
+        {
+          "value": "disabled",
+          "label": "t:blocks.product..detail_variant_picker.settings.select_unavailable_style.options_1.label"
+        },
+        {
+          "value": "line-through",
+          "label": "t:blocks.product..detail_variant_picker.settings.select_unavailable_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "flatten_selected_style",
+      "label": "t:blocks.product..detail_variant_picker.settings.flatten_selected_style.label",
+      "visible_if": "{{ block.settings.enabled_color_swatch == true || block.settings.picker_type == `flatten` }}",
+      "default": "secondary-button",
+      "options": [
+        {
+          "value": "secondary-button",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_selected_style.options_0.label"
+        },
+        {
+          "value": "primary-button",
+          "label": "t:blocks.product..detail_variant_picker.settings.flatten_selected_style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:blocks.product..detail_variant_picker.settings.size.label",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:blocks.product..detail_variant_picker.settings.size.options_0.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:blocks.product..detail_variant_picker.settings.size.options_1.label"
+        },
+        {
+          "value": "large",
+          "label": "t:blocks.product..detail_variant_picker.settings.size.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout_direction",
+      "label": "t:blocks.product..detail_variant_picker.settings.desktop_layout_direction.label",
+      "default": "row",
+      "options": [
+        {
+          "value": "column",
+          "label": "t:blocks.product..detail_variant_picker.settings.desktop_layout_direction.options_0.label"
+        },
+        {
+          "value": "row",
+          "label": "t:blocks.product..detail_variant_picker.settings.desktop_layout_direction.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout_direction",
+      "label": "t:blocks.product..detail_variant_picker.settings.mobile_layout_direction.label",
+      "default": "column",
+      "options": [
+        {
+          "value": "column",
+          "label": "t:blocks.product..detail_variant_picker.settings.mobile_layout_direction.options_0.label"
+        },
+        {
+          "value": "row",
+          "label": "t:blocks.product..detail_variant_picker.settings.mobile_layout_direction.options_1.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_variant_picker.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

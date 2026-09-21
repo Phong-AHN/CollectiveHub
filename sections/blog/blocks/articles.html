@@ -1,0 +1,185 @@
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+
+{{#component "stylesheet" src="./articles.css" | asset_url() /}}
+
+{{#var articles_pagination = props.blog | get_article_pagination(block.settings.limit) /}}
+{{#var articles = articles_pagination.list /}}
+{{#var mobile_enable_slider = block.settings.mobile_enable_slider /}}
+{{#var size = articles_pagination.items | default(3) /}}
+{{#var mobile_columns_float = block.settings.mobile_columns | to_float() /}}
+{{#var mobile_scroll_style = block.settings.mobile_scroll_style /}}
+{{#var
+  should_enable_slider = mobile_enable_slider &&
+    (mobile_columns_float < (block.settings.limit | to_float())) &&
+    (size > 1)
+/}}
+
+{{~#var mobile_columns /}}
+{{~#var extra_columns = 0.0 /}}
+{{~#if should_enable_slider }}
+  {{~#set extra_columns = 0.2 /}}
+{{~/if}}
+{{#set mobile_columns = mobile_columns_float | plus(extra_columns) /}}
+
+{{#var max_size = size | at_most(block.settings.limit) /}}
+
+<theme-carousel class="block-articles__carousel" data-direction="horizontal" {{{ block.shopline_attributes }}}>
+  <ul
+    class="block-articles grid carousel__track"
+    style="
+      --mobile-columns: {{ mobile_columns }};
+      --mobile-gap-columns: {{ mobile_columns | ceil() }};
+      {{~#if mobile_enable_slider }}--mobile-auto-flow: column;{{~/if}}
+      --desktop-columns: {{ block.settings.desktop_columns }};
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{#blocks}}
+      {{#for article in articles }}
+        <li class="block-articles__item">
+          {{#block
+            article=article
+            mobile_columns=mobile_columns | floor()
+            desktop_columns=block.settings.desktop_columns
+            has_view_all_button=props.has_view_all_button
+          /}}
+        </li>
+      {{#else/}}
+        {{#for _ in 1 | range(size) }}
+          <li class="block-articles__item">
+            {{#block has_view_all_button=props.has_view_all_button /}}
+          </li>
+        {{/for}}
+      {{/for}}
+    {{/blocks}}
+  </ul>
+
+  {{#if should_enable_slider && mobile_scroll_style == "dot" }}
+    {{#component "carousel-indicator/dot" class="block-articles__dots hidden-desktop" size=max_size /}}
+  {{/if}}
+
+  {{#if should_enable_slider && mobile_scroll_style == "progress" }}
+    {{#component "carousel-indicator/progress" class="block-articles__progress hidden-desktop" size=max_size /}}
+  {{/if}}
+</theme-carousel>
+
+{{#schema}}
+{
+  "name": "t:sections.blog.blocks.articles.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.blog.blocks.articles.settings.limit.label",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "t:sections.blog.blocks.articles.settings.limit.unit"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "t:sections.blog.blocks.articles.settings.mobile_columns.label",
+      "default": "1",
+      "options": [
+        {
+          "label": "t:sections.blog.blocks.articles.settings.mobile_columns.options_0.label",
+          "value": 1
+        },
+        {
+          "label": "2",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "mobile_enable_slider",
+      "label": "t:sections.blog.blocks.articles.settings.mobile_enable_slider.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_scroll_style",
+      "label": "t:sections.blog.blocks.articles.settings.mobile_scroll_style.label",
+      "default": "normal",
+      "options": [
+        {
+          "label": "t:sections.blog.blocks.articles.settings.mobile_scroll_style.options_0.label",
+          "value": "normal"
+        },
+        {
+          "label": "t:sections.blog.blocks.articles.settings.mobile_scroll_style.options_1.label",
+          "value": "dot"
+        },
+        {
+          "label": "t:sections.blog.blocks.articles.settings.mobile_scroll_style.options_2.label",
+          "value": "progress"
+        }
+      ]
+    },
+    {
+      "id": "desktop_columns",
+      "type": "select",
+      "label": "t:sections.blog.blocks.articles.settings.desktop_columns.label",
+      "default": "3",
+      "options": [
+        {
+          "label": "t:sections.blog.blocks.articles.settings.desktop_columns.options_0.label",
+          "value": 1
+        },
+        {
+          "label": "2",
+          "value": 2
+        },
+        {
+          "label": "t:sections.blog.blocks.articles.settings.desktop_columns.options_2.label",
+          "value": 3
+        },
+        {
+          "label": "t:sections.blog.blocks.articles.settings.desktop_columns.options_3.label",
+          "value": 4
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article/card",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.blog.blocks.articles.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "article/card",
+          "blocks": [
+            {
+              "type": "article/_cover"
+            },
+            {
+              "type": "article/_info",
+              "blocks": [
+                {
+                  "type": "article/_title"
+                },
+                {
+                  "type": "article/_date-author"
+                },
+                {
+                  "type": "article/_excerpt"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

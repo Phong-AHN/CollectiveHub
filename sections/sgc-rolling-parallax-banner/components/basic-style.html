@@ -1,0 +1,14 @@
+<style>
+  {{{ props.font_family | font_face() }}}
+
+  {{{ props.selector }}} {
+    --sgc-basic-font-family: '{{ props.font_family.family }}', '{{ props.font_family.fallback_families }}';
+    --sgc-basic-font-weight: {{ props.font_family.weight }};
+    --sgc-basic-font-style: {{ props.font_family.style }};
+    --sgc-basic-font-size: {{ props.font_size }}px;
+    --sgc-basic-mobile-font-size: {{ props.mobile_font_size }}px;
+    --sgc-basic-line-height: {{ props.line_height }};
+    --sgc-basic-color: {{ props.color.red }}, {{ props.color.green }}, {{ props.color.blue }};
+    --sgc-basic-letter-spacing: {{ props.letter_spacing | divided_by(1000, integer = false) }}em;
+  }
+</style>

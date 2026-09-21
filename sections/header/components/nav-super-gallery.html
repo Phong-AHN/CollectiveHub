@@ -1,0 +1,91 @@
+
+
+{{#var enable_highlighted_menu_items = props.enable_highlighted_menu_items /}}
+{{#var highlighted_menu_items_pattern = props.highlighted_menu_items_pattern /}}
+{{#var keywords = highlighted_menu_items_pattern | split(",") /}}
+
+{{#var data = props.data /}}
+{{#var title = data.settings.title /}}
+{{#var url = data.settings.url /}}
+{{#var title_color = data.settings.title_color /}}
+
+{{#var aspect_ratio = data.settings.aspect_ratio /}}
+{{#var mask_opacity = data.settings.mask_opacity /}}
+
+{{#var total = 0 /}}
+{{#if data.settings.image_1 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_2 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_3 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_4 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+
+{{#if title }}
+  <li
+    class="
+      header-nav__menu-item header-nav__underline-control
+      {{#if aspect_ratio == "unset" }}header-nav__menu-item--adapt{{/if}}
+    "
+    style="
+      --nav-super-gallery-text-color: {{ title_color.red }},{{ title_color.green }},{{ title_color.blue }};
+      --nav-super-gallery-background-opcity: {{ mask_opacity }};
+    "
+  >
+    <a
+      class="header-nav__underline"
+      {{#if url && total == 0 }}href="{{ url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+    >
+      <span class="header-nav__ellipsis">
+        {{#if enable_highlighted_menu_items && keywords | contains(title) }}
+          <mark class="lighthighted">{{ title }}</mark>
+        {{#else/}}
+          {{ title }}
+        {{/if}}
+      </span>
+    </a>
+
+    
+    <div class="header-nav-dropdown-panel header-super-nav-dropdown-panel flex-justify-center" aria-hidden="true">
+      
+      {{#if total }}
+        {{#component
+          "./nav-super-gallery-item"
+          image=data.settings.image_1
+          link=data.settings.image_1_link
+          title=data.settings.image_1_title
+        /}}
+
+        {{#component
+          "./nav-super-gallery-item"
+          image=data.settings.image_2
+          link=data.settings.image_2_link
+          title=data.settings.image_2_title
+        /}}
+
+        {{#component
+          "./nav-super-gallery-item"
+          image=data.settings.image_3
+          link=data.settings.image_3_link
+          title=data.settings.image_3_title
+        /}}
+
+        {{#component
+          "./nav-super-gallery-item"
+          image=data.settings.image_4
+          link=data.settings.image_4_link
+          title=data.settings.image_4_title
+        /}}
+      {{#else/}}
+        {{#for _ in 1 | range(4) }}
+          {{#component "./nav-super-gallery-item" show_placeholder=true /}}
+        {{/for}}
+      {{/if}}
+    </div>
+  </li>
+{{/if}}

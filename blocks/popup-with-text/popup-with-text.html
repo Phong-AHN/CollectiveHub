@@ -1,0 +1,203 @@
+{{#var button_text = block.settings.button_text /}}
+{{#var background_color = block.settings.background_color /}}
+{{#var background_opacity = block.settings.background_opacity /}}
+{{#var border_radius = block.settings.border_radius /}}
+
+{{#if button_text }}
+  {{#component "stylesheet" src="./popup-with-text.css" | asset_url() /}}
+
+  {{#capture class_list }}block-popup-with-text quick-add-modal-hidden{{/capture}}
+  {{#capture style_list }}
+    --width: {{ block.settings.size | css_var(`width`) }};
+    --height: {{ block.settings.size | css_var(`height`) }};
+  {{/capture}}
+
+  {{#capture trigger }}
+    <div
+      name="trigger"
+      class="
+        theme-dialog block-popup-with-text__trigger button button--text rte
+        {{ block.settings.button_typography }}
+        {{ block.settings | class_list() }}
+      "
+      style="
+        --custom-background-color:
+        {{ background_color.red }}, {{ background_color.green }}, {{ background_color.blue }};
+        --custom-background-opacity: {{ background_opacity }}%;
+        --custom-border-radius: {{ border_radius }}px;
+      "
+      tabindex="0"
+      {{{ block.shopline_attributes }}}
+    >
+      {{{ button_text }}}
+    </div>
+  {{/capture}}
+
+  {{#capture content }}
+    {{#blocks}}
+      {{#block class="block-popup-with-text__group" /}}
+    {{/blocks}}
+  {{/capture}}
+
+  {{#if block.blocks_size > 0 }}
+    {{#blocks}}
+      {{#block class_list=class_list style_list=style_list trigger=trigger content=content /}}
+    {{/blocks}}
+  {{#else/}}
+    <div class="{{ class_list }}" style="{{ style_list }}">
+      {{{ trigger }}}
+    </div>
+  {{/if}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.popup_with_text.name",
+  "tag": "",
+  "icon": "campaignPromotion",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "label": "t:blocks.popup_with_text.settings.button_text.label",
+      "id": "button_text",
+      "type": "richtext",
+      "default": "Learn more"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.popup_with_text.settings.button_typography.label",
+      "id": "button_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.popup_with_text.settings.button_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:blocks.popup_with_text.settings.background_color.label",
+      "default": "#BABABA"
+    },
+    {
+      "type": "range",
+      "id": "background_opacity",
+      "label": "t:blocks.popup_with_text.settings.background_opacity.label",
+      "default": 100,
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:blocks.popup_with_text.settings.border_radius.label",
+      "default": 0,
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.popup_with_text.settings.spacing.label",
+      "info": "t:blocks.popup_with_text.settings.spacing.info",
+      "default": {
+        "padding-top": "4px",
+        "padding-right": "8px",
+        "padding-bottom": "4px",
+        "padding-left": "8px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.popup_with_text.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "popup-with-text/_dialog",
+      "limit": 1
+    },
+    {
+      "type": "popup-with-text/_popover",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.popup_with_text.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "popup-with-text/_popover"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

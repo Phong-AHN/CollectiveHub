@@ -1,0 +1,92 @@
+<div class="before-after__link-box before-after__compare-image-group-item" {{{ block.shopline_attributes }}}>
+  <div
+    class="
+      before-after__compare-image {{ block.settings | class_list() }}
+      {{#if !block.settings.image }}before-after__compare-image--default{{/if}}
+    "
+  >
+    <div class="before-after__compare-image-img">
+      {{#if block.settings.image }}
+        {{#component "image" data=block.settings.image /}}
+      {{#else/}}
+        {{#placeholder_svg "image" /}}
+      {{/if}}
+    </div>
+    <div
+      class="before-after__compare-image-mask"
+      style="--image-mask-opacity: {{ block.settings.image_mask_opacity }};"
+    >
+
+    </div>
+  </div>
+
+  {{#if block.settings.link }}
+    <a
+      class="before-after__link-element"
+      href="{{ block.settings.link }}"
+      {{#if block.settings.link_open_blank }}target="_blank"{{/if}}
+    >
+
+    </a>
+  {{/if}}
+
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.compare_image.name",
+  "limit": 2,
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "image",
+      "label": "t:sections.before_after.blocks.compare_image.settings.image.label",
+      "id": "image"
+    },
+    {
+      "type": "url",
+      "label": "t:sections.before_after.blocks.compare_image.settings.link.label",
+      "id": "link"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.before_after.blocks.compare_image.settings.link_open_blank.label",
+      "id": "link_open_blank",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_mask_opacity",
+      "label": "t:sections.before_after.blocks.compare_image.settings.image_mask_opacity.label",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.compare_image.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "$group-title"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,101 @@
+<div
+  class="
+    image-floating__text-wrapper
+    {{ block.settings.spacing | class_list() }}
+    {{ block.settings.layout | class_list() }}
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_floating.blocks.text_group.name",
+  "tag": "",
+  "icon": "general",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.image_floating.blocks.text_group.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.image_floating.blocks.text_group.settings.color_scheme.label",
+      "default": "scheme-3",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.image_floating.blocks.text_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "center",
+        "column-gap": "14px",
+        "row-gap": "14px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_floating.blocks.text_group.settings.spacing.label",
+      "default": {
+        "padding-block-start": "40px",
+        "padding-inline-end": "100px",
+        "padding-block-end": "40px",
+        "padding-inline-start": "100px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-start": "20px",
+          "padding-block-end": "40px",
+          "padding-inline-end": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$icon",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_floating.blocks.text_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$heading"
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text_align": "left",
+            "typography": "body3"
+          }
+        },
+        {
+          "type": "$icon"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

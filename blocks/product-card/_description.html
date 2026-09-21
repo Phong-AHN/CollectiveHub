@@ -1,0 +1,139 @@
+{{#if block.settings.description }}
+  {{#component "stylesheet" src="./_description.css" | asset_url() /}}
+
+  {{#var max_height = "unset" /}}
+  {{#if block.settings.is_fold }}
+    {{#set max_height = "150px" /}}
+  {{/if}}
+
+  <div
+    class="
+      block-product-card__description rte {{ block.settings.typography }} text-{{ block.settings.text_align }} {{
+        block.settings |
+          class_list()
+      }}
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{#if block.settings.is_fold }}
+      {{#component "product/expander" content=block.settings.description max_height=max_height /}}
+    {{#else/}}
+      {{{ block.settings.description }}}
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product_card..description.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:blocks.product_card..description.settings.description.label",
+      "default": "Describe your product"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product_card..description.settings.typography.label",
+      "id": "typography",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_card..description.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_card..description.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_card..description.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_card..description.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_card..description.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_card..description.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_card..description.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_card..description.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_card..description.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_card..description.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_card..description.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_card..description.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_card..description.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_card..description.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_card..description.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:blocks.product_card..description.settings.text_align.label",
+      "default": "left"
+    },
+    {
+      "type": "switch",
+      "id": "is_fold",
+      "label": "t:blocks.product_card..description.settings.is_fold.label",
+      "default": false
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product_card..description.settings.spacing.label",
+      "default": {
+        "padding-top": "4.8px",
+        "padding-right": "0px",
+        "padding-bottom": "4.8px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_card..description.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ]
+}
+{{/schema}}

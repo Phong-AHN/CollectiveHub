@@ -1,0 +1,196 @@
+{
+  "sections": {
+    "main-collection-cover": {
+      "type": "main-collection-cover",
+      "settings": {},
+      "disabled": false,
+      "blocks": {
+        "banner": {
+          "type": "$banner",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "mask_color": "#f5eadb",
+            "mask_opacity": 100,
+            "size": {
+              "@media (--mobile)": {
+                "height": "80px"
+              },
+              "height": "200px",
+              "width": "auto"
+            }
+          },
+          "blocks": {
+            "banner_heading": {
+              "type": "$heading",
+              "settings": {
+                "text_size": "title2"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "banner_heading"
+          ]
+        },
+        "description": {
+          "type": "$description",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "banner",
+        "description"
+      ]
+    },
+    "main-collection-products": {
+      "type": "main-collection-products",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "desktop_columns": 4,
+        "enable_filtering": true,
+        "enable_infinite_scroll": false,
+        "enable_infinite_scroll_button": false,
+        "enable_position_sticky": false,
+        "enable_sorting": true,
+        "filter_layout": "vertical",
+        "mobile_columns": 2,
+        "page_size": 16,
+        "pagination_style": "simple"
+      },
+      "disabled": false,
+      "blocks": {
+        "main-collection-products__card": {
+          "type": "product-card/card",
+          "settings": {},
+          "blocks": {
+            "main-collection-products__card__image": {
+              "type": "product-image",
+              "settings": {
+                "aspect_ratio": "1/1",
+                "fit_type": "contain"
+              },
+              "blocks": {
+                "main-collection-products__card__image__layer-1": {
+                  "type": "product-card/_layer",
+                  "settings": {
+                    "layout": {
+                      "align-items": "flex-end"
+                    }
+                  },
+                  "blocks": {
+                    "main-collection-products__card__image__layer-1__discount-tag": {
+                      "type": "product-card/_discount-tag",
+                      "settings": {},
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "main-collection-products__card__image__layer-1__discount-tag"
+                  ]
+                },
+                "main-collection-products__card__image__layer-2": {
+                  "type": "product-card/_layer",
+                  "settings": {
+                    "layout": {
+                      "@media (--mobile)": {
+                        "align-items": "flex-start",
+                        "flex-direction": "column",
+                        "flex-wrap": "nowrap",
+                        "justify-content": "flex-start"
+                      },
+                      "justify-content": "flex-end"
+                    }
+                  },
+                  "disabled": true,
+                  "blocks": {
+                    "main-collection-products__card__image__layer-2__quick-add": {
+                      "type": "product-card/_quick-add",
+                      "settings": {},
+                      "disabled": false,
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "main-collection-products__card__image__layer-2__quick-add"
+                  ]
+                }
+              },
+              "block_order": [
+                "main-collection-products__card__image__layer-1",
+                "main-collection-products__card__image__layer-2"
+              ]
+            },
+            "main-collection-products__card__info": {
+              "type": "product-card/_info",
+              "settings": {},
+              "blocks": {
+                "main-collection-products__card__info__buy-button": {
+                  "type": "product-buy-button",
+                  "settings": {},
+                  "blocks": {}
+                },
+                "main-collection-products__card__info__description": {
+                  "type": "product-card/_description",
+                  "settings": {},
+                  "disabled": true,
+                  "blocks": {}
+                },
+                "main-collection-products__card__info__price": {
+                  "type": "product-price",
+                  "settings": {
+                    "sale_price_bold": true,
+                    "show_origin_price": true
+                  },
+                  "blocks": {}
+                },
+                "main-collection-products__card__info__title": {
+                  "type": "product-title",
+                  "settings": {
+                    "spacing": {
+                      "padding-block-end": "0px",
+                      "padding-block-start": "0px",
+                      "padding-inline-end": "0px",
+                      "padding-inline-start": "0px"
+                    }
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "main-collection-products__card__info__title",
+                "main-collection-products__card__info__price",
+                "main-collection-products__card__info__description",
+                "main-collection-products__card__info__buy-button"
+              ]
+            }
+          },
+          "block_order": [
+            "main-collection-products__card__image",
+            "main-collection-products__card__info"
+          ]
+        },
+        "main-collection-products__promotion-card": {
+          "type": "$promotion-card",
+          "settings": {
+            "desc": "",
+            "desktop_image": "shopline://shop_images/image 225.png",
+            "list_position": 4,
+            "mobile_image": "shopline://shop_images/image 225.png",
+            "title": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "main-collection-products__promotion-card",
+        "main-collection-products__card"
+      ],
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-collection-cover",
+    "main-collection-products"
+  ]
+}

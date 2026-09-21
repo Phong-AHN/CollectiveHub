@@ -1,0 +1,151 @@
+{{#component "stylesheet" src="../product-buy-button-group/group.css" | asset_url() /}}
+
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+{{#var button_position = block.settings.button_position | default("embed") /}}
+
+{{#capture content }}
+  <div
+    class="product-detail__buy-button-group block-product-buy-button-group {{ block.settings | class_list() }}"
+    {{{ block.shopline_attributes }}}
+  >
+    {{#blocks}}
+      {{#block
+        product=product
+        current_variant=current_variant
+        add_to_cart_path="quick-add"
+        has_default_variant=false
+      /}}
+    {{/blocks}}
+  </div>
+{{/capture}}
+
+{{#switch button_position }}
+  {{#case "embed" /}}
+    {{{ content }}}
+  {{#else/}}
+    {{#component "script" src="product/sticky-position.js" | asset_url() /}}
+    <theme-sticky-position
+      data-placeholder-class="hidden-desktop"
+      data-enforce="{{ button_position == "float" }}"
+      data-increase-height="40"
+    >
+      {{{ content }}}
+    </theme-sticky-position>
+{{/switch}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_buy_button_group.name",
+  "tag": "",
+  "icon": "button",
+  "blocks": [
+    {
+      "type": "product-buy-button-group/_bundle",
+      "limit": 1
+    },
+    {
+      "type": "product-buy-button-group/_payment-button",
+      "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "id": "button_position",
+      "label": "t:blocks.product..detail_buy_button_group.settings.button_position.label",
+      "type": "select",
+      "options": [
+        {
+          "value": "embed",
+          "label": "t:blocks.product..detail_buy_button_group.settings.button_position.options_0.label"
+        },
+        {
+          "value": "float",
+          "label": "t:blocks.product..detail_buy_button_group.settings.button_position.options_1.label"
+        },
+        {
+          "value": "both",
+          "label": "t:blocks.product..detail_buy_button_group.settings.button_position.options_2.label"
+        }
+      ],
+      "default": "embed"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.product..detail_buy_button_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "flex-start",
+        "column-gap": "14px",
+        "row-gap": "14px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product..detail_buy_button_group.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product..detail_buy_button_group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_buy_button_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-buy-button-group/_bundle",
+          "settings": {
+            "layout": {
+              "column-gap": "16px",
+              "row-gap": "16px",
+              "@media (--mobile)": {
+                "flex-direction": "row",
+                "align-items": "flex-start"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "type": "product-buy-button-group/_quantity-selector",
+              "settings": {
+                "size": {
+                  "width": "114px",
+                  "@media (--mobile)": {
+                    "width": "114px"
+                  }
+                }
+              }
+            },
+            {
+              "type": "product-buy-button-group/_buy-button",
+              "settings": {
+                "style": "secondary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "product-buy-button-group/_payment-button",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,69 @@
+{
+  "sections": {
+    "main-cart": {
+      "type": "main-cart",
+      "settings": {
+        "spacing": {}
+      },
+      "disabled": false,
+      "blocks": {
+        "cart-footer": {
+          "type": "$cart-footer",
+          "settings": {},
+          "blocks": {
+            "cart-footer-buttons": {
+              "type": "$cart-footer-buttons",
+              "settings": {},
+              "blocks": {}
+            },
+            "cart-footer-subtotal": {
+              "type": "$cart-footer-subtotal",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "cart-footer-subtotal",
+            "cart-footer-buttons"
+          ]
+        },
+        "cart-header": {
+          "type": "$cart-header",
+          "settings": {
+            "spacing": {
+              "@media (--mobile)": {
+                "padding-block-end": "20px",
+                "padding-block-start": "20px"
+              },
+              "padding-block-end": "40px",
+              "padding-block-start": "40px",
+              "padding-inline-end": "50px",
+              "padding-inline-start": "450px"
+            }
+          },
+          "blocks": {}
+        },
+        "cart-items": {
+          "type": "$cart-items",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "cart-header",
+        "cart-items",
+        "cart-footer"
+      ],
+      "custom_css": []
+    },
+    "undefined": {
+      "type": "",
+      "settings": {},
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-cart"
+  ]
+}

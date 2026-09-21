@@ -1,0 +1,176 @@
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+
+{{#component "stylesheet" src="./before-after.css" | asset_url() /}}
+{{#component "script" src="./before-after.js" | asset_url() /}}
+
+<theme-before-after class="before-after {{ section.settings | class_list() }} color-{{ section.settings.color_scheme.id }}">
+  {{#content "blocks" /}}
+</theme-before-after>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.name",
+  "icon": "textColumnsWithImages",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.before_after.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.before_after.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "wrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "0px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.before_after.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-right": "80px",
+        "padding-bottom": "60px",
+        "padding-left": "80px",
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-right": "20px",
+          "padding-bottom": "40px",
+          "padding-left": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.before_after.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$container",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.presets.presets_0.name",
+      "category": "t:sections.before_after.presets.presets_0.category",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Before&After",
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            },
+            "size": {
+              "width": "auto",
+              "height": "auto"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "A water-attracting synthetic compound. It helps boost hydration levels without disrupting the skin barrier.",
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            },
+            "size": {
+              "width": "auto",
+              "height": "auto"
+            },
+            "typography": "body3"
+          }
+        },
+        {
+          "type": "$container",
+          "blocks": [
+            {
+              "type": "$compare",
+              "blocks": [
+                {
+                  "type": "$text-group",
+                  "blocks": [
+                    {
+                      "type": "text",
+                      "settings": {
+                        "text": "<strong><span style=\"font-size: 48px;\">92%</span></strong><br><span style=\"font-size: 16px;\">Consumer study results</span><br><span style=\"font-size: 22px;\"><strong>MY LIPS FELT SOOTHED AND PROTECTED FROM DRYNESS</strong></span>",
+                        "text_align": "left",
+                        "typography": "body3"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "$image-group",
+                  "blocks": [
+                    {
+                      "type": "$compare-image",
+                      "blocks": [
+                        {
+                          "type": "$group",
+                          "blocks": [
+                            {
+                              "type": "$group-title"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "$compare-image",
+                      "blocks": [
+                        {
+                          "type": "$group",
+                          "blocks": [
+                            {
+                              "type": "$group-title",
+                              "settings": {
+                                "content": "After"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

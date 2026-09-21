@@ -1,0 +1,279 @@
+<div
+  class="sgc-product-comparison__card sgc-text-align-{{ block.settings.text_align }}"
+  style="--image-width: {{ block.settings.image_width }};"
+  id="{{ block.id }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_product_comparison.blocks.comparison_card.name",
+  "icon": "product",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image_width.label",
+      "default": "100%",
+      "options": [
+        {
+          "value": "50%",
+          "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image_width.options_0.label"
+        },
+        {
+          "value": "100%",
+          "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image_width.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.text_align.label",
+      "id": "text_align",
+      "default": "left"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.group_header_0.label"
+    },
+    {
+      "type": "image",
+      "id": "image1",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image1.label"
+    },
+    {
+      "type": "image",
+      "id": "icon1",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon1.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description1",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description1.label",
+      "default": "text1"
+    },
+    {
+      "type": "image",
+      "id": "image2",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image2.label"
+    },
+    {
+      "type": "image",
+      "id": "icon2",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon2.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description2",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description2.label",
+      "default": "text2"
+    },
+    {
+      "type": "image",
+      "id": "image3",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image3.label"
+    },
+    {
+      "type": "image",
+      "id": "icon3",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon3.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description3",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description3.label",
+      "default": "text3"
+    },
+    {
+      "type": "image",
+      "id": "image4",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image4.label"
+    },
+    {
+      "type": "image",
+      "id": "icon4",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon4.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description4",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description4.label",
+      "default": "text4"
+    },
+    {
+      "type": "image",
+      "id": "image5",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image5.label"
+    },
+    {
+      "type": "image",
+      "id": "icon5",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon5.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description5",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description5.label",
+      "default": "text5"
+    },
+    {
+      "type": "image",
+      "id": "image6",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image6.label"
+    },
+    {
+      "type": "image",
+      "id": "icon6",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon6.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description6",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description6.label",
+      "default": "text6"
+    },
+    {
+      "type": "image",
+      "id": "image7",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image7.label"
+    },
+    {
+      "type": "image",
+      "id": "icon7",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon7.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description7",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description7.label",
+      "default": "text7"
+    },
+    {
+      "type": "image",
+      "id": "image8",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image8.label"
+    },
+    {
+      "type": "image",
+      "id": "icon8",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon8.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description8",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description8.label",
+      "default": "text8"
+    },
+    {
+      "type": "image",
+      "id": "image9",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image9.label"
+    },
+    {
+      "type": "image",
+      "id": "icon9",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon9.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description9",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description9.label",
+      "default": "text9"
+    },
+    {
+      "type": "image",
+      "id": "image10",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.image10.label"
+    },
+    {
+      "type": "image",
+      "id": "icon10",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.icon10.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description10",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.description10.label",
+      "default": "text10"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.group_header_1.label"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.card_background_color.label",
+      "default": "#FDF9EE"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.group_header_2.label"
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.card_border_width.label",
+      "default": 0,
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "card_border_opacity",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.card_border_opacity.label",
+      "default": 10,
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.card_border_radius.label",
+      "default": 0,
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "t:sections.sgc_product_comparison.blocks.comparison_card.settings.card_border_color.label",
+      "default": "#000000"
+    }
+  ],
+  "tag": "",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "$product",
+      "settings": {}
+    },
+    {
+      "type": "$image-with-text",
+      "settings": {}
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_product_comparison.blocks.comparison_card.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$product",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

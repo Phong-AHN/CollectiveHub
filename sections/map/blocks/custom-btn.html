@@ -1,0 +1,174 @@
+{{#var style_secondary = false /}}
+{{#var style_link = false /}}
+{{#switch block.settings.style }}
+  {{#case "secondary" /}}
+    {{#set style_secondary = true /}}
+    {{#set style_link = false /}}
+  {{#case "link" /}}
+    {{#set style_secondary = false /}}
+    {{#set style_link = true /}}
+{{/switch}}
+
+{{#var link_url /}}
+{{#if block.settings.link }}
+  {{#set link_url = block.settings.link /}}
+{{#else/}}
+  {{#if section.settings.latitude_longitude }}
+    {{#set link_url = "https://www.google.com/maps?q=" | append(section.settings.latitude_longitude) /}}
+  {{#else/}}
+    {{#set link_url = "" /}}
+  {{/if}}
+{{/if}}
+
+{{#capture icon }}
+  {{#if block.settings.is_show_pushpin }}
+    {{#component "icons/map-pushpin" /}}
+  {{/if}}
+{{/capture}}
+
+{{#var html = icon | append(block.settings.text) /}}
+
+{{#if block.settings.text }}
+  <div class="map-block-custom-btn">
+    {{#component
+      "button"
+      type="link"
+      shopline_attributes=block.shopline_attributes
+      link_url=(link_url | default(props.link))
+      text=block.settings.text
+      style_secondary=style_secondary
+      style_link=style_link
+      html=html
+      open_in_new_tab=block.settings.is_open_new_tab
+      class_name=block.settings.typography
+    /}}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.map.blocks.custom_btn.name",
+  "icon": "button",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "is_show_pushpin",
+      "label": "t:sections.map.blocks.custom_btn.settings.is_show_pushpin.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:sections.map.blocks.custom_btn.settings.text.label",
+      "default": "Button"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.map.blocks.custom_btn.settings.link.label",
+      "default": "",
+      "info": "t:sections.map.blocks.custom_btn.settings.link.info"
+    },
+    {
+      "type": "switch",
+      "id": "is_open_new_tab",
+      "default": true,
+      "label": "t:sections.map.blocks.custom_btn.settings.is_open_new_tab.label"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.map.blocks.custom_btn.settings.style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:sections.map.blocks.custom_btn.settings.style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.map.blocks.custom_btn.settings.style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.map.blocks.custom_btn.settings.style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.map.blocks.custom_btn.settings.typography.label",
+      "id": "typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.map.blocks.custom_btn.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.map.blocks.custom_btn.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

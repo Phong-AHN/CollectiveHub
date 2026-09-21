@@ -1,0 +1,138 @@
+{{#var text_tag = block.settings.text_tag | default("div") /}}
+
+<{{ text_tag }}
+  class="block-main-collection__heading {{ block.settings.text_size }} text-{{ block.settings.text_align }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{ collection.title }}
+</{{ text_tag }}>
+
+{{#schema}}
+{
+  "name": "t:sections.main_collection_cover.blocks.heading.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "t:sections.main_collection_cover.blocks.heading.settings.text_tag.label",
+      "info": "t:sections.main_collection_cover.blocks.heading.settings.text_tag.info",
+      "default": "div",
+      "options": [
+        {
+          "value": "div",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_tag.options_0.label"
+        },
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "P"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.label",
+      "default": "title1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_collection_cover.blocks.heading.settings.text_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "id": "text_align",
+      "type": "text_align",
+      "label": "t:sections.main_collection_cover.blocks.heading.settings.text_align.label",
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_collection_cover.blocks.heading.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

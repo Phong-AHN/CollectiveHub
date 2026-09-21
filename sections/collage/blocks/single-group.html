@@ -1,0 +1,45 @@
+{{#var desktop_columns = "1" /}}
+{{#if props.has_multiple_groups }}
+  {{#set desktop_columns = "1.5" /}}
+{{/if}}
+
+<div class="collage__single-group {{ block.settings | class_list() }}">
+  {{#blocks}}
+    {{#block mobile_columns="1" desktop_columns=desktop_columns /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.collage.blocks.single_group.name",
+  "tag": "",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.collage.blocks.single_group.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video/video",
+      "limit": 1
+    },
+    {
+      "type": "product-card/card",
+      "limit": 1
+    },
+    {
+      "type": "collection/card",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}

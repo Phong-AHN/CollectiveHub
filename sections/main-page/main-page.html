@@ -1,0 +1,106 @@
+{{#component "stylesheet" src="./main-page.css" | asset_url() /}}
+
+<div class="page-width">
+  <div class="main-page {{ section.settings | class_list() }}">
+    <h1 class="main-page__title {{ section.settings.title_typography }}">
+      {{ page.title }}
+    </h1>
+    <div class="main-page__content rte">
+      {{{ page.content }}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_page.name",
+  "icon": "content",
+  "settings": [
+    {
+      "type": "select",
+      "label": "t:sections.main_page.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "title4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_page.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_page.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_page.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_page.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_page.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_page.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_page.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_page.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_page.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_page.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_page.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_page.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_page.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_page.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_page.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_page.settings.spacing.label",
+      "default": {
+        "padding-top": "80px",
+        "padding-right": "210px",
+        "padding-bottom": "80px",
+        "padding-left": "210px",
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-right": "0",
+          "padding-bottom": "40px",
+          "padding-left": "0"
+        }
+      }
+    }
+  ]
+}
+{{/schema}}

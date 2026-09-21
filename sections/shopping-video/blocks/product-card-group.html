@@ -1,0 +1,63 @@
+{{#component "script" src="./product-card-group.js" | asset_url() /}}
+
+{{#var show_expand_button = false /}}
+{{#blocks}}
+  {{#if block.settings.show_expand_button && block.blocks_size != 1 }}
+    {{#set show_expand_button = true /}}
+  {{/if}}
+{{/blocks}}
+
+<theme-shopping-video-product-card-group
+  data-show-expand-button="{{ show_expand_button }}"
+  data-product-card-expand="{{ block.settings.product_card_expand }}"
+  class="shopping-video__product-card-group shopping-video__product-card-group--{{ block.settings.position }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#block show_expand_button=show_expand_button && forblock.index0 == 0 /}}
+  {{/blocks}}
+</theme-shopping-video-product-card-group>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.product_card_group.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "show_expand_button",
+      "label": "t:sections.shopping_video.blocks.product_card_group.settings.show_expand_button.label",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "product_card_expand",
+      "label": "t:sections.shopping_video.blocks.product_card_group.settings.product_card_expand.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "t:sections.shopping_video.blocks.product_card_group.settings.position.label",
+      "options": [
+        {
+          "value": "above-video",
+          "label": "t:sections.shopping_video.blocks.product_card_group.settings.position.options_0.label"
+        },
+        {
+          "value": "under-video",
+          "label": "t:sections.shopping_video.blocks.product_card_group.settings.position.options_1.label"
+        }
+      ],
+      "default": "under-video"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-card",
+      "limit": 5
+    }
+  ],
+  "presets": []
+}
+{{/schema}}

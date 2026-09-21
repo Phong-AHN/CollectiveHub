@@ -1,0 +1,101 @@
+{{#component "stylesheet" src="./product-container.css" | asset_url() /}}
+
+<div
+  class="product-container {{ block.settings | class_list() }}"
+  style="
+    --product-container-width: {{ block.settings.product_container_width }};
+    --margin-block: {{ block.settings.margin_block }}px;
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.product_container.name",
+  "icon": "slideshow",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "product_container_width",
+      "label": "t:sections.media_promotion.blocks.product_container.settings.product_container_width.label",
+      "default": "50%",
+      "options": [
+        {
+          "value": "30%",
+          "label": "t:sections.media_promotion.blocks.product_container.settings.product_container_width.options_0.label"
+        },
+        {
+          "value": "50%",
+          "label": "t:sections.media_promotion.blocks.product_container.settings.product_container_width.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "margin_block",
+      "label": "t:sections.media_promotion.blocks.product_container.settings.margin_block.label",
+      "default": 0,
+      "min": 0,
+      "max": 40,
+      "step": 10,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-card",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.product_container.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$product-card",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$product-info",
+              "settings": {
+                "spacing": {
+                  "padding-block-start": "20px",
+                  "padding-inline-end": "20px",
+                  "padding-block-end": "20px",
+                  "padding-inline-start": "20px",
+                  "@media (--mobile)": {
+                    "padding-block-start": "20px",
+                    "padding-inline-end": "20px",
+                    "padding-block-end": "20px",
+                    "padding-inline-start": "20px"
+                  }
+                }
+              },
+              "blocks": [
+                {
+                  "type": "product-title"
+                },
+                {
+                  "type": "product-price"
+                },
+                {
+                  "type": "product-card/_description",
+                  "settings": {
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "product-buy-button"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

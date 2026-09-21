@@ -1,0 +1,31 @@
+<div class="main-cart-footer__subtotal {{ block.settings.spacing | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#if shop.cart_discount_enable }}
+    {{#component "cart/widgets/cart-coupon" /}}
+  {{/if}}
+
+  <div class="main-cart-footer__amount">
+    {{#component "cart/widgets/cart-amount" is_flex_end=true /}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.blocks.cart_footer_subtotal.name",
+  "deletable": false,
+  "icon": "currency",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.blocks.cart_footer_subtotal.settings.spacing.label",
+      "default": {}
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_cart.blocks.cart_footer_subtotal.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

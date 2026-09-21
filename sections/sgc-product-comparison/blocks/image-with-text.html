@@ -1,0 +1,163 @@
+{{#component "../components/stylesheet" src="./image-with-text.css" | asset_url() /}}
+
+<style>{{{ block.settings.subtitle_font_family | font_face() }}}</style>
+
+<div
+  class="sgc-image-with-text"
+  style="
+    --image-ratio: {{ block.settings.image_ratio }};
+    --subtitle-font-family: {{ block.settings.subtitle_font_family.family }};
+    --subtitle-font-weight: {{ block.settings.subtitle_font_family.weight }};
+    --subtitle-font-style: {{ block.settings.subtitle_font_family.style }};
+    --subtitle-color: {{ block.settings.subtitle_color.rgb }};
+    --subtitle-font-size-desktop: {{ block.settings.desktop_subtitle_font_size }}px;
+    --subtitle-font-size-mobile: {{ block.settings.mobile_subtitle_font_size }}px;
+    --subtitle-line-height-desktop: {{ block.settings.desktop_subtitle_line_height }};
+    --subtitle-line-height-mobile: {{ block.settings.mobile_subtitle_line_height }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.image }}
+    <div class="sgc-image-with-text__image-wrapper">
+      {{#component "../components/image" data=block.settings.image class="sgc-image-with-text__image" /}}
+    </div>
+  {{/if}}
+
+  {{#if block.settings.subtitle }}
+    <div class="sgc-image-with-text__subtitle">{{ block.settings.subtitle }}</div>
+  {{/if}}
+
+  {{#if block.settings.description }}
+    <div class="sgc-rte">{{{ block.settings.description }}}</div>
+  {{/if}}
+
+  {{#if block.settings.text }}
+    <div class="sgc-rte">{{{ block.settings.text }}}</div>
+  {{/if}}
+
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_product_comparison.blocks.image_with_text.name",
+  "icon": "product",
+  "tag": "",
+  "settings": [
+    {
+      "type": "image",
+      "id": "image",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image_ratio.label",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image_ratio.options_0.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image_ratio.options_2.label"
+        },
+        {
+          "value": "2/3",
+          "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image_ratio.options_3.label"
+        },
+        {
+          "value": "unset",
+          "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.image_ratio.options_4.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.subtitle.label"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.group_header_0.label"
+    },
+    {
+      "type": "font",
+      "id": "subtitle_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.subtitle_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.subtitle_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "desktop_subtitle_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.desktop_subtitle_font_size.label",
+      "default": 24,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_subtitle_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.mobile_subtitle_font_size.label",
+      "default": 14,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_subtitle_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.desktop_subtitle_line_height.label",
+      "default": 1.6,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "range",
+      "id": "mobile_subtitle_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.mobile_subtitle_line_height.label",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.description.label"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.sgc_product_comparison.blocks.image_with_text.settings.text.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_product_comparison.blocks.image_with_text.presets.presets_0.name",
+      "settings": {}
+    }
+  ]
+}
+{{/schema}}

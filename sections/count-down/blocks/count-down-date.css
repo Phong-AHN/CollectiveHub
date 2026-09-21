@@ -1,0 +1,31 @@
+.count-down__timer-container {
+  width: 100%;
+  color: rgb(var(--count-down-color));
+}
+.count-down__result {
+  display: none;
+}
+.count-down count-down-date {
+  display: inline-flex;
+  flex-wrap: wrap;
+  white-space: nowrap;
+}
+.count-down count-down-date span {
+  display: inline-block;
+}
+.count-down count-down-date .icon-loading {
+  width: 38px;
+  height: 38px;
+}
+.count-down count-down-date .icon-loading path {
+  vector-effect: unset;
+}
+.count-down count-down-date.hidden + .count-down__result {
+  display: block;
+}
+@media (max-width: 959px) {
+  .count-down count-down-date .icon-loading {
+    width: 25px;
+    height: 25px;
+  }
+}

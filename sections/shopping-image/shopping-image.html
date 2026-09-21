@@ -1,0 +1,104 @@
+{{#component "stylesheet" src="./shopping-image.css" | asset_url() /}}
+
+<shopping-image class="shopping-image color-{{ section.settings.color_scheme.id }}">
+  {{#content "blocks" /}}
+</shopping-image>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_image.name",
+  "icon": "productImage",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.shopping_image.settings.color_scheme.label",
+      "default": "scheme-3"
+    }
+  ],
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "$image",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_image.presets.presets_0.name",
+      "category": "t:sections.shopping_image.presets.presets_0.category",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$image",
+          "blocks": [
+            {
+              "type": "$group",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Shop the look",
+                    "spacing": {
+                      "padding-block-start": "0",
+                      "padding-block-end": "0",
+                      "padding-inline-start": "0",
+                      "padding-inline-end": "0"
+                    }
+                  }
+                },
+                {
+                  "type": "description",
+                  "settings": {
+                    "content": "And optional subtext",
+                    "typography": "body1"
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "text": "SHOW NOW",
+                    "style": "link",
+                    "spacing": {
+                      "padding-block-start": "40px",
+                      "padding-block-end": "0",
+                      "padding-inline-start": "0",
+                      "padding-inline-end": "0",
+                      "@media (--mobile)": {
+                        "padding-block-start": "20px",
+                        "padding-block-end": "0px",
+                        "padding-inline-start": "0",
+                        "padding-inline-end": "0"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "$product-anchor",
+              "settings": {
+                "desktop_rows": 20,
+                "desktop_columns": 50,
+                "mobile_rows": 75,
+                "mobile_columns": 20
+              }
+            },
+            {
+              "type": "$text",
+              "settings": {
+                "desktop_rows": 50,
+                "desktop_columns": 20,
+                "mobile_rows": 50,
+                "mobile_columns": 50
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,126 @@
+{{#component "stylesheet" src="./text-with-image.css" | asset_url() /}}
+
+<div class="text-with-image-section color-{{ section.settings.color_scheme.id }}" {{{ block.shopline_attributes }}}>
+  <div class="page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#blocks}}
+        {{#block/}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_with_image.name",
+  "icon": "textWithImage",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.text_with_image.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "0px",
+        "column-gap": "0px",
+        "@media (--mobile)": {
+          "row-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.text_with_image.settings.color_scheme.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.text_with_image.settings.spacing.label",
+      "default": {
+        "padding-top": "80px",
+        "padding-bottom": "80px",
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-bottom": "40px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$context-group",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.text_with_image.presets.presets_0.name",
+      "category": "t:sections.text_with_image.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "$context-group",
+          "blocks": [
+            {
+              "type": "$text-group",
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text_align": "left"
+                  },
+                  "limit": 1
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "style": "secondary",
+                    "text": "Shop now",
+                    "typography": "body2"
+                  },
+                  "limit": 1
+                }
+              ]
+            },
+            {
+              "type": "$image-with-product"
+            }
+          ]
+        },
+        {
+          "type": "$context-group",
+          "settings": {
+            "image_text_layout": "right",
+            "top_pos": -100
+          },
+          "blocks": [
+            {
+              "type": "$image-with-product",
+              "settings": {
+                "card_pos": "bottom-right"
+              }
+            },
+            {
+              "type": "$text-group",
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text_align": "left",
+                    "text": "A short description.",
+                    "typography": "body3"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,161 @@
+<{{ block.settings.text_tag }}
+  class="
+    subheading
+    {{ block.settings.typography }}
+    text-{{ block.settings.text_align }}
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{ block.settings.subtitle }}
+</{{ block.settings.text_tag }}>
+
+{{#schema}}
+{
+  "name": "t:blocks.subheading.name",
+  "tag": "",
+  "icon": "title",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:blocks.subheading.settings.subtitle.label",
+      "default": "Subtitle"
+    },
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "t:blocks.subheading.settings.text_tag.label",
+      "info": "t:blocks.subheading.settings.text_tag.info",
+      "default": "h1",
+      "options": [
+        {
+          "value": "div",
+          "label": "t:blocks.subheading.settings.text_tag.options_0.label"
+        },
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "P"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.subheading.settings.typography.label",
+      "id": "typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.subheading.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.subheading.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.subheading.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.subheading.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.subheading.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.subheading.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.subheading.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.subheading.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.subheading.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.subheading.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.subheading.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.subheading.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.subheading.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.subheading.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.subheading.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:blocks.subheading.settings.text_align.label",
+      "default": "center"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.subheading.settings.spacing.label"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.subheading.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.subheading.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

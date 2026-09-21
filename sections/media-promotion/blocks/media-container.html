@@ -1,0 +1,145 @@
+{{#component "stylesheet" src="./media-container.css" | asset_url() /}}
+{{#component "script" src="./media-container.js" | asset_url() /}}
+
+{{#var total_pages = props.total_pages /}}
+
+<div
+  class="
+    media-container {{ block.settings | class_list() }}
+    {{#if !block.settings.mobile_text_layout }}
+      media-container--text-below-image
+    {{/if}}
+  "
+>
+  {{#blocks}}
+    {{#block mobile_text_layout=block.settings.mobile_text_layout /}}
+  {{/blocks}}
+
+  {{#if total_pages > 1 && section.settings.pagination_style == "dot" }}
+    <div class="media-container__pager media-container__pager--dots">
+      {{#for index in 1 | range(total_pages) }}
+        <button class="media-container__pager--dot" name="pager" data-index="{{ index | minus(1) }}"></button>
+      {{/for}}
+    </div>
+  {{/if}}
+
+  {{#if total_pages > 1 && section.settings.pagination_style == "progress" }}
+    <div class="media-container__pager media-container__pager--progresses">
+      {{#for index in 1 | range(total_pages) }}
+        <button class="media-container__pager--progress" name="pager" data-index="{{ index | minus(1) }}">
+          {{#if section.settings.auto_switch }}
+            <div class="media-container__pager--progress-inner"></div>
+          {{#else/}}
+            <div class="media-container__pager--progress-inner-static"></div>
+          {{/if}}
+        </button>
+      {{/for}}
+    </div>
+  {{/if}}
+
+  {{#if total_pages > 1 && section.settings.pagination_style == "arrow" }}
+    <div class="media-container__pager media-container__pager--arrows">
+      <button class="media-container__pager--arrow" name="previous">
+        {{#component "icons/arrow-thin" /}}
+      </button>
+      <button class="media-container__pager--arrow" name="next">
+        {{#component "icons/arrow-thin" /}}
+      </button>
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.media_container.name",
+  "icon": "slideshow",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "mobile_text_layout",
+      "label": "t:sections.media_promotion.blocks.media_container.settings.mobile_text_layout.label",
+      "default": true,
+      "info": "t:sections.media_promotion.blocks.media_container.settings.mobile_text_layout.info"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.media_promotion.blocks.media_container.settings.spacing.label",
+      "default": {
+        "padding-block-start": "0px",
+        "padding-inline-end": "0px",
+        "padding-block-end": "0px",
+        "padding-inline-start": "0px",
+        "@media (--mobile)": {
+          "padding-inline-end": "0px",
+          "padding-inline-start": "0px",
+          "padding-block-start": "0px",
+          "padding-block-end": "0px"
+        }
+      }
+    }
+  ],
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "$video",
+      "limit": 1
+    },
+    {
+      "type": "$image",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.media_container.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$video",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$group",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Deep Cleaning",
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "description",
+                  "settings": {
+                    "content": "Rich in amino acids",
+                    "text_align": "left",
+                    "size": {
+                      "width": "auto",
+                      "height": "auto"
+                    },
+                    "spacing": {
+                      "padding": "0px",
+                      "@media (--mobile)": {
+                        "padding": "0px"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "button",
+                  "settings": {
+                    "text": "View Detail",
+                    "style": "primary"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

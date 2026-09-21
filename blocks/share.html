@@ -1,0 +1,128 @@
+{{#var page_url = request.origin | append(request.path) /}}
+{{#var share_url = page_url /}}
+{{#var share_title = shop.name /}}
+{{#var share_image = "" /}}
+
+{{#if props.product }}
+  {{#var product = props.product /}}
+  {{#var current_variant = props.current_variant /}}
+  {{#var product_url = current_variant.url | default(product.url) /}}
+  {{#set share_url = request.origin | append(product_url) /}}
+  {{#set share_title = product.title /}}
+  {{#set share_image = product.featured_image.src /}}
+{{/if}}
+
+<div
+  class="{{ props.class }} {{ block.settings | class_list() }} quick-add-modal-hidden"
+  {{{ block.shopline_attributes }}}
+>
+  {{#component
+    "social-media-share/social-media-share"
+    share_link=share_url
+    share_title=share_title
+    share_image=share_image
+    typography=block.settings.typography
+  /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.share.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.share.settings.typography.label",
+      "default": "body6",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.share.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.share.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.share.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.share.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.share.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.share.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.share.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.share.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.share.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.share.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.share.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.share.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.share.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.share.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.share.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.share.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.share.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.share.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

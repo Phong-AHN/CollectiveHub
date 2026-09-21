@@ -1,0 +1,30 @@
+{{#var page = props.page /}}
+
+<a href="{{ page.url | default(`javascript:;`) }}" class="main-search__page-card">
+  <div class="main-search__page-card-image-wrapper">
+    {{#if page.featured_image }}
+      {{#component "image" data=page.featured_image /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </div>
+  <div class="main-search__page-card-title-wrapper">
+    {{#component "icons/edit" /}}
+    <span class="main-search__page-card-title body3 body-font-bold">
+      {{ page.title }}
+    </span>
+  </div>
+</a>
+
+{{#schema}}
+{
+  "name": "t:sections.main_search.blocks.page_card.name",
+  "tag": "",
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:sections.main_search.blocks.page_card.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

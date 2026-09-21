@@ -1,0 +1,187 @@
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+{{#component "script" src="./product-card.js" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+{{#var has_images = product.images | size() | default(0) /}}
+{{#var is_carousel = product && has_images > 1 /}}
+
+<theme-product-card-media-promotion
+  class="product-card color-{{ block.settings.color_scheme.id }}"
+  style="--card-style: {{ block.settings.card_style }}"
+  {{#if product }}data-product-id="{{ product.id }}"data-product-handle="{{ product.handle }}"{{/if}}
+  {{{ block.shopline_attributes }}}
+>
+  {{#if is_carousel }}
+    <theme-carousel class="product-card__carousel" data-direction="horizontal">
+      <ul class="carousel__track product-card__carousel-track">
+        {{#for featured_media in product.images }}
+          <li class="carousel__slide product-card__carousel-slide" data-media-id="{{ featured_media.id }}">
+            <div class="product-card__slide-content {{ block.settings | class_list() }}">
+              <div class="product-card__image-container">
+                <div class="product-card__image-wrapper" style="--aspect-ratio: {{ block.settings.aspect_ratio }};">
+                  {{#component "image" data=featured_media class="product-card__image" /}}
+                </div>
+
+                <div class="product-card__indicator body2">
+                  <span name="current">{{ forloop.index }}</span>
+                  /
+                  <span name="total">{{ has_images }}</span>
+                </div>
+              </div>
+
+              <div class="product-card__content">
+                {{#blocks}}
+                  {{#block product=product /}}
+                {{/blocks}}
+              </div>
+            </div>
+          </li>
+        {{/for}}
+      </ul>
+
+      <div class="product-card__carousel-arrows">
+        <button class="product-card__carousel-arrow product-card__carousel-arrow--prev" name="previous">
+          {{#component "icons/arrow-hyphen" /}}
+        </button>
+        <button class="product-card__carousel-arrow product-card__carousel-arrow--next" name="next">
+          {{#component "icons/arrow-hyphen" /}}
+        </button>
+      </div>
+    </theme-carousel>
+  {{#else/}}
+    <div class="product-card__slide-content {{ block.settings | class_list() }}">
+      <div class="product-card__image-container">
+        <div class="product-card__image-wrapper" style="--aspect-ratio: {{ block.settings.aspect_ratio }};">
+          {{#if product.featured_image }}
+            {{#component "image" data=product.featured_image class="product-card__image" /}}
+          {{#else/}}
+            {{#placeholder_svg "image" class="product-card__image product-card__image--placeholder" /}}
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="product-card__content">
+        {{#blocks}}
+          {{#block product=product /}}
+        {{/blocks}}
+      </div>
+    </div>
+  {{/if}}
+</theme-product-card-media-promotion>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.product_card.name",
+  "icon": "discountBanner",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.media_promotion.blocks.product_card.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.media_promotion.blocks.product_card.settings.product.label",
+      "info": "t:sections.media_promotion.blocks.product_card.settings.product.info"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "t:sections.media_promotion.blocks.product_card.settings.aspect_ratio.label",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "t:sections.media_promotion.blocks.product_card.settings.aspect_ratio.options_0.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "unset",
+          "label": "t:sections.media_promotion.blocks.product_card.settings.aspect_ratio.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "t:sections.media_promotion.blocks.product_card.settings.card_style.label",
+      "default": "var(--color-background)",
+      "options": [
+        {
+          "value": "var(--color-background)",
+          "label": "t:sections.media_promotion.blocks.product_card.settings.card_style.options_0.label"
+        },
+        {
+          "value": "transparent",
+          "label": "t:sections.media_promotion.blocks.product_card.settings.card_style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.media_promotion.blocks.product_card.settings.spacing.label",
+      "default": {
+        "padding-top": "0",
+        "padding-right": "0",
+        "padding-bottom": "0",
+        "padding-left": "0"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-info",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.product_card.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$product-info",
+          "settings": {
+            "spacing": {
+              "padding-block-start": "20px",
+              "padding-inline-end": "20px",
+              "padding-block-end": "20px",
+              "padding-inline-start": "20px",
+              "@media (--mobile)": {
+                "padding-block-start": "20px",
+                "padding-inline-end": "20px",
+                "padding-block-end": "20px",
+                "padding-inline-start": "20px"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "type": "product-title"
+            },
+            {
+              "type": "product-price"
+            },
+            {
+              "type": "product-card/_description",
+              "settings": {
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "product-buy-button"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

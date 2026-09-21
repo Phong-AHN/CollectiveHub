@@ -1,0 +1,128 @@
+<div class="shopping-video__video">
+  <div class="shopping-video__video-wrapper">
+    {{#component
+      "media/video-media"
+      muted=block.settings.mute_play
+      loop=block.settings.loop_play
+      poster_image=block.settings.cover_image
+      local_media=block.settings.local_video
+      external_media=block.settings.external_link
+      controls=!block.settings.hide_video_controls && !block.settings.youtube_simple_style
+      alt_text=block.settings.video_alt_text
+      class="shopping-video__video-wrapper-media"
+    /}}
+    <div class="shopping-video__video-wrapper-autoplay" data-autoplay="{{ block.settings.auto_play }}"></div>
+    <div
+      class="
+        shopping-video__video-wrapper-mute {{#if block.settings.mute_play }}
+          shopping-video__video-wrapper-mute--active
+        {{/if}}
+      "
+    >
+      {{#component "icons/mute" /}}
+    </div>
+  </div>
+  {{#blocks}}
+    <div
+      class="
+        shopping-video__video-text-group-wrapper {{#if forblock.settings.is_float }}
+          shopping-video__video-text-group-wrapper--float
+        {{/if}} {{ props.text_group_class }} {{ forblock.settings.size | class_list() }}
+      "
+    >
+      {{#block/}}
+    </div>
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.video.name",
+  "icon": "video",
+  "settings": [
+    {
+      "type": "image",
+      "label": "t:sections.shopping_video.blocks.video.settings.cover_image.label",
+      "id": "cover_image"
+    },
+    {
+      "type": "video",
+      "label": "t:sections.shopping_video.blocks.video.settings.local_video.label",
+      "id": "local_video",
+      "info": "t:sections.shopping_video.blocks.video.settings.local_video.info"
+    },
+    {
+      "type": "external_video",
+      "label": "t:sections.shopping_video.blocks.video.settings.external_link.label",
+      "id": "external_link",
+      "info": "t:sections.shopping_video.blocks.video.settings.external_link.info"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.video.settings.auto_play.label",
+      "id": "auto_play",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.video.settings.mute_play.label",
+      "id": "mute_play",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.video.settings.loop_play.label",
+      "id": "loop_play",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.video.settings.hide_video_controls.label",
+      "id": "hide_video_controls",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.shopping_video.blocks.video.settings.youtube_simple_style.label",
+      "id": "youtube_simple_style",
+      "default": false
+    },
+    {
+      "type": "text",
+      "label": "t:sections.shopping_video.blocks.video.settings.video_alt_text.label",
+      "id": "video_alt_text",
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-text-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.blocks.video.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$product-text-group",
+          "blocks": [
+            {
+              "type": "$heading"
+            },
+            {
+              "type": "$description",
+              "settings": {
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "$button"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

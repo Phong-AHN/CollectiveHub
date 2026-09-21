@@ -1,0 +1,40 @@
+{{#component "stylesheet" src="./_discount-tag.css" | asset_url() /}}
+
+{{#var product = props.product /}}
+{{#var price = product.price /}}
+{{#var compare_at_price = product.compare_at_price /}}
+{{#var save_price = compare_at_price | minus(price) /}}
+
+<div {{{ block.shopline_attributes }}}>
+  {{#if product.available && save_price > 0 }}
+    <div class="{{ settings.product_discount_typography }} body-font-bold block-product-card__discount-tag">
+      {{#var save_price_dom = save_price | money() /}}
+
+      {{#switch settings.product_discount_style }}
+        {{#case "sale" /}}
+          {{{ "products.product_list.sale" | t() }}}
+        {{#case "amount" /}}
+          {{{ "products.product_list.save_byjs" | t(priceDom = save_price_dom) }}}
+        {{#case "percentage" /}}
+          {{#var save_ratio = save_price | times(10000) | divided_by(compare_at_price) | divided_by(100) /}}
+          {{{ "products.product_list.save_ratio" | t(price = save_ratio) }}}
+      {{/switch}}
+    </div>
+  {{#else if product && !product.available /}}
+    <div class="{{ settings.product_discount_typography }} body-font-bold block-product-card__sold-out">
+      {{ "products.general.sold_out" | t() }}
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_card..discount_tag.name",
+  "tag": "",
+  "presets": [
+    {
+      "name": "t:blocks.product_card..discount_tag.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

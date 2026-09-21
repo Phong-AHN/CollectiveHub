@@ -1,0 +1,84 @@
+
+
+{{#var enable_highlighted_menu_items = props.enable_highlighted_menu_items /}}
+{{#var highlighted_menu_items_pattern = props.highlighted_menu_items_pattern /}}
+{{#var keywords = highlighted_menu_items_pattern | split(",") /}}
+
+{{#var data = props.data /}}
+{{#var title = data.settings.title /}}
+{{#var url = data.settings.url /}}
+
+{{#var aspect_ratio = data.settings.aspect_ratio /}}
+
+{{#var total = 0 /}}
+{{#if data.settings.image_1 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_2 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_3 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+{{#if data.settings.image_4 }}
+  {{#set total = total | plus(1) /}}
+{{/if}}
+
+{{#if title }}
+  <li class="nav-drawer-super-gallery {{#if aspect_ratio == "unset" }}nav-drawer-super-gallery--adapt{{/if}}">
+    
+    <details>
+      <summary class="header-nav-drawer__menu-control">
+        <a
+          class="header-nav-drawer__menu-link header-nav-drawer__ellipsis body3 body-font-bold"
+          {{#if url }}href="{{ url }}"{{#else/}}href="javascript:;"role="link"{{/if}}
+        >
+          {{#if enable_highlighted_menu_items && keywords | contains(title) }}
+            <mark class="lighthighted">{{ title }}</mark>
+          {{#else/}}
+            {{ title }}
+          {{/if}}
+        </a>
+
+        <span class="header-nav-drawer__menu-icon button button--icon" title="expand menu" aria-label="expand menu">
+          {{#component "icons/arrow-thin" /}}
+          {{#component "icons/minus" /}}
+        </span>
+      </summary>
+    </details>
+
+    <div class="nav-drawer-super-gallery__menu header-nav-drawer__submenu" style="--nav-drawer-submenu-level:1;">
+      <div class="nav-drawer-super-gallery__row">
+        {{#component
+          "./nav-drawer-super-gallery-item"
+          image=data.settings.image_1
+          link=data.settings.image_1_link
+          title=data.settings.image_1_title
+        /}}
+
+        {{#component
+          "./nav-drawer-super-gallery-item"
+          image=data.settings.image_2
+          link=data.settings.image_2_link
+          title=data.settings.image_2_title
+        /}}
+      </div>
+
+      <div class="nav-drawer-super-gallery__row">
+        {{#component
+          "./nav-drawer-super-gallery-item"
+          image=data.settings.image_3
+          link=data.settings.image_3_link
+          title=data.settings.image_3_title
+        /}}
+
+        {{#component
+          "./nav-drawer-super-gallery-item"
+          image=data.settings.image_4
+          link=data.settings.image_4_link
+          title=data.settings.image_4_title
+        /}}
+      </div>
+    </div>
+  </li>
+{{/if}}

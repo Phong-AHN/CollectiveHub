@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "0px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "0px",
+          "padding-left": "0",
+          "padding-right": "0",
+          "padding-top": "60px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    },
+    "booth-checkout": {
+      "type": "booth-checkout",
+      "settings": {
+        "api_base_url": "",
+        "color_scheme": "scheme-2",
+        "currency": "USD",
+        "floorplan_url": "https://collectivehub9-20.expofp.com",
+        "show_debug": true,
+        "param_booth": "booth",
+        "param_type": "type",
+        "param_size": "size",
+        "param_price": "price",
+        "param_currency": "currency"
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": [],
+      "name": "t:sections.booth_checkout.presets.presets_0.name"
+    }
+  },
+  "order": [
+    "main-page",
+    "booth-checkout"
+  ]
+}

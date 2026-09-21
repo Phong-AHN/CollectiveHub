@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "customers-login": {
+      "type": "customers-login",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "20px",
+            "padding-right": "20px",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "customers-login"
+  ]
+}

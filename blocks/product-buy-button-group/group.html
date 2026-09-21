@@ -1,0 +1,98 @@
+{{#component "stylesheet" src="./group.css" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+{{#var current_variant = props.current_variant /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+<div class="block-product-buy-button-group {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#blocks}}
+    {{#block product=product current_variant=current_variant has_default_variant=false /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_buy_button_group.group.name",
+  "tag": "",
+  "icon": "button",
+  "blocks": [
+    {
+      "type": "product-buy-button-group/_bundle",
+      "limit": 1
+    },
+    {
+      "type": "product-buy-button-group/_payment-button",
+      "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_buy_button_group.group.settings.product.label",
+      "info": "t:blocks.product_buy_button_group.group.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.product_buy_button_group.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "flex-start",
+        "column-gap": "10px",
+        "row-gap": "10px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product_buy_button_group.group.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_buy_button_group.group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_buy_button_group.group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-buy-button-group/_bundle",
+          "blocks": [
+            {
+              "type": "product-buy-button-group/_quantity-selector",
+              "settings": {}
+            },
+            {
+              "type": "product-buy-button-group/_buy-button",
+              "settings": {}
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

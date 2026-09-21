@@ -1,0 +1,27 @@
+<div class="count-down__divider-wrapper {{ block.settings | class_list() }}">
+  <div {{{ block.shopline_attributes }}} class="count-down__divider"></div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.count_down.blocks.divider.name",
+  "icon": "divider",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.count_down.blocks.divider.settings.spacing.label",
+      "default": {
+        "padding-top": "0",
+        "padding-bottom": "0",
+        "@media (--mobile)": {
+          "padding-top": "0",
+          "padding-bottom": "0"
+        }
+      }
+    }
+  ],
+  "presets": []
+}
+{{/schema}}

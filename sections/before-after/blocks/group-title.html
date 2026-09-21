@@ -1,0 +1,117 @@
+<div
+  class="rte {{ block.settings.typography }} {{ block.settings | class_list() }} before-after__group-title"
+  {{#if block.settings.bg_color }}style="--title-background-color: {{ block.settings.bg_color.rgb }};"{{/if}}
+  {{{ block.shopline_attributes }}}
+>
+  {{{ block.settings.content | newline_to_br() }}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.group_title.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "label": "t:sections.before_after.blocks.group_title.settings.content.label",
+      "id": "content",
+      "default": "Before"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.before_after.blocks.group_title.settings.bg_color.label",
+      "id": "bg_color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.before_after.blocks.group_title.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.before_after.blocks.group_title.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    },
+    {
+      "type": "select",
+      "label": "t:sections.before_after.blocks.group_title.settings.typography.label",
+      "id": "typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.before_after.blocks.group_title.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.group_title.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

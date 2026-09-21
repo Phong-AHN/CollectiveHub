@@ -1,0 +1,36 @@
+<div class="main-cart-header {{ block.settings.spacing | class_list() }}" {{{ block.shopline_attributes }}}>
+  <h2 class="title4">{{ "general.header.cart" | t() }}</h2>
+
+  <a class="button button--link" href="{{ routes.all_products_collection_url }}">
+    {{ "cart.checkout_proceeding.continue_shopping" | t() }}
+  </a>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.blocks.cart_header.name",
+  "deletable": false,
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.blocks.cart_header.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-bottom": "40px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-bottom": "20px"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_cart.blocks.cart_header.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

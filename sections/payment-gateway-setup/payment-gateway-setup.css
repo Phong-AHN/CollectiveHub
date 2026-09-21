@@ -1,0 +1,197 @@
+.payment-gateway-setup {
+  background-color: rgb(var(--color-background));
+}
+
+.payment-gateway-setup__inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+theme-payment-gateway-setup[data-state='hidden'] {
+  display: none;
+}
+
+/* Once the gateway is configured the whole band goes, background included. */
+.payment-gateway-setup[hidden] {
+  display: none !important;
+}
+
+.payment-gateway-setup__heading,
+.payment-gateway-setup__description {
+  margin: 0;
+  text-align: center;
+}
+
+.payment-gateway-setup__description p {
+  margin: 0;
+}
+
+/* Checking state: keep the form out of sight until we know whether the
+   gateway is already configured, so it never flashes in and back out. */
+.payment-gateway-setup__checking {
+  display: none;
+  justify-content: center;
+  padding-block: 40px;
+}
+
+theme-payment-gateway-setup[data-state='checking'] .payment-gateway-setup__checking {
+  display: flex;
+}
+
+theme-payment-gateway-setup[data-state='checking'] .payment-gateway-setup__body {
+  display: none;
+}
+
+.payment-gateway-setup__body {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+}
+
+.payment-gateway-setup__spinner {
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgba(var(--color-text), 0.2);
+  border-block-start-color: rgb(var(--color-text));
+  border-radius: 50%;
+  animation: payment-gateway-setup-spin 0.8s linear infinite;
+}
+
+@keyframes payment-gateway-setup-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .payment-gateway-setup__spinner {
+    animation: none;
+  }
+}
+
+.payment-gateway-setup__docs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 749px) {
+  .payment-gateway-setup__docs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.payment-gateway-setup__doc {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  color: rgb(var(--color-text));
+  text-decoration: none;
+  border: 1px solid rgba(var(--color-text), 0.15);
+  border-radius: 8px;
+  transition: border-color 200ms ease;
+}
+
+.payment-gateway-setup__doc:hover {
+  border-color: rgb(var(--color-text));
+}
+
+/* Highlight the guide that matches the gateway currently selected below. */
+theme-payment-gateway-setup[data-gateway='paypal'] .payment-gateway-setup__doc[data-gateway='paypal'],
+theme-payment-gateway-setup[data-gateway='stripe'] .payment-gateway-setup__doc[data-gateway='stripe'] {
+  border-color: rgb(var(--color-text));
+  border-width: 2px;
+  padding: 19px;
+}
+
+.payment-gateway-setup__doc-text {
+  color: rgba(var(--color-text), 0.75);
+}
+
+.payment-gateway-setup__doc-link {
+  margin-block-start: 4px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.payment-gateway-setup__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-gateway-setup__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 0;
+  margin: 0 0 20px;
+  border: none;
+}
+
+.payment-gateway-setup__legend {
+  width: 100%;
+  padding: 0;
+  margin-block-end: 12px;
+}
+
+.payment-gateway-setup__choice {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.payment-gateway-setup__choice input {
+  width: 18px;
+  height: 18px;
+  accent-color: rgb(var(--color-text));
+  cursor: pointer;
+}
+
+.payment-gateway-setup__fields[hidden] {
+  display: none;
+}
+
+.payment-gateway-setup__message {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.payment-gateway-setup__message[hidden] {
+  display: none;
+}
+
+.payment-gateway-setup__message[data-type='error'] {
+  color: rgb(var(--color-text));
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.payment-gateway-setup__message[data-type='success'] {
+  color: rgb(var(--color-text));
+  background-color: rgba(0, 128, 0, 0.12);
+}
+
+.payment-gateway-setup__submit {
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+theme-payment-gateway-setup[data-state='saving'] .payment-gateway-setup__submit {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.payment-gateway-setup__note {
+  margin: 12px 0 0;
+  color: rgba(var(--color-text), 0.7);
+}
+
+@media (max-width: 749px) {
+  .payment-gateway-setup__submit {
+    align-self: stretch;
+  }
+}

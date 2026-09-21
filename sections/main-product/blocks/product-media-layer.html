@@ -1,0 +1,42 @@
+<div class="product-detail__media-layer {{ block.settings | class_list() }}">
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_product.blocks.product_media_layer.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.main_product.blocks.product_media_layer.settings.layout.label"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.main_product.blocks.product_media_layer.settings.size.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "icon/icon"
+    },
+    {
+      "type": "image/image"
+    },
+    {
+      "type": "logo/logo"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "rich-text"
+    }
+  ]
+}
+{{/schema}}

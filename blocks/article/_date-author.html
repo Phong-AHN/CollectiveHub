@@ -1,0 +1,122 @@
+{{#var show_date = block.settings.show_date /}}
+{{#var show_author = block.settings.show_author /}}
+{{#var article = props.article /}}
+
+{{#var published_at /}}
+{{#var author /}}
+
+{{#if article }}
+  {{#set published_at = article.published_at /}}
+  {{#set author = article.author /}}
+{{#else/}}
+  {{#set published_at = "1685624554752" /}}
+  {{#set author = "author" /}}
+{{/if}}
+
+<div class="block-article-card__extra-info {{ block.settings.typography }}" {{{ block.shopline_attributes }}}>
+  {{#if show_date }}
+    <span>{{ article.published_at | date(format = "abbreviated_date") }}</span>
+  {{/if}}
+
+  {{#if show_date && show_author && article.author }}
+    <span class="separator"></span>
+  {{/if}}
+
+  {{#if show_author && article.author }}
+    <span>{{ article.author }}</span>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.article..date_author.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "show_author",
+      "label": "t:blocks.article..date_author.settings.show_author.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_date",
+      "label": "t:blocks.article..date_author.settings.show_date.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.article..date_author.settings.typography.label",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.article..date_author.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.article..date_author.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.article..date_author.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.article..date_author.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.article..date_author.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.article..date_author.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.article..date_author.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.article..date_author.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.article..date_author.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.article..date_author.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.article..date_author.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.article..date_author.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.article..date_author.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.article..date_author.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.article..date_author.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.article..date_author.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

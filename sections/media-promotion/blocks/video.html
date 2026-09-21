@@ -1,0 +1,156 @@
+<div class="media-video {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#var muted = block.settings.muted /}}
+
+  
+  {{#if block.settings.autoplay }}
+    {{#set muted = true /}}
+  {{/if}}
+
+  {{#component
+    "media/video-media"
+    controls=true
+    autoplay=block.settings.autoplay
+    muted=muted
+    loop=block.settings.loop
+    poster_image=block.settings.poster_image
+    local_media=block.settings.video_local_media
+    external_media=block.settings.video_external_media
+    alt_text=block.settings.video_alt_text
+  /}}
+
+  <div class="media-mask" style="--media-mask-opacity: {{ block.settings.video_mask_opacity }};"></div>
+
+  {{#blocks}}
+    {{#block
+      show_text_mask=block.settings.show_text_mask
+      text_mask_color=block.settings.text_mask_color
+      mobile_text_layout=props.mobile_text_layout
+    /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.video.name",
+  "tag": "",
+  "icon": "video",
+  "settings": [
+    {
+      "type": "image",
+      "id": "poster_image",
+      "label": "t:sections.media_promotion.blocks.video.settings.poster_image.label"
+    },
+    {
+      "type": "video",
+      "id": "video_local_media",
+      "label": "t:sections.media_promotion.blocks.video.settings.video_local_media.label",
+      "info": "t:sections.media_promotion.blocks.video.settings.video_local_media.info"
+    },
+    {
+      "type": "external_video",
+      "id": "video_external_media",
+      "format": "video",
+      "label": "t:sections.media_promotion.blocks.video.settings.video_external_media.label",
+      "placeholder": "",
+      "info": "t:sections.media_promotion.blocks.video.settings.video_external_media.info"
+    },
+    {
+      "type": "switch",
+      "id": "autoplay",
+      "label": "t:sections.media_promotion.blocks.video.settings.autoplay.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "muted",
+      "label": "t:sections.media_promotion.blocks.video.settings.muted.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "loop",
+      "label": "t:sections.media_promotion.blocks.video.settings.loop.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "video_alt_text",
+      "label": "t:sections.media_promotion.blocks.video.settings.video_alt_text.label",
+      "default": "Describe the video"
+    },
+    {
+      "type": "range",
+      "id": "video_mask_opacity",
+      "label": "t:sections.media_promotion.blocks.video.settings.video_mask_opacity.label",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%"
+    },
+    {
+      "type": "switch",
+      "id": "show_text_mask",
+      "label": "t:sections.media_promotion.blocks.video.settings.show_text_mask.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "label": "t:sections.media_promotion.blocks.video.settings.text_mask_color.label",
+      "id": "text_mask_color",
+      "default": "deep",
+      "options": [
+        {
+          "label": "t:sections.media_promotion.blocks.video.settings.text_mask_color.options_0.label",
+          "value": "deep"
+        },
+        {
+          "label": "t:sections.media_promotion.blocks.video.settings.text_mask_color.options_1.label",
+          "value": "light"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.video.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$group",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Deep Cleaning",
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "description",
+              "settings": {
+                "content": "Rich in amino acids",
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "View Detail",
+                "style": "primary"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

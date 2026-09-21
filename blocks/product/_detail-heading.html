@@ -1,0 +1,169 @@
+{{#var product = props.product /}}
+
+<h1
+  class="
+    product-detail__title
+    hidden-empty
+    text-{{ block.settings.text_align }}
+    {{ block.settings.desktop_font_size }}
+    {{ block.settings.mobile_font_size }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{ block.settings.heading | default(product.title) }}
+</h1>
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_heading.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:blocks.product..detail_heading.settings.heading.label",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "desktop_font_size",
+      "label": "t:blocks.product..detail_heading.settings.desktop_font_size.label",
+      "default": "title5",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_heading.settings.desktop_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_font_size",
+      "label": "t:blocks.product..detail_heading.settings.mobile_font_size.label",
+      "default": "mobile-title6",
+      "options": [
+        {
+          "value": "mobile-typography-default",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_0.label"
+        },
+        {
+          "value": "mobile-title1",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_1.label"
+        },
+        {
+          "value": "mobile-title2",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_2.label"
+        },
+        {
+          "value": "mobile-title3",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_3.label"
+        },
+        {
+          "value": "mobile-title4",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_4.label"
+        },
+        {
+          "value": "mobile-title5",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_5.label"
+        },
+        {
+          "value": "mobile-title6",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_6.label"
+        },
+        {
+          "value": "mobile-body1",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_7.label"
+        },
+        {
+          "value": "mobile-body2",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_8.label"
+        },
+        {
+          "value": "mobile-body3",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_9.label"
+        },
+        {
+          "value": "mobile-body4",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_10.label"
+        },
+        {
+          "value": "mobile-body5",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_11.label"
+        },
+        {
+          "value": "mobile-body6",
+          "label": "t:blocks.product..detail_heading.settings.mobile_font_size.options_12.label"
+        }
+      ]
+    },
+    {
+      "id": "text_align",
+      "type": "text_align",
+      "label": "t:blocks.product..detail_heading.settings.text_align.label",
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_heading.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,497 @@
+{{#component "../components/stylesheet" src="./product.css" | asset_url() /}}
+{{#component "../components/script" src="./product.js" | asset_url() /}}
+
+{{#var product = block.settings.product /}}
+
+{{#var first_variant = product | get_variants() | first() /}}
+{{#var default_variant = product.selected_or_first_available_variant | default(first_variant) /}}
+
+{{#var current_variant /}}
+{{#if block.settings.product }}
+  {{#set current_variant = default_variant /}}
+{{#else/}}
+  {{#set current_variant = props.current_variant | default(default_variant) /}}
+{{/if}}
+
+{{#capture product_image }}
+  <a
+    href="{{ product.url | default(`javascript:void(0)`) }}"
+    class="sgc-product-card__image-wrapper {{#if block.settings.aspect_ratio != "unset" }}sgc-product-card__image-wrapper--fixed-aspect{{/if}}"
+    style="
+      --aspect-ratio: {{ block.settings.aspect_ratio }};
+      --fit-type: {{ block.settings.fit_type }};
+    "
+  >
+    {{#if product.featured_media }}
+      {{#component "../components/image" data=product.featured_media class="sgc-product-card__image" /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </a>
+{{/capture}}
+
+{{#capture product_title }}
+  {{#var placeholder_title = "product title" /}}
+  {{#var max_row /}}
+  {{#switch block.settings.product_title_display_type }}
+    {{#case "max_1" /}}
+      {{#set max_row = 1 /}}
+    {{#case "max_2" /}}
+      {{#set max_row = 2 /}}
+    {{#else/}}
+
+  {{/switch}}
+
+  <style>{{{ block.settings.product_title_font_family | font_face() }}}</style>
+  <style>{{{ block.settings.desktop_price_font_family | font_face() }}}</style>
+  <style>{{{ block.settings.mobile_price_font_family | font_face() }}}</style>
+  <style>{{{ block.settings.desktop_original_price_font_family | font_face() }}}</style>
+  <style>{{{ block.settings.mobile_original_price_font_family | font_face() }}}</style>
+
+  <div
+    class="sgc-product-card__title"
+    style="
+      --desktop-title-font-size:{{ block.settings.desktop_title_font_size }}px;
+      --mobile-title-font-size:{{ block.settings.mobile_title_font_size }}px;
+      --desktop-title-line-height:{{ block.settings.desktop_title_line_height }};
+      --mobile-title-line-height:{{ block.settings.mobile_title_line_height }};
+      --desktop-product-title-font-family:{{ block.settings.product_title_font_family.family }};
+      --desktop-product-title-font-weight:{{ block.settings.product_title_font_family.weight }};
+      --desktop-product-title-font-style:{{ block.settings.product_title_font_family.style }};
+      --desktop-title-color:{{ block.settings.title_color.rgb }};
+      --max-row:{{ max_row }};
+    "
+  >
+    {{ product.title | default(placeholder_title) }}
+  </div>
+{{/capture}}
+
+{{#capture product_price }}
+  {{#var layout_template = "sale origin" /}}
+  {{#var price = product.price | default(2999) /}}
+  {{#var compare_at_price = product.compare_at_price /}}
+  {{#var money_price = price | money_with_currency() /}}
+  {{#var money_price_min = product.price_min | money_with_currency() /}}
+  {{#var money_price_max = product.price_max | money_with_currency() /}}
+  {{#var sale_style = block.settings.sale_style | default("lowest_price") /}}
+  {{#var render_contents = layout_template | split(" ") /}}
+
+  <div
+    class="sgc-product-card__price sgc-price-display--{{ sale_style | replace('_', '-') }}"
+    style="
+      --desktop-price-font-size:{{ block.settings.desktop_price_font_size }}px;
+      --mobile-price-font-size:{{ block.settings.mobile_price_font_size }}px;
+      --desktop-price-line-height:{{ block.settings.desktop_price_line_height }};
+      --mobile-price-line-height:{{ block.settings.mobile_price_line_height }};
+      --desktop-price-color:{{ block.settings.sale_price_color.rgb }};
+      --desktop-price-font-family:{{ block.settings.desktop_price_font_family.family }};
+      --desktop-price-font-weight:{{ block.settings.desktop_price_font_family.weight }};
+      --desktop-price-font-style:{{ block.settings.desktop_price_font_family.style }};
+      --mobile-price-font-family:{{ block.settings.mobile_price_font_family.family }};
+      --mobile-price-font-weight:{{ block.settings.mobile_price_font_family.weight }};
+      --mobile-price-font-style:{{ block.settings.mobile_price_font_family.style }};
+      --desktop-original-price-font-size:{{ block.settings.desktop_original_price_font_size }}px;
+      --mobile-original-price-font-size:{{ block.settings.mobile_original_price_font_size }}px;
+      --desktop-original-price-line-height:{{ block.settings.desktop_original_price_line_height }};
+      --mobile-original-price-line-height:{{ block.settings.mobile_original_price_line_height }};
+      --desktop-original-price-font-family:{{ block.settings.desktop_original_price_font_family.family }};
+      --desktop-original-price-font-weight:{{ block.settings.desktop_original_price_font_family.weight }};
+      --desktop-original-price-font-style:{{ block.settings.desktop_original_price_font_family.style }};
+      --mobile-original-price-font-family:{{ block.settings.mobile_original_price_font_family.family }};
+      --mobile-original-price-font-weight:{{ block.settings.mobile_original_price_font_family.weight }};
+      --mobile-original-price-font-style:{{ block.settings.mobile_original_price_font_family.style }};
+      --desktop-original-price-color:{{ block.settings.original_price_color.rgb }};
+    "
+  >
+    {{#for content in render_contents }}
+      {{#switch content }}
+        {{#case "sale" /}}
+          <div class="sgc-product-card__price-sale">
+            {{#switch sale_style }}
+              {{#case "from_lowest_price" /}}
+                   {{{ "sgc_product_comparison.from_price_html" | t(price = money_price_min) }}}
+              {{#case "price_interval" /}}
+                {{#if money_price_min != money_price_max }}
+                  {{{ money_price_min }}} - {{{ money_price_max }}}
+                {{#else/}}
+                  {{{ money_price }}}
+                {{/if}}
+              {{#else/}}
+                {{{ money_price }}}
+            {{/switch}}
+          </div>
+        {{#case "origin" /}}
+          {{#if compare_at_price > price }}
+            <div class="sgc-product-card__price-origin">
+              {{{ compare_at_price | money_with_currency() }}}
+            </div>
+          {{/if}}
+      {{/switch}}
+    {{/for}}
+  </div>
+{{/capture}}
+
+<div class="sgc-product-card {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{{ product_image }}}
+  <div class="sgc-product-card__info">
+    {{{ product_title }}}
+    {{{ product_price }}}
+    <theme-product-form class="sgc-product-card__button-wrapper">
+      {{#capture product_form_id }}quick-add-product-card-{{ product.id }}{{/capture}}
+      {{#product_form product id=product_form_id }}
+        <input type="hidden" name="id" value="{{ current_variant.id }}"/>
+        <input type="hidden" required name="quantity" value="1"/>
+        <button
+          class="sgc-product-card__button {{#if !block.settings.show_add_to_cart_button }}sgc-hidden{{/if}}"
+          style="
+            --button-bg-color: {{ block.settings.add_to_cart_background_color.rgb }};
+            --button-text-color: {{ block.settings.add_to_cart_font_color.rgb }};
+            --desktop-add-to-cart-button-font-size:{{ block.settings.desktop_add_to_cart_button_font_size }}px;
+            --mobile-add-to-cart-button-font-size:{{ block.settings.mobile_add_to_cart_button_font_size }}px;
+          "
+          type="button"
+          data-product-handle="{{ product.handle }}"
+          {{#if !current_variant.available }}disabled{{/if}}
+        >
+          <span class="sgc-product-card__button-text">
+            {{#if current_variant.available }}
+              {{ block.settings.add_to_cart_text }}
+            {{#else/}}
+              {{ "sgc_product_comparison.sold_out" | t() }}
+            {{/if}}
+          </span>
+        </button>
+      {{/product_form}}
+    </theme-product-form>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_product_comparison.blocks.product.name",
+  "icon": "product",
+  "tag": "",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.product.label"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.aspect_ratio.label",
+      "default": "3/4",
+      "options": [
+        {
+          "value": "2/3",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.aspect_ratio.options_0.label"
+        },
+        {
+          "value": "1/1",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.aspect_ratio.options_1.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.aspect_ratio.options_3.label"
+        },
+        {
+          "value": "unset",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.aspect_ratio.options_4.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.fit_type.label",
+      "id": "fit_type",
+      "default": "contain",
+      "options": [
+        {
+          "value": "cover",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.fit_type.options_0.label"
+        },
+        {
+          "value": "contain",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.fit_type.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "product_title_display_type",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.product_title_display_type.label",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.product_title_display_type.options_0.label"
+        },
+        {
+          "value": "max_1",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.product_title_display_type.options_1.label"
+        },
+        {
+          "value": "max_2",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.product_title_display_type.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sale_style",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.sale_style.label",
+      "info": "t:sections.sgc_product_comparison.blocks.product.settings.sale_style.info",
+      "default": "lowest_price",
+      "options": [
+        {
+          "value": "lowest_price",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.sale_style.options_0.label"
+        },
+        {
+          "value": "price_interval",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.sale_style.options_1.label"
+        },
+        {
+          "value": "from_lowest_price",
+          "label": "t:sections.sgc_product_comparison.blocks.product.settings.sale_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.group_header_0.label"
+    },
+    {
+      "type": "font",
+      "id": "product_title_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.product_title_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.title_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "desktop_title_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_title_font_size.label",
+      "default": 24,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_title_font_size.label",
+      "default": 14,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_title_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_title_line_height.label",
+      "default": 1.6,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_title_line_height.label",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.group_header_1.label"
+    },
+    {
+      "type": "font",
+      "id": "desktop_price_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_price_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "font",
+      "id": "mobile_price_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_price_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "color",
+      "id": "sale_price_color",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.sale_price_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "desktop_price_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_price_font_size.label",
+      "default": 24,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_price_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_price_font_size.label",
+      "default": 14,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_price_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_price_line_height.label",
+      "default": 1.6,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "range",
+      "id": "mobile_price_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_price_line_height.label",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.group_header_2.label"
+    },
+    {
+      "type": "font",
+      "id": "desktop_original_price_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_original_price_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "font",
+      "id": "mobile_original_price_font_family",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_original_price_font_family.label",
+      "default": "Anton"
+    },
+    {
+      "type": "color",
+      "id": "original_price_color",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.original_price_color.label",
+      "default": "#85837f"
+    },
+    {
+      "type": "range",
+      "id": "desktop_original_price_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_original_price_font_size.label",
+      "default": 16,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_original_price_font_size",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_original_price_font_size.label",
+      "default": 12,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_original_price_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_original_price_line_height.label",
+      "default": 1.6,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "range",
+      "id": "mobile_original_price_line_height",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_original_price_line_height.label",
+      "default": 1.6,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.group_header_3.label"
+    },
+    {
+      "type": "switch",
+      "id": "show_add_to_cart_button",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.show_add_to_cart_button.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.add_to_cart_text.label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.desktop_add_to_cart_button_font_size.label",
+      "id": "desktop_add_to_cart_button_font_size",
+      "default": 14,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.mobile_add_to_cart_button_font_size.label",
+      "id": "mobile_add_to_cart_button_font_size",
+      "default": 12,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "add_to_cart_background_color",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.add_to_cart_background_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "add_to_cart_font_color",
+      "label": "t:sections.sgc_product_comparison.blocks.product.settings.add_to_cart_font_color.label",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "t:sections.sgc_product_comparison.blocks.product.presets.presets_0.name",
+      "settings": {},
+      "blocks": []
+    }
+  ]
+}
+{{/schema}}

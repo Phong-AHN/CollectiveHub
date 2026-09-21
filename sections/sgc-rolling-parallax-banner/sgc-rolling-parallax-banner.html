@@ -1,0 +1,142 @@
+{{#component "./components/importmap" /}}
+
+{{#component "./components/stylesheet" src="./sgc-rolling-parallax-banner.css" | asset_url() /}}
+
+{{#component "./components/script" src="./sgc-rolling-parallax-banner.js" | asset_url() /}}
+
+<div
+  class="
+    sgc-rolling-parallax-banner
+    {{#if !section.settings.pc_show }}
+      sgc-hidden-desktop
+    {{/if}}
+    {{#if !section.settings.mobile_show }}
+      sgc-hidden-mobile
+    {{/if}}
+  "
+>
+  <sgc-rolling-parallax-banner
+    class="sgc-rolling-parallax-banner-section"
+    style="
+      --background-color: {{ section.settings.background_color.red }}, {{ section.settings.background_color.green }}, {{
+        section.settings.background_color.blue
+      }};
+      --text-color-inner: {{ section.settings.text_color_inner.red }}, {{ section.settings.text_color_inner.green }}, {{
+        section.settings.text_color_inner.blue
+      }};
+      --text-color-outer: {{ section.settings.text_color_outer.red }}, {{ section.settings.text_color_outer.green }}, {{
+        section.settings.text_color_outer.blue
+      }};
+    "
+  >
+    <div class="sgc-rolling-parallax-banner-content-wrapper">
+      <div class="sgc-rolling-parallax-banner-content">
+        <div class="sgc-rolling-parallax-banner-content-text sgc-rolling-parallax-banner-content-text--outer">
+          {{#blocks}}
+            {{#block/}}
+          {{/blocks}}
+        </div>
+        <div class="sgc-rolling-parallax-banner-content-inner">
+          <div class="sgc-rolling-parallax-banner-content-inner-image-wrapper">
+            <div class="sgc-rolling-parallax-banner-content-inner-image-item sgc-hidden-mobile">
+              {{#if section.settings.pc_image }}
+                {{#component "./components/image" data=section.settings.pc_image /}}
+              {{#else/}}
+                {{#placeholder_svg "lifestyle-1" /}}
+              {{/if}}
+            </div>
+            <div class="sgc-rolling-parallax-banner-content-inner-image-item sgc-hidden-desktop">
+              {{#if section.settings.mobile_image }}
+                {{#component "./components/image" data=section.settings.mobile_image /}}
+              {{#else/}}
+                {{#placeholder_svg "lifestyle-1" /}}
+              {{/if}}
+            </div>
+
+            <div class="sgc-rolling-parallax-banner-content-text sgc-rolling-parallax-banner-content-text--inner">
+              {{#blocks}}
+                {{#block/}}
+              {{/blocks}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sgc-rolling-parallax-banner>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_rolling_parallax_banner.name",
+  "class": "sgc-rolling-parallax-banner",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "pc_show",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.pc_show.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "mobile_show",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.mobile_show.label",
+      "default": true
+    },
+    {
+      "type": "image",
+      "id": "pc_image",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.pc_image.label",
+      "info": "t:sections.sgc_rolling_parallax_banner.settings.pc_image.info"
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.mobile_image.label",
+      "info": "t:sections.sgc_rolling_parallax_banner.settings.mobile_image.info"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.background_color.label",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "text_color_inner",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.text_color_inner.label",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color_outer",
+      "label": "t:sections.sgc_rolling_parallax_banner.settings.text_color_outer.label",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$content-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_rolling_parallax_banner.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$content-group",
+          "blocks": [
+            {
+              "type": "$title"
+            },
+            {
+              "type": "$subtitle"
+            }
+          ]
+        }
+      ],
+      "category": "Section Gallery"
+    }
+  ]
+}
+{{/schema}}

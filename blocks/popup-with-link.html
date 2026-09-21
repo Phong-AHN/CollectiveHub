@@ -1,0 +1,273 @@
+{{#var button_text = block.settings.button_text /}}
+
+{{#if button_text }}
+  {{#component "stylesheet" src="components/dialog/index.css" | asset_url() /}}
+  {{#component "stylesheet" src="./popup-with-link.css" | asset_url() /}}
+  {{#component "script" src="components/dialog/index.js" | asset_url() /}}
+
+  <theme-dialog
+    class="block-popup"
+    style="
+      --width: {{ block.settings.size | css_var(`width`) }};
+      --height: {{ block.settings.size | css_var(`height`) }};
+    "
+    data-mask-closable="true"
+    data-esc-to-exit="true"
+  >
+    <div class="block-popup__main {{ block.settings | class_list() }}">
+      <button
+        name="trigger"
+        class="
+          theme-dialog
+          block-popup__trigger button
+          {{#if block.settings.button_style == "link" }}button--link{{/if}}
+          {{#if block.settings.button_style == "secondary" }}button--secondary{{/if}}
+          {{ block.settings.button_typography }}
+        "
+      >
+        {{ button_text }}
+      </button>
+    </div>
+
+    <dialog class="block-popup__main modal__content">
+      <button class="modal__close-control" name="close">
+        {{#component "icons/close" /}}
+      </button>
+      <div class="block-popup__content">
+        {{#blocks}}
+          {{#block class="block-popup__group" /}}
+        {{/blocks}}
+      </div>
+    </dialog>
+  </theme-dialog>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.popup_with_link.name",
+  "tag": "",
+  "icon": "campaignPromotion",
+  "settings": [
+    {
+      "label": "t:blocks.popup_with_link.settings.button_text.label",
+      "id": "button_text",
+      "type": "text",
+      "default": "Learn more"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:blocks.popup_with_link.settings.button_style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:blocks.popup_with_link.settings.button_style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:blocks.popup_with_link.settings.button_style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:blocks.popup_with_link.settings.button_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.popup_with_link.settings.button_typography.label",
+      "id": "button_typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.popup_with_link.settings.button_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.popup_with_link.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.popup_with_link.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.popup_with_link.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "color_scheme": "color_scheme_1",
+            "url": "shopline://collections",
+            "layout": {
+              "flex-direction": "row",
+              "flex-wrap": "nowrap",
+              "align-items": "center",
+              "justify-content": "center",
+              "@media (--mobile)": {
+                "flex-direction": "column",
+                "align-items": "flex-start",
+                "column-gap": "0px"
+              }
+            },
+            "size": {
+              "width": "1200px",
+              "height": "auto",
+              "@media (--mobile)": {
+                "width": "100%"
+              }
+            },
+            "spacing": {
+              "padding-top": "40px",
+              "padding-right": "40px",
+              "padding-bottom": "40px",
+              "padding-left": "40px",
+              "@media (--mobile)": {
+                "padding-top": "20px",
+                "padding-right": "20px",
+                "padding-bottom": "20px",
+                "padding-left": "20px"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "type": "image/image",
+              "settings": {
+                "size": {
+                  "width": "43%",
+                  "height": "auto",
+                  "@media (--mobile)": {
+                    "width": "auto",
+                    "height": "25%"
+                  }
+                }
+              }
+            },
+            {
+              "type": "group",
+              "settings": {
+                "color_scheme": "color_scheme_1",
+                "layout": {
+                  "flex-direction": "column",
+                  "flex-wrap": "nowrap",
+                  "align-items": "flex-start",
+                  "justify-content": "center",
+                  "row-gap": "8px",
+                  "column-gap": "0px",
+                  "@media (--mobile)": {
+                    "row-gap": "4px",
+                    "column-gap": "0px"
+                  }
+                },
+                "size": {
+                  "width": "57%",
+                  "height": "auto",
+                  "@media (--mobile)": {
+                    "width": "auto",
+                    "height": "75%"
+                  }
+                }
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Best Reseller",
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "rich-text",
+                  "settings": {
+                    "content": "Our designs focus on what you need.",
+                    "text_align": "left"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

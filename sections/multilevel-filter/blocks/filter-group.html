@@ -1,0 +1,185 @@
+{{#var selector_length = block.blocks_size /}}
+
+<form
+  class="
+    multilevel-filter__form
+    {{#if selector_length <= 4 }}
+      multilevel-filter__form--one-line
+    {{#else if selector_length < 8 /}}
+      multilevel-filter__form--two-line
+    {{#else/}}
+      multilevel-filter__form--three-line
+    {{/if}}
+    {{ block.settings | class_list() }}
+  "
+  method="get"
+  action="{{ block.settings.collection.url | default(routes.all_products_collection_url) }}"
+>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+
+  <button
+    type="submit"
+    class="
+      multilevel-filter__search-button
+      button
+      {{#if block.settings.button_style == "secondary" }}button--secondary{{/if}}
+      {{#if block.settings.button_style == "link" }}button--link{{/if}}
+      {{ block.settings.button_typography }}
+    "
+  >
+    {{#if block.settings.button_text }}
+      {{ block.settings.button_text }}
+    {{#else/}}
+      {{#component "icons/search" classes="multilevel-filter__search-button-icon" /}}
+    {{/if}}
+  </button>
+</form>
+
+{{#schema}}
+{
+  "tag": "",
+  "name": "t:sections.multilevel_filter.blocks.filter_group.name",
+  "icon": "normal",
+  "blocks": [
+    {
+      "type": "$filter",
+      "limit": 8
+    }
+  ],
+  "settings": [
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "t:sections.multilevel_filter.blocks.filter_group.settings.collection.label",
+      "info": "t:sections.multilevel_filter.blocks.filter_group.settings.collection.info"
+    },
+    {
+      "id": "button_text",
+      "type": "text",
+      "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_text.label",
+      "default": "Search"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.label",
+      "id": "button_typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.multilevel_filter.blocks.filter_group.settings.button_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.multilevel_filter.blocks.filter_group.settings.layout.label",
+      "default": {
+        "flex-wrap": "wrap",
+        "row-gap": "20px",
+        "column-gap": "14px",
+        "align-items": "flex-end",
+        "@media (--mobile)": {
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.multilevel_filter.blocks.filter_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$filter"
+        },
+        {
+          "type": "$filter"
+        },
+        {
+          "type": "$filter"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

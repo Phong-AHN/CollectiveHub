@@ -1,0 +1,149 @@
+{{#component "stylesheet" src="./card.css" | asset_url() /}}
+{{#component "script" src="./card.js" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) | default(product) /}}
+
+{{#var current_variant /}}
+{{#if block.settings.has_default_variant }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+{{#var product_card_style = settings.product_card_style /}}
+
+{{#var enable_info_layer /}}
+{{#blocks}}
+  {{#if forblock.type == "product-card/info" }}
+    {{#set enable_info_layer = forblock.settings.layer /}}
+  {{/if}}
+{{/blocks}}
+
+{{#product_item product class="product-card-shadow-space" }}
+  <theme-product-card
+    style="--info-row-gap: {{ block.settings.layout | css_var(`row-gap`) }};"
+    class="
+      block-product-card
+      product-card-style--{{ settings.product_card_style }}
+      {{#if product_card_style == "card" }}product-card-border-shadow{{/if}}
+      {{ block.settings | class_list() }}
+    "
+    data-add-to-cart-path="{{ settings.add_to_cart_path }}"
+    data-block-id="{{ block.id }}"
+    data-product-id="{{ product.id }}"
+    data-product-handle="{{ product.handle }}"
+    data-product-url="{{ product.url }}"
+    {{{ block.shopline_attributes }}}
+  >
+    {{#blocks}}
+      {{#if product }}
+        {{#if forblock.type == "product-image" }}
+          {{#block
+            product=product
+            mobile_columns=props.mobile_columns
+            desktop_columns=props.desktop_columns
+            lazy=props.lazy
+            current_variant=current_variant
+            has_default_variant=block.settings.has_default_variant
+          /}}
+        {{#else/}}
+          {{#block
+            product=product
+            current_variant=current_variant
+            has_default_variant=block.settings.has_default_variant
+          /}}
+        {{/if}}
+      {{#else/}}
+        {{#block/}}
+      {{/if}}
+    {{/blocks}}
+  </theme-product-card>
+{{/product_item}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product_card.card.name",
+  "icon": "discountBanner",
+  "tag": "",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_card.card.settings.product.label",
+      "info": "t:blocks.product_card.card.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "id": "has_default_variant",
+      "type": "switch",
+      "label": "t:blocks.product_card.card.settings.has_default_variant.label",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.product_card.card.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "row-gap": "16px",
+        "column-gap": "16px",
+        "@media (--mobile)": {
+          "flex-direction": "row",
+          "flex-wrap": "wrap",
+          "row-gap": "8px",
+          "column-gap": "8px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product_card.card.settings.spacing.label"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_card.card.settings.size.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@blocks"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "product-image",
+      "limit": 1
+    },
+    {
+      "type": "product-card/_info",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_card.card.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-image"
+        },
+        {
+          "type": "product-card/_info",
+          "blocks": [
+            {
+              "type": "product-title"
+            },
+            {
+              "type": "product-price"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

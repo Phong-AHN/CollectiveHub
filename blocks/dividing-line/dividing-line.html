@@ -1,0 +1,119 @@
+{{#component "stylesheet" src="./dividing-line.css" | asset_url() /}}
+
+<style>
+  {{{ block.settings.font_family | font_modify("weight", "400") | font_face() }}}
+  {{{ block.settings.font_family | font_modify("weight", "500") | font_face() }}}
+  {{{ block.settings.font_family | font_modify("weight", "600") | font_face() }}}
+  {{{ block.settings.font_family | font_modify("weight", "700") | font_face() }}}
+  {{{ block.settings.font_family | font_face() }}}
+</style>
+
+<div
+  class="dividing-line {{ block.settings | class_list() }}"
+  style="
+    --line-color: {{ block.settings.line_color.rgb }};
+    --background-color: {{ block.settings.background_color.rgb }};
+    --text-color: {{ block.settings.text_color.rgb }};
+    --font-family: {{ block.settings.font_family.family }};
+    --font-size: {{ block.settings.font_size }}px;
+    --line-width-desktop: {{ block.settings.line_width_desktop }}px;
+    --line-width-mobile: {{ block.settings.line_width_mobile }}px;
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div class="dividing-line__line-left"></div>
+  {{#if block.settings.title }}
+    <div class="dividing-line__line-title">{{ block.settings.title }}</div>
+  {{/if}}
+  <div class="dividing-line__line-right"></div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.dividing_line.name",
+  "icon": "divider",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:blocks.dividing_line.settings.title.label",
+      "default": "Fashion"
+    },
+    {
+      "type": "font",
+      "id": "font_family",
+      "label": "t:blocks.dividing_line.settings.font_family.label",
+      "default": "Oregano"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "t:blocks.dividing_line.settings.font_size.label",
+      "default": 48,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:blocks.dividing_line.settings.text_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:blocks.dividing_line.settings.background_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "t:blocks.dividing_line.settings.line_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "line_width_desktop",
+      "label": "t:blocks.dividing_line.settings.line_width_desktop.label",
+      "default": 1,
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "line_width_mobile",
+      "label": "t:blocks.dividing_line.settings.line_width_mobile.label",
+      "default": 1,
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.dividing_line.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-bottom": "20px",
+        "padding-left": "0px",
+        "padding-right": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.dividing_line.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,57 @@
+@layer component {
+  theme-dialog > dialog {
+    inset: 0;
+    width: fit-content;
+    height: fit-content;
+    padding: 0;
+    margin: auto;
+    background-color: rgba(
+      var(--color-background, var(--color-page-background, 255, 255, 255))
+    );
+    animation-duration: 0.2s;
+    animation-timing-function: ease;
+  }
+
+  @media (max-width: 959px) {
+    theme-dialog > dialog {
+      --modal-animation-name: animation-slide-in-bottom;
+
+      inset-block: auto 0;
+      width: 100vw;
+    }
+  }
+
+  theme-dialog > dialog::backdrop {
+    background-color: rgb(var(--color-mask), 0.4);
+  }
+
+  theme-dialog[data-placement="left"] > dialog {
+    --modal-animation-name: animation-slide-in-left;
+
+    inset-inline: 0 auto;
+    width: auto;
+    height: 100%;
+  }
+
+  theme-dialog[data-placement="right"] > dialog {
+    inset-inline: auto 0;
+    width: auto;
+    height: 100%;
+
+    --modal-animation-name: animation-slide-in-right;
+  }
+
+  theme-dialog[data-placement="top"] > dialog {
+    --modal-animation-name: animation-slide-in-top;
+
+    inset-block: 0 auto;
+    width: 100vw;
+  }
+
+  theme-dialog[data-placement="bottom"] > dialog {
+    --modal-animation-name: animation-slide-in-bottom;
+
+    inset-block: auto 0;
+    width: 100vw;
+  }
+}

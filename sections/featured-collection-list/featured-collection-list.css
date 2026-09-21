@@ -1,0 +1,105 @@
+.featured-collection-list__wrapper {
+  background-color: rgb(var(--color-background));
+}
+.featured-collection-list__list {
+  overflow-y: hidden;
+}
+.featured-collection-list__list > * {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 2/1;
+}
+.featured-collection-list__cover-wrapper.row-2-column-1 {
+  grid-row: span 2;
+  grid-column: span 1;
+}
+.featured-collection-list__cover-wrapper.row-1-column-1 {
+  grid-row: span 1;
+  grid-column: span 1;
+}
+.featured-collection-list__cover,
+.featured-collection-list__collection {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(var(--color-image-background));
+}
+.featured-collection-list__cover-title {
+  color: var(--cover-text-color);
+}
+.featured-collection-list__cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featured-collection-list__cover-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  padding: 20px;
+  background-color: var(--background-color);
+}
+.featured-collection-list__cover-inner.left-top {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.featured-collection-list__cover-inner.top {
+  align-items: flex-start;
+  justify-content: center;
+}
+.featured-collection-list__cover-inner.right-top {
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+.featured-collection-list__cover-inner.left {
+  align-items: center;
+  justify-content: flex-start;
+}
+.featured-collection-list__cover-inner.center {
+  align-items: center;
+  justify-content: center;
+}
+.featured-collection-list__cover-inner.right {
+  align-items: center;
+  justify-content: flex-end;
+}
+.featured-collection-list__cover-inner.left-bottom {
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.featured-collection-list__cover-inner.bottom {
+  align-items: flex-end;
+  justify-content: center;
+}
+.featured-collection-list__cover-inner.right-bottom {
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.featured-collection-list__collection-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--position);
+}
+.featured-collection-list__collection-inner {
+  position: absolute;
+  inset: 0;
+  background-color: var(--background-color);
+}
+.featured-collection-list__collection-inner.with-recommend-image > * {
+  flex: 1;
+}
+.featured-collection-list__collection-content.with-recommend-image {
+  text-align: center;
+}
+.featured-collection-list__collection-recommend {
+  width: 100%;
+  max-width: 50%;
+  height: 100%;
+}
+.featured-collection-list__collection-recommend-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

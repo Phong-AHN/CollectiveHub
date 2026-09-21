@@ -1,0 +1,97 @@
+{{#component "stylesheet" src="./group.css" | asset_url() /}}
+
+<div
+  class="
+    block-group {{ props.class }}
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.url }}
+    <a class="url" href="{{ block.settings.url }}" {{#if block.settings.open_in_new_tab }}target="_blank"{{/if}}></a>
+  {{/if}}
+
+  {{#blocks}}
+    {{#block product=props.product current_variant=props.current_variant /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:blocks.group.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:blocks.group.settings.color_scheme.label",
+      "default": "scheme-3",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:blocks.group.settings.url.label"
+    },
+    {
+      "type": "switch",
+      "id": "open_in_new_tab",
+      "label": "t:blocks.group.settings.open_in_new_tab.label",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.group.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-right": "20px",
+        "padding-bottom": "20px",
+        "padding-left": "20px",
+        "@media (--mobile)": {
+          "padding-top": "10px",
+          "padding-right": "10px",
+          "padding-bottom": "10px",
+          "padding-left": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.group.settings.size.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@blocks"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.group.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

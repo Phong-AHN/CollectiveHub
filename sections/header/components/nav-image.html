@@ -1,0 +1,34 @@
+{{#var data = props.data /}}
+{{#var title_pattern = data.settings.title_pattern /}}
+
+<div class="nav-item-with-images" pattern="{{ title_pattern }}">
+  {{#component
+    "./nav-image-item"
+    image=data.settings.image_1
+    position=data.settings.image_1_position
+    title=data.settings.image_1_title
+    link=data.settings.image_1_link
+    link_text=data.settings.image_1_link_text
+    button_style=data.settings.image_1_button_style
+  /}}
+
+  {{#component
+    "./nav-image-item"
+    image=data.settings.image_2
+    position=data.settings.image_2_position
+    title=data.settings.image_2_title
+    link=data.settings.image_2_link
+    link_text=data.settings.image_2_link_text
+    button_style=data.settings.image_2_button_style
+  /}}
+
+  {{#component
+    "./nav-image-item"
+    image=data.settings.image_3
+    position=data.settings.image_3_position
+    title=data.settings.image_3_title
+    link=data.settings.image_3_link
+    link_text=data.settings.image_3_link_text
+    button_style=data.settings.image_3_button_style
+  /}}
+</div>

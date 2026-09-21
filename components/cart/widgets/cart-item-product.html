@@ -1,0 +1,130 @@
+
+
+{{#var widgets_list = props.widgets | default("image,title,options,properties,discount,total") /}}
+{{#var final_widgets_list = widgets_list | split(",") /}}
+
+<div class="cart-item__product">
+  
+  {{#if final_widgets_list | contains("image") }}
+    <div class="cart-item__picture">
+      {{#if props.item.image.src }}
+        <a href="{{ props.item.url }}">
+          {{#component "image" data=props.item.image /}}
+        </a>
+      {{#else/}}
+        {{#placeholder_svg "image" class="placeholder" /}}
+      {{/if}}
+    </div>
+  {{/if}}
+
+  <div class="cart-item__product-infos">
+    <div class="cart-item__product-infos-text">
+      
+      {{#if final_widgets_list | contains("title") }}
+        <div class="cart-item__title body2">
+          <a href="{{ props.item.url }}">{{ props.item.product_title }}</a>
+        </div>
+      {{/if}}
+
+      
+      {{#if final_widgets_list | contains("total") }}
+        {{#component "./cart-item-total" item=props.item /}}
+      {{/if}}
+
+      
+      {{#if final_widgets_list | contains("options") && !props.item.product.has_only_default_variant }}
+        <div class="cart-item__options">
+          {{#for option in props.item.options_with_values }}
+            <div class="cart-item__option body6">
+              <span class="font-bold">{{ option.name }}:</span>
+              <span>{{ option.value }}</span>
+            </div>
+          {{/for}}
+        </div>
+      {{/if}}
+
+      
+      {{#if final_widgets_list | contains("properties") && props.item.properties | size() }}
+        <div class="cart-item__properties">
+          {{#for property in props.item.properties }}
+            <div class="cart-item__property body6">
+              <span class="cart-item__property-name font-bold">{{ property.name }}:</span>
+              {{#if property.type == "text" }}
+                <span class="cart-item__property-text">{{ property.value }}</span>
+              {{#else if property.type == "link" /}}
+                <a class="button button--link" href="{{ property.urls[0] }}" target="_blank">
+                  {{#if property.value }}
+                    {{ property.value }}
+                  {{#else/}}
+                    {{ "cart.item.click_to_view" | t() }}
+                  {{/if}}
+                </a>
+              {{#else if property.type == "picture" /}}
+                <div class="cart-item__property-images">
+                  {{#for url in property.urls }}
+                    <a class="cart-item__property-link" href="{{ url }}" target="_blank">
+                      {{#component "image" class="cart-item__property-image" src=url /}}
+                    </a>
+                  {{/for}}
+                </div>
+              {{/if}}
+            </div>
+          {{/for}}
+        </div>
+      {{/if}}
+
+      
+      {{#if props.item.selling_plan_allocation }}
+        <div class="cart-item__selling-plan">
+          <div class="body6">
+            <span class="font-bold">{{ "cart.item.selling_plan.name" | t() }}:</span>
+            <span>{{ props.item.selling_plan_allocation.selling_plan.name }}</span>
+          </div>
+        </div>
+      {{/if}}
+
+      
+      {{#if
+        final_widgets_list | contains("discount") &&
+        ((props.item.line_level_discount_allocations | size()) || props.item.selling_plan_allocation)
+      }}
+        <ul class="cart-item__discount body6">
+          
+          {{#if props.item.selling_plan_allocation }}
+            <li>
+              {{#component "icons/bookmark" /}}
+              {{#var plan_value = props.item.selling_plan_allocation.selling_plan.price_adjustments[0].value /}}
+              {{#var
+                plan_value_type = props.item.selling_plan_allocation.selling_plan.price_adjustments[0].value_type
+              /}}
+              <span>
+                {{ "cart.item.selling_plan.discount" | t() }}
+                {{#if plan_value_type == "percentage" }}
+                  (-{{ plan_value | divided_by(100) }}%)
+                {{#else if plan_value_type == "fixed_amount" /}}
+                  (-{{{ plan_value | money_with_currency() }}})
+                {{/if}}
+              </span>
+            </li>
+          {{/if}}
+
+          
+          {{#for discount in props.item.line_level_discount_allocations }}
+            <li>
+              {{#component "icons/bookmark" /}}
+              <span>
+                {{ discount.discount_application.title }}
+                (-{{{ discount.amount | money_with_currency() }}})
+              </span>
+            </li>
+          {{/for}}
+        </ul>
+      {{/if}}
+    </div>
+
+    
+    {{#if final_widgets_list | contains("quantity") }}
+      {{#component "./cart-item-quantity" item=props.item /}}
+    {{/if}}
+  </div>
+</div>

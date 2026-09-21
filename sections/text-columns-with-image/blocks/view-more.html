@@ -1,0 +1,135 @@
+{{#var button_typography = "body2" /}}
+{{#if block.settings.typography }}
+  {{#set button_typography = block.settings.typography /}}
+{{/if}}
+{{#var button_style = block.settings.button_style | default("primary") /}}
+{{#var style_secondary = false /}}
+{{#var style_link = false /}}
+{{#switch button_style }}
+  {{#case "secondary" /}}
+    {{#set style_secondary = true /}}
+    {{#set style_link = false /}}
+  {{#case "link" /}}
+    {{#set style_secondary = false /}}
+    {{#set style_link = true /}}
+{{/switch}}
+
+<div class="text-columns-with-image__view-more {{ button_typography }}">
+  {{#component
+    "button"
+    type="link"
+    link_url=block.settings.link
+    html=block.settings.link_text
+    style_secondary=style_secondary
+    style_link=style_link
+  /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_columns_with_image.blocks.view_more.name",
+  "icon": "button",
+  "tag": "",
+  "settings": [
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.text_columns_with_image.blocks.view_more.settings.link.label"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:sections.text_columns_with_image.blocks.view_more.settings.link_text.label",
+      "default": "View more"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:sections.text_columns_with_image.blocks.view_more.settings.button_style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.button_style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.button_style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.button_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.label",
+      "id": "typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.text_columns_with_image.blocks.view_more.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

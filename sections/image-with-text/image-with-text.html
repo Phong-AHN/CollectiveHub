@@ -1,0 +1,142 @@
+{{#component "stylesheet" src="./image-with-text.css" | asset_url() /}}
+
+<div
+  class="
+    image-with-text-section color-{{ section.settings.color_scheme.id }}
+    {{#if section.settings.overlap }}overlap{{/if}}
+  "
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width {{ section.settings | class_list() }}">
+    {{#content "blocks" /}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_with_text.name",
+  "icon": "textWithImage",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.image_with_text.settings.color_scheme.label",
+      "default": "scheme-3"
+    },
+    {
+      "type": "switch",
+      "id": "overlap",
+      "label": "t:sections.image_with_text.settings.overlap.label",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.image_with_text.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "50px",
+        "column-gap": "0",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "align-items": "flex-start",
+          "justify-content": "center",
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_with_text.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-end": "30px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "30px",
+        "@media (--mobile)": {
+          "padding-block-start": "30px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "20px",
+          "padding-inline-start": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.image_with_text.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image/image",
+      "limit": 1
+    },
+    {
+      "type": "$group",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.image_with_text.presets.presets_0.category",
+      "name": "t:sections.image_with_text.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "image/image"
+        },
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "subheading",
+              "settings": {
+                "text": "Subtitle",
+                "typography": "body3"
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Image with text",
+                "typography": "title3"
+              }
+            },
+            {
+              "type": "rich-text",
+              "settings": {
+                "content": "Pair large text with a full-width image to draw attention to an important detail of your brand or product line.",
+                "text_align": "left",
+                "typography": "body3"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "Optional button",
+                "spacing": {
+                  "padding-block-start": "12px",
+                  "padding-block-end": "12px",
+                  "padding-inline-start": "20px",
+                  "padding-inline-end": "20px"
+                },
+                "typography": "body2"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

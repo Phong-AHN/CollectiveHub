@@ -1,0 +1,264 @@
+{
+  "sections": {
+    "17890252343347fea6d2": {
+      "type": "count-down",
+      "settings": {
+        "color_scheme": "scheme-7",
+        "count_down_color": "#ff0000",
+        "full_display": false,
+        "layout": {
+          "@media (--mobile)": {
+            "align-items": "center",
+            "column-gap": "10px",
+            "flex-direction": "column",
+            "row-gap": "10px"
+          },
+          "column-gap": "50px",
+          "flex-direction": "row",
+          "flex-wrap": "nowrap",
+          "justify-content": "flex-start",
+          "row-gap": "20px"
+        },
+        "size": {
+          "@media (--mobile)": {
+            "height": "100%",
+            "width": "100%"
+          },
+          "height": "100%",
+          "width": "100%"
+        },
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-block-end": "40px",
+            "padding-block-start": "40px",
+            "padding-inline-end": "20px",
+            "padding-inline-start": "20px"
+          },
+          "padding-block-end": "40px",
+          "padding-block-start": "40px",
+          "padding-inline-end": "70px",
+          "padding-inline-start": "70px"
+        }
+      },
+      "disabled": false,
+      "blocks": {
+        "1789025234335ea30b18": {
+          "type": "$content",
+          "settings": {
+            "color_scheme": "scheme-2",
+            "inherit_color_scheme": false,
+            "layout": {
+              "@media (--mobile)": {
+                "column-gap": "20px",
+                "row-gap": "10px"
+              },
+              "align-items": "flex-start",
+              "column-gap": "40px",
+              "flex-direction": "column",
+              "flex-wrap": "nowrap",
+              "justify-content": "center",
+              "row-gap": 0
+            },
+            "spacing": {
+              "@media (--mobile)": {
+                "padding-block-end": "0px",
+                "padding-block-start": "0px",
+                "padding-inline-end": "0px",
+                "padding-inline-start": "0px"
+              },
+              "padding-block-end": "0px",
+              "padding-block-start": "0px",
+              "padding-inline-end": "0px",
+              "padding-inline-start": "0px"
+            }
+          },
+          "blocks": {
+            "1789025234335782b724": {
+              "type": "heading",
+              "settings": {
+                "background_color": "rgba(0,0,0,0)",
+                "size": {
+                  "height": "auto",
+                  "width": "auto"
+                },
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "5px",
+                    "padding-block-start": "0px"
+                  },
+                  "padding-block-end": "5px",
+                  "padding-block-start": "10px"
+                },
+                "text": "Vendor Registration Closes In:",
+                "text_align": "left",
+                "text_align_mobile": "left",
+                "text_tag": "h6",
+                "typography": "body3"
+              },
+              "blocks": {},
+              "block_order": []
+            },
+            "17890252343358189462": {
+              "type": "description",
+              "settings": {
+                "content": "Prime spots at the Justine and Piazza Ballroom are selling out fast. Lock in your table now to showcase your inventory to thousands of ready-to-buy collectors.",
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "0px",
+                    "padding-block-start": "0px"
+                  },
+                  "padding-block-end": "0px",
+                  "padding-block-start": "0px"
+                },
+                "text_align": "left",
+                "text_tag": "h6"
+              },
+              "blocks": {}
+            },
+            "17890252343359fb5a15": {
+              "type": "button",
+              "settings": {
+                "link": "shopline://url/pages/boothbooking",
+                "open_in_new_tab": false,
+                "style": "primary",
+                "text": "VIEW AND BOOK TABLES"
+              },
+              "disabled": true,
+              "blocks": {}
+            },
+            "1789025234335be05d64": {
+              "type": "heading",
+              "settings": {
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "0px",
+                    "padding-block-start": "0px"
+                  },
+                  "padding-block-end": "20px",
+                  "padding-block-start": 0
+                },
+                "text": "Secure Your Vendor Table",
+                "text_align": "left",
+                "typography": "title2"
+              },
+              "disabled": false,
+              "blocks": {}
+            },
+            "1789025234335d1c6c8f": {
+              "type": "$count-down-date",
+              "settings": {
+                "deadline": "12-20-2026",
+                "deadline_font_size": "title2",
+                "result": "",
+                "result_font_size": "title1",
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "0px",
+                    "padding-block-start": "0px"
+                  },
+                  "padding-block-end": "40px",
+                  "padding-block-start": 0
+                }
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "1789025234335be05d64",
+            "17890252343358189462",
+            "1789025234335782b724",
+            "1789025234335d1c6c8f",
+            "17890252343359fb5a15"
+          ]
+        },
+        "1789025234335faf9208": {
+          "type": "$image",
+          "settings": {
+            "image_width": "50%",
+            "mobile_image": "shopline://shop_images/pickleball.png",
+            "pc_image": "shopline://files/images/#2.png"
+          },
+          "disabled": false,
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "1789025234335faf9208",
+        "1789025234335ea30b18"
+      ],
+      "custom_css": [
+        ".count-down__image {max-width: 688px;}",
+        ".hover-scale:hover .hover-scale__image {transform: unset;}",
+        "p {margin: 0;}",
+        ".layout\\:template--index__1759041743330e045304___1759041743332a3962e1___1785494974725caa485e--size {font-weight: bold;}",
+        "/* .count-down__timer-container {display: flex; justify-content: center;}",
+        " */"
+      ],
+      "name": "t:sections.count_down.presets.presets_0.name"
+    },
+    "1789025270954052cb72": {
+      "type": "custom-sline",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "layout": {
+          "@media (--mobile)": {
+            "column-gap": "20px",
+            "row-gap": "20px"
+          },
+          "align-items": "center",
+          "column-gap": "30px",
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "justify-content": "center",
+          "row-gap": "30px"
+        },
+        "size": {
+          "height": "auto",
+          "width": "100%"
+        },
+        "sline": "\u003cdiv style=\"width: 90vw; height: 450px; over-flow: hidden; border-radius: 12px;\"\u003e\r\n  \u003ciframe\r\n    src=\"https://www.google.com/maps?q=34.142945,-118.1441316\u0026z=17\u0026output=embed\"\r\n    width=\"100%\"\r\n    height=\"100%\"\r\n    style=\"border:0;\"\r\n    allowfullscreen=\"\"\r\n    loading=\"lazy\"\r\n    referrerpolicy=\"no-referrer-when-downgrade\"\u003e\r\n  \u003c/iframe\u003e\r\n\u003c/div\u003e",
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "name": "t:sections.custom_sline.presets.presets_0.name"
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": true,
+      "blocks": {}
+    },
+    "undefined": {
+      "type": "undefined",
+      "settings": {},
+      "disabled": false,
+      "blocks": {}
+    }
+  },
+  "order": [
+    "main-page",
+    "17890252343347fea6d2",
+    "1789025270954052cb72"
+  ]
+}

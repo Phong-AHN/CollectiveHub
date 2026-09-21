@@ -1,0 +1,110 @@
+<div
+  class="footer__copyright-text rte {{ block.settings.text_typography }} {{ block.settings | class_list() }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{{ block.settings.text }}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.footer.blocks.copyright_text.name",
+  "icon": "brandList",
+  "tag": "",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.footer.blocks.copyright_text.settings.text.label",
+      "default": "Copyright © Company name"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.label",
+      "id": "text_typography",
+      "default": "body6",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.footer.blocks.copyright_text.settings.text_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.footer.blocks.copyright_text.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.footer.blocks.copyright_text.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.blocks.copyright_text.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

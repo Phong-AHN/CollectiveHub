@@ -1,0 +1,15 @@
+
+
+{{#var links = props.links /}}
+
+<nav class="mobile-slider-navbar">
+  <ul class="mobile-slider-navbar__list">
+    {{#for link in links }}
+      <li class="mobile-slider-navbar__item">
+        <a class="mobile-slider-navbar__link" {{#if link.url }}href="{{ link.url }}"{{/if}}>
+          {{ link.title }}
+        </a>
+      </li>
+    {{/for}}
+  </ul>
+</nav>

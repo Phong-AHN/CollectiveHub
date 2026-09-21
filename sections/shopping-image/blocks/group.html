@@ -1,0 +1,114 @@
+<div class="shopping-image__group {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#blocks}}
+    {{#if forblock.type == "description" }}
+      {{#block class="shopping-image__description body1" /}}
+    {{#else/}}
+      {{#block/}}
+    {{/if}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_image.blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_image.blocks.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "flex-start",
+        "row-gap": "8px",
+        "column-gap": "8px",
+        "@media (--mobile)": {
+          "align-items": "flex-start",
+          "justify-content": "center"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.shopping_image.blocks.group.settings.spacing.label",
+      "default": {
+        "padding-top": "80px",
+        "padding-right": "80px",
+        "padding-bottom": "80px",
+        "padding-left": "80px",
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-bottom": "40px",
+          "padding-right": "20px",
+          "padding-left": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "limit": 1
+    },
+    {
+      "type": "button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_image.blocks.group.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Shop the look",
+            "spacing": {
+              "padding-block-start": "0",
+              "padding-block-end": "0",
+              "padding-inline-start": "0",
+              "padding-inline-end": "0"
+            }
+          }
+        },
+        {
+          "type": "description",
+          "settings": {
+            "content": "And optional subtext",
+            "typography": "body1"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "SHOW NOW",
+            "style": "link",
+            "spacing": {
+              "padding-block-start": "40px",
+              "padding-block-end": "0",
+              "padding-inline-start": "0",
+              "padding-inline-end": "0",
+              "@media (--mobile)": {
+                "padding-block-start": "20px",
+                "padding-block-end": "0px",
+                "padding-inline-start": "0",
+                "padding-inline-end": "0"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

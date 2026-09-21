@@ -1,0 +1,150 @@
+{{#component "./components/importmap" /}}
+
+{{#component "./components/stylesheet" src="./sgc-scroll-banner.css" | asset_url() /}}
+
+{{#component "./components/script" src="./sgc-scroll-banner.js" | asset_url() /}}
+
+<style>{{{ section.settings.font_family | font_face() }}}</style>
+
+<div
+  class="
+    sgc-scroll-banner
+    {{ section.settings.spacing | class_list() }}
+    {{#if !section.settings.desktop_show }}
+      sgc-hidden-desktop
+    {{/if}}
+    {{#if !section.settings.mobile_show }}
+      sgc-hidden-mobile
+    {{/if}}
+  "
+  style="
+    --background-color: {{ section.settings.background_color.red }}, {{ section.settings.background_color.green }}, {{
+      section.settings.background_color.blue
+    }};
+    --banner-section-padding-top:{{ section.settings.spacing | css_var("padding-block-start") }};
+    --banner-section-padding-bottom:{{ section.settings.spacing | css_var("padding-block-end") }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div
+    class="
+      sgc-scroll-banner-container
+      {{#if section.settings.overlay_show }}
+        sgc-scroll-banner-container--overlay
+      {{/if}}
+    "
+  >
+    {{#blocks}}
+      <div class="sgc-scroll-banner-container-item">
+        {{#block/}}
+      </div>
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_banner.name",
+  "icon": "image",
+  "class": "sgc-scroll-banner",
+  "settings": [
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_banner.settings.desktop_show.label",
+      "id": "desktop_show",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_banner.settings.mobile_show.label",
+      "id": "mobile_show",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_banner.settings.overlay_show.label",
+      "id": "overlay_show",
+      "default": false
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_banner.settings.group_header_0.label"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_banner.settings.background_color.label",
+      "id": "background_color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.sgc_scroll_banner.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "0px",
+        "padding-inline-end": "0px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-block-end": "40px",
+          "padding-inline-start": "0px",
+          "padding-inline-end": "0px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$banner",
+      "limit": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_banner.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$banner",
+          "settings": {
+            "scroll_direction": "ltr",
+            "tilt_angle": -3,
+            "background_color": "#FBBC05"
+          },
+          "blocks": [
+            {
+              "type": "$title"
+            },
+            {
+              "type": "$icon"
+            }
+          ]
+        },
+        {
+          "type": "$banner",
+          "settings": {
+            "scroll_direction": "rtl",
+            "tilt_angle": 3,
+            "background_color": "#000000"
+          },
+          "blocks": [
+            {
+              "type": "$title",
+              "settings": {
+                "title_color": "#FFFFFF"
+              }
+            },
+            {
+              "type": "$icon",
+              "settings": {
+                "icon_color": "#FFFFFF"
+              }
+            }
+          ]
+        }
+      ],
+      "category": "Section Gallery"
+    }
+  ]
+}
+{{/schema}}

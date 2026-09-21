@@ -1,0 +1,18 @@
+.block-product-card-info--layer {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  gap: 0;
+  max-height: 80%;
+  background-color: rgba(255 255 255 / var(--layer-opacity));
+}
+
+.block-product-card-info--layer .block-product-card__buy-button-wrapper {
+  width: calc(100% + var(--info-padding-start) + var(--info-padding-end));
+  margin-inline: calc(var(--info-padding-start) * -1)
+    calc(var(--info-padding-end) * -1);
+}
+
+.block-product-card-info--layer .block-product-card-info__content {
+  overflow-y: auto;
+}

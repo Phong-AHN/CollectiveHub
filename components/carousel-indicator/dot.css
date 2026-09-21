@@ -1,0 +1,30 @@
+.theme-carousel-indicator__dot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 10px;
+}
+.theme-carousel-indicator__dot-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+.theme-carousel-indicator__dot-item {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  background-color: rgba(var(--color-text), 0.2);
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+.theme-carousel-indicator__dot-item.is-active {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(var(--color-text));
+}

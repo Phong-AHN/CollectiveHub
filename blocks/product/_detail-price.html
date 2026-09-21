@@ -1,0 +1,533 @@
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+{{#var use_variant = true /}}
+{{#var sale_style = "auto" /}}
+
+{{#if !current_variant }}
+  {{#set use_variant = false /}}
+  {{#set sale_style = "from_lowest_price" /}}
+{{/if}}
+
+<div class="product-detail__price" data-rerender-id="{{ block.id }}-price" {{{ block.shopline_attributes }}}>
+  {{#capture sale_font_size }}
+    {{ block.settings.sale_price_desktop_font_size }} {{ block.settings.sale_price_mobile_font_size }}
+  {{/capture}}
+
+  {{#capture origin_font_size }}
+    {{ block.settings.origin_price_desktop_font_size }} {{ block.settings.origin_price_mobile_font_size }}
+  {{/capture}}
+
+  {{#capture save_font_size }}
+    {{ block.settings.save_price_desktop_font_size }} {{ block.settings.save_price_mobile_font_size }}
+  {{/capture}}
+
+  {{#component
+    "product/price"
+    product=product
+    use_variant=use_variant
+    layout_template=block.settings.layout_template
+    sale_font_size=sale_font_size
+    sale_style=sale_style
+    sale_font_bold=block.settings.sale_font_bold
+    origin_font_size=origin_font_size
+    save_font_size=save_font_size
+    save_style=block.settings.save_style
+    save_radius=block.settings.save_radius
+    discount_style=block.settings.discount_style
+  /}}
+
+  {{#if product.quantity_price_breaks_configured }}
+    <div class="body4">
+      {{ "products.product_list.price_break_tag" | t() }}
+    </div>
+  {{/if}}
+
+  <div class="hidden-empty body4 rte">
+    {{~#if shop.cart_taxes_included }}
+      {{ "products.product_details.taxes_included" | t() }}
+    {{/if~}}
+    {{~#if shop.shipping_policy.body }}
+      {{{ "products.product_details.shipping_policy" | t(link = shop.shipping_policy.url) }}}
+    {{/if~}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_price.name",
+  "tag": "",
+  "icon": "currency",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_template",
+      "label": "t:blocks.product..detail_price.settings.layout_template.label",
+      "options": [
+        {
+          "value": "sale origin",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_0.label"
+        },
+        {
+          "value": "origin sale",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_1.label"
+        },
+        {
+          "value": "save sale origin",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_2.label"
+        },
+        {
+          "value": "sale origin save",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_3.label"
+        },
+        {
+          "value": "sale save",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_4.label"
+        },
+        {
+          "value": "save sale",
+          "label": "t:blocks.product..detail_price.settings.layout_template.options_5.label"
+        }
+      ],
+      "default": "sale origin"
+    },
+    {
+      "type": "select",
+      "id": "discount_style",
+      "label": "t:blocks.product..detail_price.settings.discount_style.label",
+      "options": [
+        {
+          "value": "ratio",
+          "label": "t:blocks.product..detail_price.settings.discount_style.options_0.label"
+        },
+        {
+          "value": "number",
+          "label": "t:blocks.product..detail_price.settings.discount_style.options_1.label"
+        }
+      ],
+      "default": "number"
+    },
+    {
+      "type": "select",
+      "id": "save_style",
+      "label": "t:blocks.product..detail_price.settings.save_style.label",
+      "info": "t:blocks.product..detail_price.settings.save_style.info",
+      "options": [
+        {
+          "value": "button",
+          "label": "t:blocks.product..detail_price.settings.save_style.options_0.label"
+        },
+        {
+          "value": "text",
+          "label": "t:blocks.product..detail_price.settings.save_style.options_1.label"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "id": "save_radius",
+      "type": "range",
+      "label": "t:blocks.product..detail_price.settings.save_radius.label",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "sale_price_desktop_font_size",
+      "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.label",
+      "default": "body1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_price.settings.sale_price_desktop_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sale_price_mobile_font_size",
+      "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.label",
+      "default": "mobile-body2",
+      "options": [
+        {
+          "value": "mobile-typography-default",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_0.label"
+        },
+        {
+          "value": "mobile-title1",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_1.label"
+        },
+        {
+          "value": "mobile-title2",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_2.label"
+        },
+        {
+          "value": "mobile-title3",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_3.label"
+        },
+        {
+          "value": "mobile-title4",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_4.label"
+        },
+        {
+          "value": "mobile-title5",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_5.label"
+        },
+        {
+          "value": "mobile-title6",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_6.label"
+        },
+        {
+          "value": "mobile-body1",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_7.label"
+        },
+        {
+          "value": "mobile-body2",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_8.label"
+        },
+        {
+          "value": "mobile-body3",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_9.label"
+        },
+        {
+          "value": "mobile-body4",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_10.label"
+        },
+        {
+          "value": "mobile-body5",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_11.label"
+        },
+        {
+          "value": "mobile-body6",
+          "label": "t:blocks.product..detail_price.settings.sale_price_mobile_font_size.options_12.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "origin_price_desktop_font_size",
+      "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.label",
+      "default": "body1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_price.settings.origin_price_desktop_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "origin_price_mobile_font_size",
+      "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.label",
+      "default": "mobile-body3",
+      "options": [
+        {
+          "value": "mobile-typography-default",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_0.label"
+        },
+        {
+          "value": "mobile-title1",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_1.label"
+        },
+        {
+          "value": "mobile-title2",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_2.label"
+        },
+        {
+          "value": "mobile-title3",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_3.label"
+        },
+        {
+          "value": "mobile-title4",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_4.label"
+        },
+        {
+          "value": "mobile-title5",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_5.label"
+        },
+        {
+          "value": "mobile-title6",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_6.label"
+        },
+        {
+          "value": "mobile-body1",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_7.label"
+        },
+        {
+          "value": "mobile-body2",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_8.label"
+        },
+        {
+          "value": "mobile-body3",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_9.label"
+        },
+        {
+          "value": "mobile-body4",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_10.label"
+        },
+        {
+          "value": "mobile-body5",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_11.label"
+        },
+        {
+          "value": "mobile-body6",
+          "label": "t:blocks.product..detail_price.settings.origin_price_mobile_font_size.options_12.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "save_price_desktop_font_size",
+      "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.label",
+      "default": "body1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_price.settings.save_price_desktop_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "save_price_mobile_font_size",
+      "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.label",
+      "default": "mobile-body3",
+      "options": [
+        {
+          "value": "mobile-typography-default",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_0.label"
+        },
+        {
+          "value": "mobile-title1",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_1.label"
+        },
+        {
+          "value": "mobile-title2",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_2.label"
+        },
+        {
+          "value": "mobile-title3",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_3.label"
+        },
+        {
+          "value": "mobile-title4",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_4.label"
+        },
+        {
+          "value": "mobile-title5",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_5.label"
+        },
+        {
+          "value": "mobile-title6",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_6.label"
+        },
+        {
+          "value": "mobile-body1",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_7.label"
+        },
+        {
+          "value": "mobile-body2",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_8.label"
+        },
+        {
+          "value": "mobile-body3",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_9.label"
+        },
+        {
+          "value": "mobile-body4",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_10.label"
+        },
+        {
+          "value": "mobile-body5",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_11.label"
+        },
+        {
+          "value": "mobile-body6",
+          "label": "t:blocks.product..detail_price.settings.save_price_mobile_font_size.options_12.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "sale_font_bold",
+      "label": "t:blocks.product..detail_price.settings.sale_font_bold.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_price.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

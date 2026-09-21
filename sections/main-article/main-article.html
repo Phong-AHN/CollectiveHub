@@ -1,0 +1,103 @@
+{{#component "stylesheet" src="./main-article.css" | asset_url() /}}
+
+<div class="main-article-container color-{{ section.settings.color_scheme.id }}">
+  <div class="main-article page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#content "blocks" /}}
+    </div>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "articleBody": {{{ article.content | strip_html() | json() }}},
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{{ request.origin | append(article.url) }}}"
+  },
+  "headline": "{{ article.title }}",
+  {{#if article.excerpt }}
+  "description": {{{ article.excerpt | strip_html() | json() }}},
+  {{/if}}
+  {{#if article.image.src }}
+  "image": [
+    "{{{ article.image.src }}}"
+  ],
+  {{/if}}
+  "datePublished": "{{ article.published_at | date(format = "%Y-%m-%dT%H:%M:%SZ") }}",
+  "dateCreated": "{{ article.created_at | date(format = "%Y-%m-%dT%H:%M:%SZ") }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ shop.name }}"
+  }
+}
+</script>
+
+{{#schema}}
+{
+  "name": "t:sections.main_article.name",
+  "icon": "blog",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_article.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_article.settings.spacing.label",
+      "default": {
+        "padding-block-start": "80px",
+        "padding-inline-start": "250px",
+        "padding-block-end": "80px",
+        "padding-inline-end": "250px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-start": "0px",
+          "padding-block-end": "40px",
+          "padding-inline-end": "0px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$title",
+      "limit": 1
+    },
+    {
+      "type": "$info",
+      "limit": 1
+    },
+    {
+      "type": "$cover_image",
+      "limit": 1
+    },
+    {
+      "type": "$content",
+      "limit": 1
+    },
+    {
+      "type": "$share",
+      "limit": 1
+    },
+    {
+      "type": "$button_back",
+      "limit": 1
+    },
+    {
+      "type": "$comment",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}

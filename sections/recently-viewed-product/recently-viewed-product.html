@@ -1,0 +1,162 @@
+{{#component "script" src="./recently-viewed-product.js" | asset_url() /}}
+
+{{#var template_directory = "" /}}
+{{#if template.directory }}
+  {{#set template_directory = template.directory | append("/") /}}
+{{/if}}
+{{#var template_suffix = "" /}}
+{{#if template.suffix }}
+  {{#set template_suffix = "." | append(template.suffix) /}}
+{{/if}}
+{{#capture section_template ~}}{{ template_directory }}{{ template.name }}{{ template_suffix }}{{~/capture}}
+
+<div class="schema-background color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <div class="section-recently-viewed-product {{ section.settings | class_list() }}">
+      {{#blocks}}
+        {{#switch forblock.type }}
+          {{#case "product-list/list" /}}
+            <theme-recently-viewed-product
+              class="block-full-width"
+              data-url="{{ routes.search_url }}?section_id={{ section.id }}&section_template={{ section_template }}"
+              data-page-size="{{ forblock.settings.page_size }}"
+              data-product-id="{{ product.id }}"
+            >
+              {{#var search_result_paginate = search | get_search_pagination(forblock.settings.page_size) /}}
+              {{#block products=search_result_paginate.list product_placeholder=false /}}
+            </theme-recently-viewed-product>
+          {{#else/}}
+            {{#block/}}
+        {{/switch}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.recently_viewed_product.name",
+  "icon": "collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.recently_viewed_product.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.recently_viewed_product.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "row-gap": "40px",
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.recently_viewed_product.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-bottom": "60px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-bottom": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "product-list/list",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.recently_viewed_product.presets.presets_0.name",
+      "category": "t:sections.recently_viewed_product.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Recently viewed",
+            "text_align": "center"
+          }
+        },
+        {
+          "type": "product-list/list",
+          "settings": {
+            "page_size": 4,
+            "desktop_columns": 4,
+            "mobile_columns": 2,
+            "desktop_enable_slider": true,
+            "mobile_enable_slider": true
+          },
+          "blocks": [
+            {
+              "type": "product-card/card",
+              "blocks": [
+                {
+                  "type": "product-image",
+                  "blocks": [
+                    {
+                      "type": "product-card/_layer",
+                      "blocks": [
+                        {
+                          "type": "product-card/_discount-tag"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_layer",
+                      "settings": {
+                        "layout": {
+                          "justify-content": "flex-end"
+                        }
+                      },
+                      "blocks": [
+                        {
+                          "type": "product-card/_quick-add"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "product-card/_info",
+                  "blocks": [
+                    {
+                      "type": "product-title"
+                    },
+                    {
+                      "type": "product-price"
+                    },
+                    {
+                      "type": "product-card/_description"
+                    },
+                    {
+                      "type": "product-buy-button"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

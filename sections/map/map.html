@@ -1,0 +1,204 @@
+{{#component "stylesheet" src="./map.css" | asset_url() /}}
+
+<div
+  class="
+    map color-{{ section.settings.color_scheme.id }}
+    {{ section.settings | class_list() }} page-width
+  "
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.map.name",
+  "icon": "navigation",
+  "settings": [
+    {
+      "id": "color_scheme",
+      "type": "color_scheme",
+      "label": "t:sections.map.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "switch",
+      "id": "is_map_jump",
+      "label": "t:sections.map.settings.is_map_jump.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "google_api_secret_key",
+      "label": "t:sections.map.settings.google_api_secret_key.label",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "latitude_longitude",
+      "label": "t:sections.map.settings.latitude_longitude.label",
+      "default": "",
+      "info": "t:sections.map.settings.latitude_longitude.info"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.map.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "justify-content": "center",
+        "align-items": "center",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.map.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-right": 0,
+        "padding-bottom": 0,
+        "padding-left": 0,
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-right": 0,
+          "padding-bottom": 0,
+          "padding-left": 0
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.map.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "limit": 1,
+      "type": "heading"
+    },
+    {
+      "limit": 1,
+      "type": "text"
+    },
+    {
+      "limit": 1,
+      "type": "$bottom-content"
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.map.presets.presets_0.category",
+      "name": "t:sections.map.presets.presets_0.name",
+      "settings": {
+        "latitude_longitude": "51.30,0.7"
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Store Location",
+            "text_align": "center",
+            "spacing": {
+              "padding-top": 0,
+              "padding-right": 0,
+              "padding-bottom": 0,
+              "padding-left": 0
+            }
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "You can find a store nearby.",
+            "text_align": "center",
+            "spacing": {
+              "padding-top": 0,
+              "padding-bottom": 0
+            }
+          }
+        },
+        {
+          "type": "$bottom-content",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$text-content",
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "DEMURE",
+                    "text_align": "left",
+                    "spacing": {
+                      "padding-top": 0,
+                      "padding-bottom": 0
+                    }
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "text": "OUR STORE",
+                    "text_align": "left",
+                    "spacing": {
+                      "padding-top": 0,
+                      "padding-bottom": 0
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<div>\n<div>London, UK</div>\n<div>Mon - Fri, 10am - 9pm</div>\n<div>Saturday, 10am - 9pm</div>\n<div>Sunday, 11am - 5pm</div>\n</div>",
+                    "text_align": "left",
+                    "spacing": {
+                      "padding-top": "168px",
+                      "padding-bottom": 0,
+                      "@media (--mobile)": {
+                        "padding-top": "35px"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "$btn-group",
+                  "blocks": [
+                    {
+                      "type": "$custom-btn",
+                      "settings": {
+                        "text": "Get direcions"
+                      }
+                    },
+                    {
+                      "type": "$custom-btn",
+                      "settings": {
+                        "text": "LEARN MORE",
+                        "style": "secondary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$map-style"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,63 @@
+{{#component "stylesheet" src="./_quick-add.css" | asset_url() /}}
+
+{{#var product = props.product /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+{{#var current_variant = props.current_variant /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+{{#var add_to_cart_path = settings.add_to_cart_path /}}
+
+{{#if product && product.available && settings.product_quick_add }}
+  {{#if add_to_cart_path == "quick-add" || add_to_cart_path == "layer" }}
+    {{#component "script" src="product/form.js" | asset_url() /}}
+    <theme-product-form data-use-error-toast="true" {{{ block.shopline_attributes }}}>
+      {{#capture product_form_id }}quick-add-product-form-{{ product.id }}{{/capture}}
+      {{#product_form product id=product_form_id }}
+        <input type="hidden" name="id" value="{{ current_variant.id }}"/>
+        <input type="hidden" required name="quantity" value="1"/>
+        <button
+          class="block-product-card__quick-add"
+          type="submit"
+          name="add"
+          {{#if !product.first_available_variant.available }}disabled{{/if}}
+        >
+          {{#component "icons/quick-add" class="icon-quick-add" /}}
+          {{#component "icons/loading-spinner" class="icon-loading" /}}
+        </button>
+      {{/product_form}}
+    </theme-product-form>
+  {{#else if add_to_cart_path == "modal" /}}
+    {{#capture summary }}
+      <summary class="block-product-card__quick-add {{#if !product.first_available_variant.available }}disabled{{/if}}">
+        {{#component "icons/quick-add" class="icon-quick-add" /}}
+        {{#component "icons/loading-spinner" class="icon-loading" /}}
+      </summary>
+    {{/capture}}
+
+    {{#component
+      "quick-add-modal/quick-add-modal"
+      summary=summary
+      product=product
+      current_variant=props.current_variant
+      shopline_attributes=block.shopline_attributes
+    /}}
+  {{/if}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product_card..quick_add.name",
+  "tag": "",
+  "presets": [
+    {
+      "name": "t:blocks.product_card..quick_add.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

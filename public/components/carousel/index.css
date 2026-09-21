@@ -1,0 +1,62 @@
+@layer component {
+  theme-carousel {
+    position: relative;
+    display: block;
+  }
+
+  theme-carousel .carousel__track {
+    position: relative;
+    display: flex;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+  }
+
+  theme-carousel .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  theme-carousel .carousel__track > * {
+    flex-shrink: 0;
+    list-style: none;
+    scroll-snap-align: start;
+  }
+  theme-carousel .carousel__track-scroll-behavior--auto {
+    scroll-behavior: auto;
+  }
+  theme-carousel .carousel__track-scroll-snap-type--none {
+    scroll-snap-type: none;
+  }
+  theme-carousel[data-scroll-snap-align="center"] .carousel__track > * {
+    scroll-snap-align: center;
+  }
+  theme-carousel[data-scroll-snap-align="end"] .carousel__track > * {
+    scroll-snap-align: end;
+  }
+  theme-carousel[data-direction="vertical"] .carousel__track {
+    flex-direction: column;
+    overflow-x: unset;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+  }
+  @media (min-width: 960px) {
+    theme-carousel[data-desktop-direction="vertical"] .carousel__track {
+      flex-direction: column;
+      overflow-x: unset;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+    }
+  }
+  @media (max-width: 959px) {
+    theme-carousel[data-mobile-direction="vertical"] .carousel__track {
+      flex-direction: column;
+      overflow-x: unset;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+    }
+  }
+}

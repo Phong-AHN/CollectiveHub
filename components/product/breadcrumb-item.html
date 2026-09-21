@@ -1,0 +1,13 @@
+{{#var data = props.data /}}
+
+{{#if data.parent }}
+  {{#component "product/breadcrumb-item" data=data.parent /}}
+{{/if}}
+
+<li class="product-detail__breadcrumb-item">
+  {{#if props.is_last }}
+    <span class="breadcrumb-label title-font-bold">{{ data.collection.title }}</span>
+  {{#else/}}
+    <a class="breadcrumb-label" href="{{ data.collection.url }}">{{ data.collection.title }}</a>
+  {{/if}}
+</li>

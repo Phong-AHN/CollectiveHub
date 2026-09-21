@@ -1,0 +1,247 @@
+{{#component "stylesheet" src="./collage.css" | asset_url() /}}
+
+{{#var has_multiple_groups = section.blocks_size > 1 /}}
+
+<div
+  class="collage-container page-width color-{{ section.settings.color_scheme.id }}"
+  style="--mobile-direction: {{ section.settings.layout_mobile }};"
+>
+  <div class="collage {{ section.settings | class_list() }}">
+    {{#if section.settings.title }}
+      <div class="collage__title {{ section.settings.title_size }}">
+        {{ section.settings.title }}
+      </div>
+    {{/if}}
+
+    <div class="collage__content">
+      {{#blocks}}
+        {{#block has_multiple_groups=has_multiple_groups mobile_layout=section.settings.layout_mobile /}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.collage.name",
+  "icon": "textWithImage",
+  "blocks": [
+    {
+      "type": "$single-group",
+      "limit": 1
+    },
+    {
+      "type": "$both-group",
+      "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.collage.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "t:sections.collage.settings.title_size.label",
+      "default": "title3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.collage.settings.title_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.collage.settings.title_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.collage.settings.title_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.collage.settings.title_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.collage.settings.title_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.collage.settings.title_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.collage.settings.title_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.collage.settings.title_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.collage.settings.title_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.collage.settings.title_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.collage.settings.title_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.collage.settings.title_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.collage.settings.title_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.collage.settings.title_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.collage.settings.title_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile",
+      "label": "t:sections.collage.settings.layout_mobile.label",
+      "options": [
+        {
+          "value": "row",
+          "label": "t:sections.collage.settings.layout_mobile.options_0.label"
+        },
+        {
+          "value": "column",
+          "label": "t:sections.collage.settings.layout_mobile.options_1.label"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.collage.settings.color_scheme.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.collage.settings.spacing.label",
+      "default": {
+        "padding-top": "100px",
+        "padding-right": "0px",
+        "padding-bottom": "100px",
+        "padding-left": "0px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-bottom": "24px",
+          "padding-left": "0px",
+          "padding-right": "0px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.collage.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collage.presets.presets_0.name",
+      "category": "t:sections.collage.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "$single-group",
+          "blocks": [
+            {
+              "type": "video/video",
+              "settings": {
+                "size": {
+                  "height": "100%"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "$both-group",
+          "blocks": [
+            {
+              "type": "product-card/card",
+              "blocks": [
+                {
+                  "type": "product-image",
+                  "blocks": [
+                    {
+                      "type": "product-card/_layer",
+                      "blocks": [
+                        {
+                          "type": "product-card/_discount-tag"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_layer",
+                      "settings": {
+                        "layout": {
+                          "justify-content": "flex-end"
+                        }
+                      },
+                      "blocks": [
+                        {
+                          "type": "product-card/_quick-add"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "product-card/_info",
+                  "blocks": [
+                    {
+                      "type": "product-title"
+                    },
+                    {
+                      "type": "product-price"
+                    },
+                    {
+                      "type": "product-card/_description"
+                    },
+                    {
+                      "type": "product-buy-button"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "collection/card",
+              "blocks": [
+                {
+                  "type": "collection/_image"
+                },
+                {
+                  "type": "collection/_title"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

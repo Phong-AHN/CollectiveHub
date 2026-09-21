@@ -1,0 +1,86 @@
+<div class="text-with-image__text-group {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_with_image.blocks.text_group.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.text_with_image.blocks.text_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "center",
+        "row-gap": "12px",
+        "column-gap": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.text_with_image.blocks.text_group.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.text_with_image.blocks.text_group.settings.spacing.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.text_with_image.blocks.text_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text_align": "left"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text_align": "left",
+            "text": "A short description."
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "Shop now",
+            "typography": "body3"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

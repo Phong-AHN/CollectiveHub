@@ -1,0 +1,269 @@
+{{#var pagination_style = block.settings.pagination_style /}}
+{{#var pagination_color = block.settings.pagination_color /}}
+{{#var layout_style = block.settings.layout_style /}}
+{{#var mobile_layout_style = block.settings.mobile_layout_style /}}
+{{#var aspect_ratio = block.settings.aspect_ratio /}}
+
+{{#var pc_image_group_width = "100%" /}}
+
+{{#if layout_style == "row" || layout_style == "row-reverse" }}
+  {{#set pc_image_group_width = "50%" /}}
+{{/if}}
+
+<div
+  class="before-after__container {{ block.settings | class_list() }}"
+  {{{ block.shopline_attributes }}}
+  style="
+    --pc-image-group-width: {{ pc_image_group_width }};
+    --flex-direction: {{ layout_style }};
+    --mobile-flex-direction: {{ mobile_layout_style }};
+  "
+>
+  
+  <div class="before-after__compare-text">
+    {{#blocks}}
+      {{#block ind=forblock.index type="text" /}}
+    {{/blocks}}
+  </div>
+  
+  <theme-carousel
+    data-direction="horizontal"
+    data-loop="true"
+    class="before-after__carousel"
+    style="--paper-color: {{ pagination_color }};"
+  >
+    <ul class="carousel__track">
+      {{#blocks}}
+        {{#block aspect_ratio=aspect_ratio ind=forblock.index type="image" /}}
+      {{/blocks}}
+    </ul>
+
+    {{#if block.blocks_size > 1 && pagination_style == "dot" }}
+      {{#component "carousel-indicator/dot" class="before-after__pager-dot" size=block.blocks_size /}}
+    {{/if}}
+
+    {{#if block.blocks_size > 1 && pagination_style == "progress" }}
+      {{#component "carousel-indicator/capsule" class="before-after__pager-progress" size=block.blocks_size page_size=1 /}}
+    {{/if}}
+
+    {{#if block.blocks_size > 1 && pagination_style == "arrow" }}
+      <button class="before-after__pager--arrow" name="previous">
+        {{#component "icons/arrow-circle" /}}
+      </button>
+      <button class="before-after__pager--arrow" name="next">
+        {{#component "icons/arrow-circle" /}}
+      </button>
+      <div class="before-after__pager--number body2">
+        <span class="before-after__pager--number-current">1</span>/{{ block.blocks_size }}
+      </div>
+    {{/if}}
+  </theme-carousel>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.container.name",
+  "icon": "slideshow",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.label",
+      "info": "t:sections.before_after.blocks.container.settings.aspect_ratio.info",
+      "options": [
+        {
+          "value": "unset",
+          "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.options_0.label"
+        },
+        {
+          "value": "1/1",
+          "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.options_1.label"
+        },
+        {
+          "value": "4/3",
+          "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.options_2.label"
+        },
+        {
+          "value": "3/2",
+          "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.options_3.label"
+        },
+        {
+          "value": "16/9",
+          "label": "t:sections.before_after.blocks.container.settings.aspect_ratio.options_4.label"
+        }
+      ],
+      "default": "3/2"
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "t:sections.before_after.blocks.container.settings.pagination_style.label",
+      "default": "progress",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "t:sections.before_after.blocks.container.settings.pagination_style.options_0.label"
+        },
+        {
+          "value": "progress",
+          "label": "t:sections.before_after.blocks.container.settings.pagination_style.options_1.label"
+        },
+        {
+          "value": "dot",
+          "label": "t:sections.before_after.blocks.container.settings.pagination_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "pagination_color",
+      "label": "t:sections.before_after.blocks.container.settings.pagination_color.label",
+      "options": [
+        {
+          "value": "#000000",
+          "label": "t:sections.before_after.blocks.container.settings.pagination_color.options_0.label"
+        },
+        {
+          "value": "#ffffff",
+          "label": "t:sections.before_after.blocks.container.settings.pagination_color.options_1.label"
+        }
+      ],
+      "default": "#000000"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.before_after.blocks.container.settings.group_header_0.label"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "t:sections.before_after.blocks.container.settings.layout_style.label",
+      "default": "row",
+      "options": [
+        {
+          "value": "row",
+          "label": "t:sections.before_after.blocks.container.settings.layout_style.options_0.label"
+        },
+        {
+          "value": "row-reverse",
+          "label": "t:sections.before_after.blocks.container.settings.layout_style.options_1.label"
+        },
+        {
+          "value": "column",
+          "label": "t:sections.before_after.blocks.container.settings.layout_style.options_2.label"
+        },
+        {
+          "value": "column-reverse",
+          "label": "t:sections.before_after.blocks.container.settings.layout_style.options_3.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.before_after.blocks.container.settings.group_header_1.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout_style",
+      "label": "t:sections.before_after.blocks.container.settings.mobile_layout_style.label",
+      "default": "column",
+      "options": [
+        {
+          "value": "column",
+          "label": "t:sections.before_after.blocks.container.settings.mobile_layout_style.options_0.label"
+        },
+        {
+          "value": "column-reverse",
+          "label": "t:sections.before_after.blocks.container.settings.mobile_layout_style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.before_after.blocks.container.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.before_after.blocks.container.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$compare",
+      "limit": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.container.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$compare",
+          "blocks": [
+            {
+              "type": "$text-group",
+              "blocks": [
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<strong><span style=\"font-size: 48px;\">92%</span></strong><br><span style=\"font-size: 16px;\">Consumer study results</span><br><span style=\"font-size: 22px;\"><strong>MY LIPS FELT SOOTHED AND PROTECTED FROM DRYNESS</strong></span>",
+                    "text_align": "left",
+                    "typography": "body3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "$image-group",
+              "blocks": [
+                {
+                  "type": "$compare-image",
+                  "blocks": [
+                    {
+                      "type": "$group",
+                      "blocks": [
+                        {
+                          "type": "$group-title"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$compare-image",
+                  "blocks": [
+                    {
+                      "type": "$group",
+                      "blocks": [
+                        {
+                          "type": "$group-title",
+                          "settings": {
+                            "content": "After"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

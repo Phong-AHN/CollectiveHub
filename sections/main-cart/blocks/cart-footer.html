@@ -1,0 +1,74 @@
+{{#component "script" src="./cart-footer.js" | asset_url() /}}
+
+{{#var SCENE = "page" /}}
+
+<div class="main-cart-footer__container {{ block.settings.spacing | class_list() }}" {{{ block.shopline_attributes }}}>
+  <theme-main-cart-footer data-root-margin="0px" class="main-cart-footer">
+    <div class="main-cart-footer__inner">
+      {{#if !cart.empty }}
+        <div class="main-cart-footer__infos">
+          <div class="main-cart-footer__payment-info">
+            {{#blocks}}
+              {{#if forblock.type == "$buttons" }}
+                {{#block scene=SCENE /}}
+              {{#else/}}
+                {{#block/}}
+              {{/if}}
+            {{/blocks}}
+          </div>
+        </div>
+
+        {{#component "cart/widgets/cart-fixed-checkout" scene=SCENE /}}
+      {{/if}}
+    </div>
+  </theme-main-cart-footer>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.blocks.cart_footer.name",
+  "deletable": false,
+  "icon": "generalSection",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.blocks.cart_footer.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-bottom": "100px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-bottom": "24px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$cart-footer-buttons",
+      "limit": 1
+    },
+    {
+      "type": "$cart-footer-subtotal",
+      "limit": 1
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_cart.blocks.cart_footer.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$cart-footer-buttons"
+        },
+        {
+          "type": "$cart-footer-subtotal"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

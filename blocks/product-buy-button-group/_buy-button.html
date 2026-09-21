@@ -1,0 +1,40 @@
+{{#component
+  "product/buy-button"
+  block=block
+  product=props.product
+  current_variant=props.current_variant
+  add_to_cart_path=props.add_to_cart_path
+  has_default_variant=props.has_default_variant
+/}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product_buy_button_group..buy_button.name",
+  "icon": "button",
+  "deletable": false,
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:blocks.product_buy_button_group..buy_button.settings.style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:blocks.product_buy_button_group..buy_button.settings.style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:blocks.product_buy_button_group..buy_button.settings.style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_buy_button_group..buy_button.settings.size.label"
+    }
+  ]
+}
+{{/schema}}

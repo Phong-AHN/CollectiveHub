@@ -1,0 +1,39 @@
+
+
+{{#var type = props.type /}}
+{{#var class_name = props.class_name /}}
+{{#var style_secondary = props.style_secondary /}}
+{{#var style_link = props.style_link /}}
+{{#var text = props.text /}}
+{{#var html = props.html /}}
+{{#var link_url = props.link_url /}}
+{{#var shopline_attributes = props.shopline_attributes /}}
+{{#var open_in_new_tab = props.open_in_new_tab /}}
+
+{{#if type == "link" }}
+  <a
+    class="
+      button
+      {{#if style_link }}button--link{{/if}}
+      {{#if style_secondary }}button--secondary{{/if}}
+      {{{ class_name }}}
+    "
+    href="{{ link_url | default(`javascript:;`) }}"
+    {{#if open_in_new_tab }}target="_blank"{{/if}}
+    {{{ shopline_attributes }}}
+  >
+    {{#if html }}{{{ html }}}{{#else/}}{{ text }}{{/if}}
+  </a>
+{{#else/}}
+  <button
+    class="
+      button
+      {{#if style_link }}button--link{{/if}}
+      {{#if style_secondary }}button--secondary{{/if}}
+      {{{ class_name }}}
+    "
+    {{{ shopline_attributes }}}
+  >
+    {{#if html }}{{{ html }}}{{#else/}}{{ text }}{{/if}}
+  </button>
+{{/if}}

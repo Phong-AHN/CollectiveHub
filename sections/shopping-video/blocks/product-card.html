@@ -1,0 +1,331 @@
+{{#component "script" src="product/form.js" | asset_url() /}}
+
+{{#var product = block.settings.product /}}
+{{#capture quick_add_form }}
+  {{#if product }}
+    <theme-product-form>
+      {{#product_form
+        product
+        id="product-form-" | append(section.id)
+        class="shopping-video__product-card-quick-add-form"
+      }}
+        <input type="hidden" name="id" value="{{ product.first_available_variant.id }}"/>
+        <button
+          type="submit"
+          name="add"
+          class="button button--fill button--secondary"
+          {{#if !product.first_available_variant.available }}disabled{{/if}}
+        >
+          {{#component "icons/loading" class="button__spinner" /}}
+        </button>
+      {{/product_form}}
+    </theme-product-form>
+  {{/if}}
+{{/capture}}
+
+{{#var show_origin_price = block.settings.show_original_price /}}
+{{#var layout_template = "sale" /}}
+{{#if show_origin_price }}
+  {{#set layout_template = "sale origin" /}}
+{{#else/}}
+  {{#set layout_template = "sale" /}}
+{{/if}}
+
+<div
+  class="
+    shopping-video__product-card
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div class="shopping-video__product-card-image">
+    {{#if product.featured_image }}
+      {{#component "image" data=product.featured_image /}}
+    {{#else if product.featured_media /}}
+      {{#component "image" data=product.featured_media /}}
+    {{#else/}}
+      {{#placeholder_svg "image" class="empty-image-class" /}}
+    {{/if}}
+  </div>
+  <div class="shopping-video__product-card-title-wrapper {{ block.settings.layout | class_list() }}">
+    <div class="shopping-video__product-card-title {{ block.settings.title_typography }}">
+      {{ block.settings.product.title | default("Example Product Title") }}
+    </div>
+
+    {{#var price_sale_font_size = "title-font-bold" | append(" ") | append(block.settings.price_typography) /}}
+    {{#var price_origin_font_size = block.settings.origin_price_typography /}}
+    {{#component
+      "product/price"
+      product=block.settings.product
+      sale_font_size=price_sale_font_size
+      origin_font_size=price_origin_font_size
+      class="shopping-video__product-card-price"
+      layout_template=layout_template
+    /}}
+  </div>
+  <div class="shopping-video__product-card-operate-wrapper">
+    {{#if props.show_expand_button }}
+      <div
+        class="shopping-video__product-card-operate-wrapper-icon shopping-video__product-card-operate-wrapper-toggle"
+      >
+        {{#component "icons/arrow-down" /}}
+      </div>
+    {{/if}}
+    <div
+      class="shopping-video__product-card-operate-wrapper-icon shopping-video__product-card-operate-wrapper-quick-add"
+    >
+      {{#component "icons/quick-add" /}}
+      {{{ quick_add_form }}}
+    </div>
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.product_card.name",
+  "icon": "productThumbnail",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.product.label"
+    },
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "switch",
+      "id": "show_original_price",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.show_original_price.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "title_typography",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.label",
+      "default": "body6",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "price_typography",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.label",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.price_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "origin_price_typography",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.label",
+      "default": "body5",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.shopping_video.blocks.product_card.settings.origin_price_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_video.blocks.product_card.settings.layout.label"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.blocks.product_card.presets.presets_0.name",
+      "blocks": []
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,83 @@
+{
+  "sections": {
+    "main-blog": {
+      "type": "main-blog",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "desktop_columns": "2",
+        "layout": "grid",
+        "page_size": 6,
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-block-end": "40px",
+            "padding-block-start": "40px"
+          },
+          "padding-block-end": "80px",
+          "padding-block-start": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {
+        "main-blog__card": {
+          "type": "article/card",
+          "settings": {},
+          "blocks": {
+            "main-blog__card__cover": {
+              "type": "article/_cover",
+              "settings": {},
+              "blocks": {}
+            },
+            "main-blog__card__info": {
+              "type": "article/_info",
+              "settings": {},
+              "blocks": {
+                "main-blog__card__date-author": {
+                  "type": "article/_date-author",
+                  "settings": {},
+                  "disabled": false,
+                  "blocks": {}
+                },
+                "main-blog__card__excerpt": {
+                  "type": "article/_excerpt",
+                  "settings": {},
+                  "disabled": false,
+                  "blocks": {}
+                },
+                "main-blog__card__title": {
+                  "type": "article/_title",
+                  "settings": {},
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "main-blog__card__title",
+                "main-blog__card__date-author",
+                "main-blog__card__excerpt"
+              ]
+            }
+          },
+          "block_order": [
+            "main-blog__card__cover",
+            "main-blog__card__info"
+          ]
+        },
+        "main-blog__title": {
+          "type": "$title",
+          "settings": {
+            "text_align": "left",
+            "text_size": "title2"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "main-blog__title",
+        "main-blog__card"
+      ],
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-blog"
+  ]
+}

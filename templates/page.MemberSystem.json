@@ -1,0 +1,174 @@
+{
+  "sections": {
+    "1759134284959a8602ca": {
+      "type": "apps",
+      "settings": {
+        "sync_margins_with_theme": true
+      },
+      "disabled": false,
+      "blocks": {
+        "1759134284960b368840": {
+          "type": "shopline://apps/订阅式电商/blocks/bundle/dc7225ea-8d91-400c-9a0c-7a168bb9ec98",
+          "settings": {
+            "addToCartButtonText": "ADD TO CART",
+            "backgroundColor": "#f5eadb",
+            "borderColor": "#000000",
+            "borderRadius": 0,
+            "borderSize": 1,
+            "buttonBackgroundColor": "#000000",
+            "buttonBorderColor": "rgba(0,0,0,0)",
+            "buttonSelectorSelectedBackgroundColor": "#242833",
+            "buttonSelectorSelectedBorderColor": "#242833",
+            "buttonSelectorSelectedTextColor": "#FFFFFF",
+            "buttonSelectorUnselectedBackgroundColor": "#FFFFFF",
+            "buttonSelectorUnselectedBorderColor": "#242833",
+            "buttonSelectorUnselectedTextColor": "#242833",
+            "buttonTextColor": "#FFFFFF",
+            "cardBackgroundColor": "rgba(0,0,0,0)",
+            "descriptionText": "Zero sugar, gluten-free, and made with clean ingredients—Brew \u0026amp; Chew is here to fuel your day with bold coffee and better snacks, no crash, no compromise. Sip loud. Snack bold.",
+            "fontFamily": "Anton",
+            "isBoldDiscountFont": true,
+            "oneTimePurchaseText": "One-time Purchase",
+            "primaryTextColor": "#000000",
+            "productAddButtonText": "Add",
+            "productCardBorderRadius": 16,
+            "productCardColumn": 3,
+            "productPriceFontSize": 22,
+            "secondaryTextColor": "#000000",
+            "selectedProductBorderRadius": 16,
+            "selectedProductBorderSize": 1,
+            "subscribeAndSaveText": "Subscribe \u0026 Save",
+            "subscriptionBenefitText": "\u003cul\u003e\n\u003cli\u003eFree monthly delivery\u003c/li\u003e\n\u003cli\u003eCancel or skip anytime\u003c/li\u003e\n\u003cli\u003eFree New Flavour with Every box\u003c/li\u003e\n\u003c/ul\u003e",
+            "titleFontSize": 60,
+            "titleText": "BUILD YOUR OWN BUNDLE"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "1759134284960b368840"
+      ]
+    },
+    "1759134420810b71ed90": {
+      "type": "slideshow",
+      "settings": {
+        "auto_switch": true,
+        "desktop_height": "fit-first-image",
+        "image_full_screen": true,
+        "mobile_height": "fit-first-image",
+        "mobile_text_layout": "text-in-image",
+        "pagination_style": "progress",
+        "switch_interval": 7
+      },
+      "disabled": false,
+      "blocks": {
+        "1759134420811f6d6b06": {
+          "type": "$image",
+          "settings": {
+            "desktop_image": "shopline://shop_images/BYOB banner -pc.png",
+            "image_mask_opacity": 0,
+            "mobile_image": "shopline://shop_images/BYOB banner -pc.png"
+          },
+          "blocks": {
+            "17591344208123469acb": {
+              "type": "$group",
+              "settings": {},
+              "disabled": true,
+              "blocks": {
+                "17591344208125940422": {
+                  "type": "text",
+                  "settings": {
+                    "text": "Subtitle"
+                  },
+                  "blocks": {}
+                },
+                "17591344208126d15763": {
+                  "type": "text",
+                  "settings": {
+                    "text": "And optional subtext"
+                  },
+                  "blocks": {}
+                },
+                "17591344208129314037": {
+                  "type": "button-group",
+                  "settings": {},
+                  "blocks": {
+                    "17591344208128e15b72": {
+                      "type": "button",
+                      "settings": {
+                        "style": "primary",
+                        "text": "Shop all"
+                      },
+                      "blocks": {}
+                    },
+                    "1759134420812ebf1adb": {
+                      "type": "button",
+                      "settings": {
+                        "style": "secondary",
+                        "text": "Shop this"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "1759134420812ebf1adb",
+                    "17591344208128e15b72"
+                  ]
+                },
+                "17591344208129ea8c7d": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Two Line\nTitle Slide"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "17591344208125940422",
+                "17591344208129ea8c7d",
+                "17591344208126d15763",
+                "17591344208129314037"
+              ]
+            }
+          },
+          "block_order": [
+            "17591344208123469acb"
+          ]
+        }
+      },
+      "block_order": [
+        "1759134420811f6d6b06"
+      ],
+      "custom_css": [],
+      "name": "t:sections.slideshow.presets.presets_0.name"
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": true,
+      "blocks": {},
+      "custom_css": [
+        ".main-page,.section,.main-page__content {background-color: #f5eadb !important;}",
+        ".main-page__title,.title4 {font-size: 50px !important;}"
+      ]
+    }
+  },
+  "order": [
+    "1759134420810b71ed90",
+    "main-page",
+    "1759134284959a8602ca"
+  ]
+}

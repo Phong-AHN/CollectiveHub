@@ -1,0 +1,12 @@
+.media-promotion {
+  width: 100%;
+  padding-block: var(--media-promotion-padding-block-start)
+    var(--media-promotion-padding-block-end);
+  padding-inline: var(--media-promotion-padding-inline-start)
+    var(--media-promotion-padding-inline-end);
+  background: rgb(var(--color-background));
+}
+
+.media-promotion .carousel__track {
+  overflow: auto hidden;
+}

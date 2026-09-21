@@ -1,0 +1,137 @@
+{{#component "stylesheet" src="./blog.css" | asset_url() /}}
+
+{{#var has_view_all_button = false /}}
+
+{{#blocks}}
+  {{#if forblock.type == "button" }}
+    {{#set has_view_all_button = true /}}
+  {{/if}}
+{{/blocks}}
+
+<div class="section-blog-container color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <div class="{{ section.settings | class_list() }}">
+      {{#blocks}}
+        {{#if forblock.type == "heading" }}
+          {{#block/}}
+        {{#else if forblock.type == "$articles" /}}
+          {{#block blog=section.settings.blog has_view_all_button=has_view_all_button /}}
+        {{#else if forblock.type == "button" /}}
+          {{#block link=section.settings.blog.url /}}
+        {{/if}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.blog.name",
+  "icon": "blog",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "t:sections.blog.settings.blog.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.blog.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.blog.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "40px",
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.blog.settings.spacing.label",
+      "default": {
+        "padding-top": "60px",
+        "padding-bottom": "60px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-bottom": "24px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "$articles",
+      "limit": 1
+    },
+    {
+      "type": "button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.blog.presets.presets_0.name",
+      "category": "t:sections.blog.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Blogs"
+          }
+        },
+        {
+          "type": "$articles",
+          "blocks": [
+            {
+              "type": "article/card",
+              "blocks": [
+                {
+                  "type": "article/_cover"
+                },
+                {
+                  "type": "article/_info",
+                  "blocks": [
+                    {
+                      "type": "article/_title"
+                    },
+                    {
+                      "type": "article/_date-author"
+                    },
+                    {
+                      "type": "article/_excerpt"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "View all",
+            "typography": "body2"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

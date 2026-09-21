@@ -1,0 +1,13 @@
+.block-icon svg,
+.block-icon img {
+  width: var(--icon-desktop-width);
+  height: auto;
+  color: inherit;
+}
+
+@media (max-width: 959px) {
+  .block-icon svg,
+  .block-icon img {
+    width: var(--icon-mobile-width);
+  }
+}

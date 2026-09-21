@@ -1,0 +1,104 @@
+{{#component "stylesheet" src="components/dialog/index.css" | asset_url() /}}
+{{#component "script" src="components/dialog/index.js" | asset_url() /}}
+
+<theme-dialog
+  class="{{ props.class_list }}"
+  style="{{ props.style_list }}"
+  data-mask-closable="true"
+  data-esc-to-exit="true"
+>
+  {{{ props.trigger }}}
+  <dialog
+    class="
+      block-popup-with-text__dialog
+      {{#if !block.settings.inherit_color_scheme }}
+        color-{{ block.settings.color_scheme.id }}
+      {{/if}}
+    "
+    style="
+      --dialog-width: {{ block.settings.size | css_var(`width`) }};
+      --dialog-height: {{ block.settings.size | css_var(`height`) }};
+    "
+  >
+    <button class="modal__close-control" name="close">
+      {{#component "icons/close" /}}
+    </button>
+    <div class="block-popup-with-text__dialog-content modal__content {{ block.settings | class_list() }}">
+      {{#content "blocks" /}}
+    </div>
+  </dialog>
+</theme-dialog>
+
+{{#schema}}
+{
+  "name": "t:blocks.popup_with_text..dialog.name",
+  "tag": "",
+  "icon": "general",
+  "blocks": [
+    {
+      "type": "@blocks"
+    }
+  ],
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:blocks.popup_with_text..dialog.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:blocks.popup_with_text..dialog.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.popup_with_text..dialog.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "flex-start"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.popup_with_text..dialog.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-right": "40px",
+        "padding-bottom": "40px",
+        "padding-left": "40px",
+        "@media (--mobile)": {
+          "padding-top": "20px",
+          "padding-right": "20px",
+          "padding-bottom": "20px",
+          "padding-left": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.popup_with_text..dialog.settings.size.label",
+      "default": {
+        "width": "580px",
+        "height": "564px",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "480px"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.popup_with_text..dialog.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

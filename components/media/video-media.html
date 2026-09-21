@@ -1,0 +1,162 @@
+
+
+{{#var local_media = props.local_media /}}
+{{#var external_media = props.external_media /}}
+{{#var poster_image = props.poster_image /}}
+{{#var poster_image_lazy = props.poster_image_lazy /}}
+{{#var poster_image_desktop_size = props.poster_image_desktop_size /}}
+{{#var poster_image_quality = props.poster_image_quality /}}
+{{#var poster_image_fit_type = props.poster_image_fit_type | default("cover") /}}
+{{#var alt_text = props.alt_text | default(local_media.alt) | default(external_media.alt) | default("") /}}
+
+{{#component "stylesheet" src="./video-media.css" | asset_url() /}}
+{{#component "script" src="./video-media.js" | asset_url() /}}
+
+{{#var is_have_poster = false /}}
+{{#if poster_image }}
+  {{#set poster_image_lazy = true /}}
+{{/if}}
+{{#var is_have_media = false /}}
+{{#if local_media || external_media }}
+  {{#set is_have_media = true /}}
+{{/if}}
+
+{{#var loop = props.loop | default(false, allow_false = true) /}}
+{{#var muted = props.muted | default(false, allow_false = true) /}}
+{{#var autoplay = props.autoplay | default(false, allow_false = true) /}}
+{{#var controls = props.controls | default(true, allow_false = true) /}}
+
+{{#if !controls && !external_media }}
+  {{#set loop = true /}}
+  {{#set muted = true /}}
+  {{#set autoplay = true /}}
+{{/if}}
+
+{{#if autoplay }}
+  {{#set muted = true /}}
+{{/if}}
+
+{{#capture external_loop }}{{#if loop }}1{{#else/}}0{{/if}}{{/capture}}
+{{#capture external_muted }}{{#if muted }}1{{#else/}}0{{/if}}{{/capture}}
+{{#capture external_autoplay }}{{#if autoplay }}1{{#else/}}0{{/if}}{{/capture}}
+{{#capture external_controls }}{{#if controls }}1{{#else/}}0{{/if}}{{/capture}}
+
+{{#capture aspect_ratio }}
+  aspect-ratio:
+  {{#if props.aspect_ratio }}
+    {{ props.aspect_ratio }}
+  {{#else if poster_image /}}
+    calc({{ poster_image.width }}/{{ poster_image.height }})
+  {{#else if local_media /}}
+    {{ local_media.aspect_ratio }}
+  {{#else if external_media.aspect_ratio /}}
+    {{ external_media.aspect_ratio }}
+  {{#else/}}
+    calc(16/9)
+  {{/if}}
+{{/capture}}
+
+{{#if poster_image }}
+  {{#set is_have_poster = true /}}
+{{/if}}
+
+{{#capture poster }}
+  <div class="theme-video-media__poster" style="--poster-image-fit-type: {{ poster_image_fit_type }};">
+    {{#if poster_image.src }}
+      {{#component
+        "image"
+        sizes="100%"
+        data=poster_image
+        lazy=poster_image_lazy
+        desktop_size=poster_image_desktop_size
+        mobile_size=poster_image_mobile_size
+        quality=poster_image_quality
+      /}}
+    {{#else if local_media.preview_image.src /}}
+      {{#component
+        "image"
+        sizes="100%"
+        data=local_media.preview_image
+        lazy=poster_image_lazy
+        desktop_size=poster_image_desktop_size
+        mobile_size=poster_image_mobile_size
+        quality=poster_image_quality
+      /}}
+    {{#else if external_media.preview_image.src /}}
+      {{#component
+        "image"
+        sizes="100%"
+        data=external_media.preview_image
+        lazy=poster_image_lazy
+        desktop_size=poster_image_desktop_size
+        mobile_size=poster_image_mobile_size
+        quality=poster_image_quality
+      /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </div>
+{{/capture}}
+
+{{#capture media }}
+  <template>
+    {{#if !local_media && external_media }}
+      {{#if external_media.host == "youtube" }}
+        {{#external_video_tag
+          external_media |
+          external_video_url(playlist = external_media.external_id, autoplay = external_autoplay, loop = external_loop, mute = external_muted, controls = external_controls)
+          class="video-media-youtube"
+          allow="autoplay; encrypted-media"
+          frameborder="0"
+          title=alt_text
+          aria-label=alt_text
+        /}}
+      {{#else if external_media.host == "vimeo" /}}
+        {{#external_video_tag
+          external_media |
+          external_video_url(autoplay = external_autoplay, loop = external_loop, muted = external_muted, controls = external_controls)
+          class="video-media-vimeo"
+          allow="autoplay; encrypted-media"
+          frameborder="0"
+          title=alt_text
+          aria-label=alt_text
+        /}}
+      {{/if}}
+    {{#else/}}
+      {{#video_tag
+        local_media
+        autoplay=autoplay
+        loop=loop
+        muted=muted
+        controls=controls
+        controlsList="nodownload"
+        title=alt_text
+        aria-label=alt_text
+      /}}
+    {{/if}}
+  </template>
+{{/capture}}
+
+<theme-video-media
+  class="{{ props.class }}"
+  data-autoplay="{{ autoplay }}"
+  data-loop="{{ loop }}"
+  data-muted="{{ muted }}"
+>
+  <div
+    class="theme-video-media {{#if !is_have_poster && !is_have_media }}theme-video-media--empty{{/if}}"
+    style="{{ aspect_ratio | trim() }}"
+  >
+    {{#if is_have_media }}
+      {{{ poster }}}
+      <button class="theme-video-media__play-button">
+        {{#component "icons/video-play" class="theme-video-media__play-button-icon" /}}
+      </button>
+      <div class="theme-video-media__media">
+        {{{ media }}}
+      </div>
+    {{#else/}}
+      {{{ poster }}}
+    {{/if}}
+  </div>
+</theme-video-media>

@@ -1,0 +1,44 @@
+{{#component "script" src="cart/base-items.js" | asset_url() /}}
+{{#component "script" src="./cart-items.js" | asset_url() /}}
+
+<div class="main-cart-items__container {{ block.settings.spacing | class_list() }}" {{{ block.shopline_attributes }}}>
+  <theme-main-cart-items class="main-cart-items">
+    <div class="main-cart-items__content">
+      {{#component "cart/widgets/cart-empty" /}}
+
+      {{#if !cart.empty }}
+        <div class="main-cart-items__header">
+          <div>{{ "products.product_list.products" | t() }}</div>
+          <div>{{ "products.product_details.amount" | t() }}</div>
+          <div>{{ "cart.payment.total_sum" | t() }}</div>
+        </div>
+
+        <div class="main-cart-items__list">
+          {{#component "cart/widgets/cart-items" scene="page" /}}
+        </div>
+      {{/if}}
+    </div>
+  </theme-main-cart-items>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.blocks.cart_items.name",
+  "deletable": false,
+  "tag": "",
+  "icon": "collection",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.blocks.cart_items.settings.spacing.label",
+      "default": {}
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_cart.blocks.cart_items.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

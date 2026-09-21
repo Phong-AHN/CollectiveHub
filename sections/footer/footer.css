@@ -1,0 +1,206 @@
+.footer__menu {
+  position: relative;
+}
+
+.footer__menu-title {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__menu-title .icon__arrow,
+.footer__menu-title .icon__minus {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .footer__menu-title {
+    padding-block-start: 15px;
+  }
+
+  .footer__menu-title .icon__arrow {
+    display: inline;
+  }
+
+  .footer__menu-title .icon__minus {
+    display: none;
+  }
+}
+
+.footer__menu-item {
+  padding-block-start: 15px;
+}
+
+.footer__menu-item a {
+  display: block;
+}
+
+.footer__menu-item--active a {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.footer__menu-item--active a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 959px) {
+  .footer__menu-content {
+    height: 0;
+    padding-block-end: 15px;
+    overflow: hidden;
+    opacity: 0;
+  }
+}
+
+.footer__menu::after {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  display: none;
+  width: 100%;
+  height: 1px;
+  content: "";
+  background-color: rgba(var(--color-text), 0.1);
+}
+
+@media (max-width: 959px) {
+  .footer__menu::after {
+    display: block;
+  }
+}
+
+@media (max-width: 959px) {
+  .footer__menu[open] .footer__menu-title .icon__arrow {
+    display: none;
+  }
+
+  .footer__menu[open] .footer__menu-title .icon__minus {
+    display: inline;
+  }
+}
+
+.footer__menu[open] .footer__menu-content {
+  height: auto;
+  opacity: 1;
+}
+.footer__custom-text-title {
+  padding-block-end: 15px;
+}
+@media (max-width: 959px) {
+  .footer__custom-text-title {
+    padding-block-start: 15px;
+  }
+}
+.footer__email-subscribe-title {
+  margin-block-end: 15px;
+  font-weight: bold;
+}
+@media (min-width: 960px) {
+  .footer__email-subscribe--small .field__input {
+    padding-block-start: 16px;
+  }
+  .footer__email-subscribe--middle .field__input {
+    padding-block: 20px 2px;
+  }
+  .footer__email-subscribe--large .field__input {
+    padding-block: 30px 19px;
+  }
+
+  .footer__email-subscribe--large .field__input:focus ~ .field__label,
+  .footer__email-subscribe--large
+    .field__input:not(:placeholder-shown)
+    ~ .field__label,
+  .footer__email-subscribe--large
+    .field__input:-webkit-autofill
+    ~ .field__label {
+    transform: scale(0.7) translate(0, -150%);
+  }
+}
+.footer__image img {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  vertical-align: bottom;
+}
+.footer__localization-form .localization__selector:nth-last-of-type(2) {
+  margin-block-end: 10px;
+  margin-inline-end: 15px;
+}
+.footer__localization-form form {
+  display: contents;
+}
+@media (max-width: 959px) {
+  .footer__localization-form .localization__selector {
+    width: 100%;
+  }
+
+  .footer__localization-form .localization__selector:nth-last-of-type(2) {
+    margin-block-end: 6px;
+    margin-inline-end: 0;
+  }
+}
+.footer__payment-icons > svg {
+  width: auto;
+  height: 22px;
+}
+.footer__social-media-title {
+  padding-block-end: 20px;
+  font-weight: bold;
+}
+.footer__social-media-content {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer__social-media-content svg,
+.footer__social-media-content img {
+  width: 24px;
+  height: 24px;
+}
+.footer__social-media-content img {
+  border-radius: 100%;
+}
+@media (min-width: 960px) {
+  .footer__social-media--small .footer__social-media-content {
+    gap: 8px;
+  }
+
+  .footer__social-media--small .footer__social-media-content svg,
+  .footer__social-media--small .footer__social-media-content img {
+    width: 28px;
+    height: 28px;
+  }
+  .footer__social-media--middle .footer__social-media-content {
+    gap: 16px;
+  }
+
+  .footer__social-media--middle .footer__social-media-content svg,
+  .footer__social-media--middle .footer__social-media-content img {
+    width: 32px;
+    height: 32px;
+  }
+  .footer__social-media--large .footer__social-media-content {
+    gap: 16px;
+  }
+
+  .footer__social-media--large .footer__social-media-content svg,
+  .footer__social-media--large .footer__social-media-content img {
+    width: 64px;
+    height: 64px;
+  }
+}
+.footer__copyright-menu a {
+  word-break: break-all;
+}
+.footer__copyright-menu span {
+  padding: 0 10px;
+}
+.footer__copyright-menu span:last-child {
+  display: none;
+}
+.footer {
+  background-color: rgb(var(--color-background));
+}

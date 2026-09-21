@@ -1,0 +1,36 @@
+.infinite-scroll-button-tip {
+  margin-block: 48px 12px;
+  text-align: center;
+}
+
+.infinite-scroll-button-wrapper {
+  text-align: center;
+}
+
+.infinite-scroll-button-wrapper.hidden {
+  display: none;
+}
+
+.infinite-scroll-loading {
+  display: none;
+  margin-block-start: 48px;
+  color: rgb(var(--color-text));
+}
+
+.infinite-scroll-loading.loading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.infinite-scroll-loading .infinite-scroll-loading-tip {
+  margin-inline-start: 18px;
+}
+
+@media (--tablet) {
+  .infinite-scroll-loading {
+    margin-block-start: 20px;
+  }
+}

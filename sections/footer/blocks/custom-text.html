@@ -1,0 +1,61 @@
+<div class="
+    footer__custom-text
+    {{ block.settings | class_list() }}
+    text-{{ block.settings.text_align }}
+  " {{{ block.shopline_attributes }}}>
+  <h3 class="footer__custom-text-title {{ props.title_typography }}">{{ block.settings.title }}</h3>
+  <div class="footer__custom-text-content rte {{ props.content_typography }}">{{{ block.settings.content }}}</div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.footer.blocks.custom_text.name",
+  "icon": "content",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.footer.blocks.custom_text.settings.title.label",
+      "default": "Custom text"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:sections.footer.blocks.custom_text.settings.content.label",
+      "default": "Add your own custom text here."
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:sections.footer.blocks.custom_text.settings.text_align.label",
+      "default": "left"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.footer.blocks.custom_text.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.footer.blocks.custom_text.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.blocks.custom_text.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

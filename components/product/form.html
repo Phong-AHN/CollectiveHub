@@ -1,0 +1,22 @@
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+
+{{#component "script" src="product/form.js" | asset_url() /}}
+
+<theme-product-form
+  class="product-form {{ props.class }}"
+  data-use-error-toast="{{ props.use_error_toast | default(false, allow_false = true) }}"
+  {{#if props.attributes }}{{{ props.attributes }}}{{/if}}
+>
+  {{#product_form product id=props.form_id }}
+    <input type="hidden" name="id" value="{{ current_variant.id }}"/>
+    <input type="hidden" required name="quantity" value="1"/>
+    {{#if props.content }}
+      {{{ props.content }}}
+    {{/if}}
+
+    {{#if props.use_payment_button }}
+      {{#payment_button/}}
+    {{/if}}
+  {{/product_form}}
+</theme-product-form>

@@ -1,0 +1,616 @@
+{{#component "./components/stylesheet" src="./sgc-product-comparison.css" | asset_url() /}}
+{{!-- 表格列数 --}}
+{{#var card_column = section.blocks_size /}}
+
+{{!-- 计算所有子 block 的最大有效行数（1..10），只要某列 imageN/iconN/descriptionN 有任一非空，该行计入 --}}
+{{#var card_max_row = 0 /}}
+{{#blocks}}
+  {{#var current_max = 0 /}}
+  {{#if forblock.settings.description1 || forblock.settings.image1 || forblock.settings.icon1 }}
+    {{#set current_max = 1 /}}
+  {{/if}}
+  {{#if forblock.settings.description2 || forblock.settings.image2 || forblock.settings.icon2 }}
+    {{#set current_max = 2 /}}
+  {{/if}}
+  {{#if forblock.settings.description3 || forblock.settings.image3 || forblock.settings.icon3 }}
+    {{#set current_max = 3 /}}
+  {{/if}}
+  {{#if forblock.settings.description4 || forblock.settings.image4 || forblock.settings.icon4 }}
+    {{#set current_max = 4 /}}
+  {{/if}}
+  {{#if forblock.settings.description5 || forblock.settings.image5 || forblock.settings.icon5 }}
+    {{#set current_max = 5 /}}
+  {{/if}}
+  {{#if forblock.settings.description6 || forblock.settings.image6 || forblock.settings.icon6 }}
+    {{#set current_max = 6 /}}
+  {{/if}}
+  {{#if forblock.settings.description7 || forblock.settings.image7 || forblock.settings.icon7 }}
+    {{#set current_max = 7 /}}
+  {{/if}}
+  {{#if forblock.settings.description8 || forblock.settings.image8 || forblock.settings.icon8 }}
+    {{#set current_max = 8 /}}
+  {{/if}}
+  {{#if forblock.settings.description9 || forblock.settings.image9 || forblock.settings.icon9 }}
+    {{#set current_max = 9 /}}
+  {{/if}}
+  {{#if forblock.settings.description10 || forblock.settings.image10 || forblock.settings.icon10 }}
+    {{#set current_max = 10 /}}
+  {{/if}}
+  {{#if current_max > card_max_row }}
+    {{#set card_max_row = current_max /}}
+  {{/if}}
+{{/blocks}}
+
+<style>{{{ section.settings.font_family | font_face() }}}</style>
+
+<section style="--sgc-product-comparison-background-color: {{ section.settings.background_color.rgb }};">
+  <sgc-product-comparison
+    class="
+      sgc-product-comparison
+      {{#if !section.settings.show_in_desktop }}sgc-hidden-desktop{{/if}}
+      {{#if !section.settings.show_in_mobile }}sgc-hidden-mobile{{/if}}
+      {{ section.settings | class_list() }}
+    "
+    data-card-column="{{ card_column }}"
+    style="
+      --sgc-product-comparison-background-color: {{ section.settings.background_color.rgb }};
+      --sgc-product-comparison-desktop-max-width: {{ section.settings.desktop_max_width }}px;
+      --sgc-product-comparison-header-title-desktop-font-size: {{ section.settings.desktop_font_size }}px;
+      --sgc-product-comparison-header-title-mobile-font-size: {{ section.settings.mobile_font_size }}px;
+      --sgc-product-comparison-header-title-font-family: {{ section.settings.font_family.family }};
+      --sgc-product-comparison-header-title-font-weight: {{ section.settings.font_family.weight }};
+      --sgc-product-comparison-header-title-font-style: {{ section.settings.font_family.style }};
+      --sgc-product-comparison-header-title-letter-spacing: {{
+        section.settings.letter_spacing |
+          divided_by(1000, integer = false)
+      }}em;
+      --sgc-product-comparison-header-title-line-height: {{ section.settings.line_height }};
+      --sgc-product-comparison-header-title-color: {{ section.settings.title_color.rgb }};
+      --card-column: {{ card_column }};
+    "
+    {{{ section.shopline_attributes }}}
+  >
+    <div class="sgc-product-comparison__header sgc-text-align-{{ section.settings.text_align }}">
+      <div class="sgc-product-comparison__header-title">
+        {{ section.settings.title }}
+      </div>
+      <div class="sgc-product-comparison__header-subtitle sgc-rte">{{{ section.settings.description }}}</div>
+    </div>
+
+    <div class="sgc-product-comparison__table-container">
+      <table class="sgc-product-comparison__table">
+        <thead>
+          <tr>
+            {{#blocks}}
+              <th
+                class="sgc-text-align-{{ forblock.settings.text_align }}"
+                style="
+                  position: relative;
+                  --comparison-card-background-color: {{ forblock.settings.card_background_color.rgb }};
+                  --comparison-card-border-width: {{ forblock.settings.card_border_width }}px;
+                  --comparison-card-border-opacity: {{ forblock.settings.card_border_opacity }}%;
+                  --comparison-card-border-radius: {{ forblock.settings.card_border_radius }}px;
+                  --comparison-card-border-color: {{ forblock.settings.card_border_color.rgb }};
+                "
+              >
+                {{#block/}}
+              </th>
+            {{/blocks}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#for i in 1 | range(card_max_row) }}
+            <tr class="sgc-product-comparison__row">
+              {{#blocks}}
+                <td
+                  class="sgc-product-comparison__cell sgc-text-align-{{ forblock.settings.text_align }}"
+                  style="
+                    --comparison-card-background-color: {{ forblock.settings.card_background_color.rgb }};
+                    --comparison-card-border-width: {{ forblock.settings.card_border_width }}px;
+                    --comparison-card-border-opacity: {{ forblock.settings.card_border_opacity }}%;
+                    --comparison-card-border-radius: {{ forblock.settings.card_border_radius }}px;
+                    --comparison-card-border-color: {{ forblock.settings.card_border_color.rgb }};
+                  "
+                >
+                  <div class="sgc-product-comparison__cell-content">
+                    {{#if i == 1 }}
+                      {{#if forblock.settings.image1 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image1
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon1 || forblock.settings.description1 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon1 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon1
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description1 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description1 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 2 }}
+                      {{#if forblock.settings.image2 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image2
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon2 || forblock.settings.description2 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon2 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon2
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description2 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description2 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 3 }}
+                      {{#if forblock.settings.image3 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image3
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon3 || forblock.settings.description3 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon3 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon3
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description3 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description3 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 4 }}
+                      {{#if forblock.settings.image4 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image4
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon4 || forblock.settings.description4 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon4 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon4
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description4 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description4 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 5 }}
+                      {{#if forblock.settings.image5 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image5
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon5 || forblock.settings.description5 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon5 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon5
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description5 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description5 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 6 }}
+                      {{#if forblock.settings.image6 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image6
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon6 || forblock.settings.description6 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon6 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon6
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description6 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description6 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 7 }}
+                      {{#if forblock.settings.image7 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image7
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon7 || forblock.settings.description7 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon7 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon7
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description7 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description7 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 8 }}
+                      {{#if forblock.settings.image8 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image8
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon8 || forblock.settings.description8 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon8 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon8
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description8 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description8 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 9 }}
+                      {{#if forblock.settings.image9 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image9
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon9 || forblock.settings.description9 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon9 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon9
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description9 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description9 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+
+                    {{#if i == 10 }}
+                      {{#if forblock.settings.image10 }}
+                        <div class="sgc-product-comparison__image">
+                          {{#component
+                            "./components/image"
+                            data=forblock.settings.image10
+                            class="sgc-product-comparison__image-img"
+                          /}}
+                        </div>
+                      {{/if}}
+                      {{#if forblock.settings.icon10 || forblock.settings.description10 }}
+                        <div class="sgc-product-comparison__icon-text-row">
+                          {{#if forblock.settings.icon10 }}
+                            <div class="sgc-product-comparison__icon">
+                              {{#component
+                                "./components/image"
+                                data=forblock.settings.icon10
+                                class="sgc-product-comparison__icon-img"
+                              /}}
+                            </div>
+                          {{/if}}
+                          {{#if forblock.settings.description10 }}
+                            <div class="sgc-product-comparison__description sgc-rte">
+                              {{{ forblock.settings.description10 }}}
+                            </div>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    {{/if}}
+                  </div>
+                </td>
+              {{/blocks}}
+            </tr>
+          {{/for}}
+        </tbody>
+      </table>
+    </div>
+  </sgc-product-comparison>
+</section>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_product_comparison.name",
+  "icon": "product",
+  "class": "sgc-product-comparison",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "show_in_desktop",
+      "label": "t:sections.sgc_product_comparison.settings.show_in_desktop.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "show_in_mobile",
+      "label": "t:sections.sgc_product_comparison.settings.show_in_mobile.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.sgc_product_comparison.settings.title.label",
+      "default": "Product Comparison"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.sgc_product_comparison.settings.description.label",
+      "default": "This is a short description"
+    },
+    {
+      "type": "text_align",
+      "label": "t:sections.sgc_product_comparison.settings.text_align.label",
+      "id": "text_align",
+      "default": "center",
+      "info": "t:sections.sgc_product_comparison.settings.text_align.info"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.settings.group_header_0.label"
+    },
+    {
+      "type": "font",
+      "id": "font_family",
+      "label": "t:sections.sgc_product_comparison.settings.font_family.label",
+      "default": "Tilt Warp"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "t:sections.sgc_product_comparison.settings.title_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "desktop_font_size",
+      "label": "t:sections.sgc_product_comparison.settings.desktop_font_size.label",
+      "default": 32,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "t:sections.sgc_product_comparison.settings.mobile_font_size.label",
+      "default": 24,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "t:sections.sgc_product_comparison.settings.letter_spacing.label",
+      "default": 0,
+      "min": -75,
+      "max": 250,
+      "step": 25,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "t:sections.sgc_product_comparison.settings.line_height.label",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_product_comparison.settings.group_header_1.label"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.sgc_product_comparison.settings.background_color.label",
+      "default": "#fdf9ee"
+    },
+    {
+      "type": "range",
+      "id": "desktop_max_width",
+      "label": "t:sections.sgc_product_comparison.settings.desktop_max_width.label",
+      "default": 1420,
+      "min": 1000,
+      "max": 1920,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.sgc_product_comparison.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-end": "40px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "40px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "40px",
+          "padding-inline-start": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$comparison-card",
+      "limit": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_product_comparison.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$comparison-card",
+          "name": "对比卡片",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$image-with-text",
+              "settings": {}
+            }
+          ]
+        },
+        {
+          "type": "$comparison-card",
+          "name": "对比卡片",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$product",
+              "settings": {}
+            }
+          ]
+        },
+        {
+          "type": "$comparison-card",
+          "name": "对比卡片",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$product",
+              "settings": {}
+            }
+          ]
+        },
+        {
+          "type": "$comparison-card",
+          "name": "对比卡片",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$product",
+              "settings": {}
+            }
+          ]
+        }
+      ],
+      "category": "Section Gallery"
+    }
+  ]
+}
+{{/schema}}

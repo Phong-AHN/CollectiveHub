@@ -1,0 +1,44 @@
+{{#var icon_url = "images/image-floating-icon.png" | asset_url() /}}
+
+<div
+  class="image-floating__icon-wrapper {{ block.settings.icon_spacing | class_list() }}"
+  {{{ block.shopline_attributes }}}
+>
+  <div class="image-floating__icon" style="--icon-background-color: {{ block.settings.icon_border_color.hex }};">
+    {{#component "image" sizes="100%" src=icon_url /}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_floating.blocks.icon.name",
+  "icon": "image",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "id": "icon_border_color",
+      "type": "color",
+      "label": "t:sections.image_floating.blocks.icon.settings.icon_border_color.label",
+      "default": "#CDF24D"
+    },
+    {
+      "type": "style.spacing",
+      "id": "icon_spacing",
+      "label": "t:sections.image_floating.blocks.icon.settings.icon_spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-end": "0px",
+        "padding-block-end": "0px",
+        "padding-inline-start": "0px",
+        "@media (--mobile)": {
+          "padding-block-start": "0px",
+          "padding-inline-end": "0px",
+          "padding-block-end": "0px",
+          "padding-inline-start": "0px"
+        }
+      }
+    }
+  ]
+}
+{{/schema}}

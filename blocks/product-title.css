@@ -1,0 +1,14 @@
+.block-product-title {
+  flex-shrink: 0;
+  padding-inline-end: 4px;
+  color: rgb(var(--color-text));
+  background-color: var(--background-color);
+}
+
+.block-product-title span {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: var(--max-row);
+  -webkit-box-orient: vertical;
+}

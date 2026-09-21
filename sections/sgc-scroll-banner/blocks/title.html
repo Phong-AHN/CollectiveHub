@@ -1,0 +1,117 @@
+<style>{{{ block.settings.font_family | font_face() }}}</style>
+
+<div
+  class="sgc-scroll-banner__banner-title"
+  style="
+    --title-font-family: {{ block.settings.font_family.family }};
+    --title-font-weight: {{ block.settings.font_family.weight }};
+    --title-font-style: {{ block.settings.font_family.style }};
+    --title-font-color: {{ block.settings.title_color.red }}, {{ block.settings.title_color.green }}, {{
+      block.settings.title_color.blue
+    }};
+    --desktop-font-size: {{ block.settings.desktop_font_size }}px;
+    --mobile-font-size: {{ block.settings.mobile_font_size }}px;
+    --desktop-line-height: {{ block.settings.desktop_line_height }};
+    --mobile-line-height: {{ block.settings.mobile_line_height }};
+    --letter-spacing: {{ block.settings.letter_spacing | divided_by(1000, integer = false) }}em;
+    --line-height: {{ block.settings.line_height }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <h2
+    class="
+      sgc-scroll-banner__banner-title-text
+      sgc-scroll-banner__banner-title-text--{{ block.settings.title_style }}
+    "
+  >
+    {{ block.settings.title }}
+  </h2>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_banner.blocks.title.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "text",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title.label",
+      "id": "title",
+      "default": "Rich Text"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title_style.label",
+      "id": "title_style",
+      "default": "solid",
+      "options": [
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title_style.options_0.label",
+          "value": "solid"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title_style.options_1.label",
+          "value": "outlined"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title_style.options_2.label",
+          "value": "italic"
+        }
+      ]
+    },
+    {
+      "type": "font",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.font_family.label",
+      "id": "font_family",
+      "default": "Poppins-semibold"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.title_color.label",
+      "id": "title_color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.desktop_font_size.label",
+      "id": "desktop_font_size",
+      "default": 32,
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.mobile_font_size.label",
+      "id": "mobile_font_size",
+      "default": 20,
+      "min": 20,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.letter_spacing.label",
+      "id": "letter_spacing",
+      "default": 0,
+      "min": -75,
+      "max": 250,
+      "step": 25,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.title.settings.line_height.label",
+      "id": "line_height",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    }
+  ],
+  "blocks": [],
+  "presets": []
+}
+{{/schema}}

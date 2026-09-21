@@ -1,0 +1,106 @@
+{{#component "stylesheet" src="./image-promotion.css" | asset_url() /}}
+
+<div
+  class="
+    image-promotion color-{{ section.settings.color_scheme.id }} {{#if !section.settings.full_screen }}
+      page-width
+    {{/if}}
+  "
+>
+  <div class="image-promotion__content {{ section.settings | class_list() }}">
+    {{#blocks}}
+      {{#block/}}
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_promotion.name",
+  "icon": "largeImageWithTextBox",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.image_promotion.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "switch",
+      "id": "full_screen",
+      "label": "t:sections.image_promotion.settings.full_screen.label",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.image_promotion.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "stretch",
+        "justify-content": "center",
+        "row-gap": "24px",
+        "column-gap": "24px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px",
+          "flex-direction": "column"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_promotion.settings.spacing.label",
+      "default": {
+        "padding-top": "100px",
+        "padding-right": "0px",
+        "padding-bottom": "100px",
+        "padding-left": "0px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-bottom": "24px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$group",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_promotion.presets.presets_0.name",
+      "category": "t:sections.image_promotion.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "$heading"
+            },
+            {
+              "type": "$subheading"
+            }
+          ]
+        },
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "$heading"
+            },
+            {
+              "type": "$subheading"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

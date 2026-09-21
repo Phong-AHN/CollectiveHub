@@ -1,0 +1,15 @@
+.block-logo {
+  color: rgb(var(--color-text));
+}
+
+.block-logo img {
+  width: var(--logo-desktop-width);
+  height: auto;
+  color: inherit;
+}
+
+@media (max-width: 959px) {
+  .block-logo img {
+    width: var(--logo-mobile-width);
+  }
+}

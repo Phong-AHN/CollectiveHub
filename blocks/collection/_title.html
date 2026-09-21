@@ -1,0 +1,153 @@
+{{#var title = block.settings.collection_title | default(props.collection.title) /}}
+
+{{#if title }}
+  <{{ block.settings.text_tag }}
+    class="
+      body-font-bold
+      block-collection-card__title
+      text-{{ block.settings.text_align }}
+      {{ block.settings.typography }}
+      {{ block.settings | class_list() }}
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{ title }}
+  </{{ block.settings.text_tag }}>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.collection..title.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "collection_title",
+      "label": "t:blocks.collection..title.settings.collection_title.label",
+      "placeholder": "请输入分类标题名称"
+    },
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "t:blocks.collection..title.settings.text_tag.label",
+      "info": "t:blocks.collection..title.settings.text_tag.info",
+      "default": "h2",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "P"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.collection..title.settings.typography.label",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.collection..title.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.collection..title.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.collection..title.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.collection..title.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.collection..title.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.collection..title.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.collection..title.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.collection..title.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.collection..title.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.collection..title.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.collection..title.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.collection..title.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.collection..title.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.collection..title.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.collection..title.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "id": "text_align",
+      "type": "text_align",
+      "label": "t:blocks.collection..title.settings.text_align.label",
+      "default": "center"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.collection..title.settings.size.label",
+      "default": {}
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.collection..title.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,33 @@
+{{#var link = block.settings.link /}}
+
+<li class="image-floating__slide-item" {{{ block.shopline_attributes }}}>
+  <a class="image-floating__slide-item-link" href="{{#if link }}{{ link }}{{#else/}}javascript:; {{/if}}">
+    {{#if block.settings.image }}
+      {{#component "image" data=block.settings.image /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </a>
+</li>
+
+{{#schema}}
+{
+  "name": "t:sections.image_floating.blocks.image.name",
+  "tag": "",
+  "icon": "image",
+  "limit": 3,
+  "settings": [
+    {
+      "id": "image",
+      "type": "image",
+      "label": "t:sections.image_floating.blocks.image.settings.image.label",
+      "info": "t:sections.image_floating.blocks.image.settings.image.info"
+    },
+    {
+      "id": "link",
+      "type": "url",
+      "label": "t:sections.image_floating.blocks.image.settings.link.label"
+    }
+  ]
+}
+{{/schema}}

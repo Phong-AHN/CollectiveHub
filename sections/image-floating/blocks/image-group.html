@@ -1,0 +1,41 @@
+{{#component "script" src="./image-group.js" | asset_url() /}}
+
+<theme-image-group class="image-floating__slide-wrapper" {{{ block.shopline_attributes }}}>
+  <div class="image-floating__slide">
+    <ul class="image-floating__slide-list">
+      {{#content "blocks" /}}
+    </ul>
+  </div>
+</theme-image-group>
+
+{{#schema}}
+{
+  "name": "t:sections.image_floating.blocks.image_group.name",
+  "icon": "image",
+  "tag": "",
+  "limit": 1,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "$image",
+      "limit": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_floating.blocks.image_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$image"
+        },
+        {
+          "type": "$image"
+        },
+        {
+          "type": "$image"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

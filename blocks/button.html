@@ -1,0 +1,168 @@
+{{#var style_secondary = false /}}
+{{#var style_link = false /}}
+
+{{#switch block.settings.style }}
+  {{#case "secondary" /}}
+    {{#set style_secondary = true /}}
+    {{#set style_link = false /}}
+  {{#case "link" /}}
+    {{#set style_secondary = false /}}
+    {{#set style_link = true /}}
+{{/switch}}
+
+{{#var flex_class_name = block.settings | class_list() | append(" ") | append(block.settings.typography) /}}
+
+{{#if block.settings.text }}
+  {{#component
+    "button"
+    type="link"
+    class_name=flex_class_name
+    shopline_attributes=block.shopline_attributes
+    link_url=(block.settings.link | default(props.link))
+    text=block.settings.text
+    style_secondary=style_secondary
+    style_link=style_link
+    open_in_new_tab=block.settings.open_in_new_tab
+  /}}
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.button.name",
+  "icon": "button",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:blocks.button.settings.text.label",
+      "default": "Button"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.button.settings.typography.label",
+      "id": "typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.button.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.button.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.button.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.button.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.button.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.button.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.button.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.button.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.button.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.button.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.button.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.button.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.button.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.button.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.button.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:blocks.button.settings.link.label",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:blocks.button.settings.style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:blocks.button.settings.style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:blocks.button.settings.style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:blocks.button.settings.style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "open_in_new_tab",
+      "label": "t:blocks.button.settings.open_in_new_tab.label",
+      "default": true
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.button.settings.spacing.label",
+      "default": {
+        "padding-block-start": "10px",
+        "padding-block-end": "10px",
+        "padding-inline-start": "20px",
+        "padding-inline-end": "20px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.button.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.button.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

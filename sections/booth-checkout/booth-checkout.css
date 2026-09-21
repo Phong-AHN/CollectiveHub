@@ -1,0 +1,190 @@
+.booth-checkout {
+  background-color: rgb(var(--color-background));
+}
+
+.booth-checkout__inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+.booth-checkout__heading,
+.booth-checkout__description {
+  margin: 0;
+}
+
+.booth-checkout__description p {
+  margin: 0;
+}
+
+.booth-checkout__layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 959px) {
+  .booth-checkout__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Nothing usable arrived from the floor plan - hide the form, show the way back. */
+theme-booth-checkout[data-state='empty'] .booth-checkout__layout {
+  display: none;
+}
+
+theme-booth-checkout[data-state='empty'] .booth-checkout__empty {
+  display: flex;
+}
+
+/* Paid and back from the provider - the form has nothing left to do. */
+theme-booth-checkout[data-state='paid'] .booth-checkout__layout {
+  display: none;
+}
+
+.booth-checkout__empty {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.booth-checkout__summary {
+  padding: 24px;
+  border: 1px solid rgba(var(--color-text), 0.15);
+  border-radius: 8px;
+}
+
+.booth-checkout__summary-title,
+.booth-checkout__form-title {
+  margin: 0 0 16px;
+}
+
+.booth-checkout__lines {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.booth-checkout__lines dt {
+  color: rgba(var(--color-text), 0.7);
+}
+
+.booth-checkout__lines dd {
+  margin: 0;
+  text-align: end;
+}
+
+.booth-checkout__total {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block-start: 16px;
+  margin-block-start: 16px;
+  border-block-start: 1px solid rgba(var(--color-text), 0.15);
+}
+
+.booth-checkout__total[hidden] {
+  display: none;
+}
+
+.booth-checkout__hold-note {
+  margin: 16px 0 0;
+  color: rgba(var(--color-text), 0.7);
+}
+
+.booth-checkout__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.booth-checkout__row--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+@media (max-width: 749px) {
+  .booth-checkout__row--split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The theme's .field already carries its own bottom margin. */
+.booth-checkout__row .field {
+  margin-block-end: 16px;
+}
+
+.booth-checkout__row .field.is-invalid::after {
+  border-color: rgb(255, 0, 0);
+}
+
+.booth-checkout__submit {
+  align-self: flex-start;
+  margin-block-start: 8px;
+  cursor: pointer;
+}
+
+theme-booth-checkout[data-state='submitting'] .booth-checkout__submit {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@media (max-width: 749px) {
+  .booth-checkout__submit {
+    align-self: stretch;
+  }
+}
+
+.booth-checkout__note {
+  margin: 12px 0 0;
+  color: rgba(var(--color-text), 0.7);
+}
+
+.booth-checkout__message {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.booth-checkout__message[hidden] {
+  display: none;
+}
+
+.booth-checkout__message[data-type='error'] {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.booth-checkout__message[data-type='success'] {
+  background-color: rgba(0, 128, 0, 0.12);
+}
+
+.booth-checkout__message[data-type='info'] {
+  background-color: rgba(var(--color-text), 0.08);
+}
+
+.booth-checkout__debug {
+  padding: 12px 16px;
+  color: rgba(var(--color-text), 0.7);
+  border: 1px dashed rgba(var(--color-text), 0.25);
+  border-radius: 6px;
+}
+
+.booth-checkout__debug[hidden] {
+  display: none;
+}
+
+.booth-checkout__debug summary {
+  cursor: pointer;
+}
+
+.booth-checkout__debug-output {
+  margin: 12px 0 0;
+  overflow-x: auto;
+  white-space: pre;
+}

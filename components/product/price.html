@@ -1,0 +1,106 @@
+
+
+{{#var product = props.product /}}
+{{#var use_variant = props.use_variant /}}
+{{#var layout_template = props.layout_template | default("sale origin") /}}
+
+{{#var sale_font_bold = props.sale_font_bold | default(true, allow_false = true) /}}
+{{#var sale_font_size = props.sale_font_size | default("title6") /}}
+
+{{#if sale_font_bold }}
+  {{#set sale_font_size = sale_font_size | append(" body-font-bold") /}}
+{{/if}}
+
+{{#var origin_font_size = props.origin_font_size | default("body5") | append(" body-font-bold") /}}
+{{#var save_font_size = props.save_font_size | default("body4") | append(" body-font-bold") /}}
+{{#var sale_style = props.sale_style | default("auto") /}}
+{{#var save_style = props.save_style | default("text") /}}
+{{#var save_radius = props.save_radius /}}
+{{#var discount_style = props.discount_style | default("number") /}}
+
+{{#var target /}}
+
+{{#if use_variant }}
+  {{#set target = product.selected_or_first_available_variant /}}
+  {{#if !target }}
+    {{#set target = product | get_variants() | first() /}}
+  {{/if}}
+  
+  {{#set sale_style = "lowest_price" /}}
+{{#else/}}
+  {{#set target = product /}}
+
+  
+  {{#if product.quantity_price_breaks_configured }}
+    {{#set layout_template = "sale" /}}
+    {{#set sale_style = "price_interval" /}}
+  {{/if}}
+
+  
+  {{#if (sale_style == "price_interval" || sale_style == "from_lowest_price") && target.price_max == target.price_min }}
+    {{#set sale_style = "lowest_price" /}}
+  {{/if}}
+
+  
+  {{#if sale_style == "auto" }}
+    {{#if target.price_max != target.price_min }}
+      {{#set sale_style = "price_interval" /}}
+    {{#else/}}
+      {{#set sale_style = "lowest_price" /}}
+    {{/if}}
+  {{/if}}
+{{/if}}
+
+{{#var price = target.price | default(2999) /}}
+{{#var compare_at_price = target.compare_at_price /}}
+{{#var money_price = price | money_with_currency() /}}
+{{#var money_price_min = target.price_min | money_with_currency() /}}
+{{#var money_price_max = target.price_max | money_with_currency() /}}
+
+{{#var render_contents = layout_template | split(" ") /}}
+
+<div class="product-price {{ props.class }}">
+  {{#for content in render_contents }}
+    {{#switch content }}
+      {{#case "sale" /}}
+        <div class="product-price__item product-price__sale {{ sale_font_size }}">
+          {{#switch sale_style }}
+            {{#case "from_lowest_price" /}}
+              {{{ "products.general.from_price_html" | t(price = money_price_min) }}}
+            {{#case "price_interval" /}}
+              {{{ money_price_min }}} - {{{ money_price_max }}}
+            {{#else/}}
+              {{{ money_price }}}
+          {{/switch}}
+        </div>
+      {{#case "origin" /}}
+        {{#if compare_at_price > price }}
+          <div class="product-price__item product-price__origin {{ origin_font_size }}">
+            {{{ compare_at_price | money_with_currency() }}}
+          </div>
+        {{/if}}
+      {{#case "save" /}}
+        {{#if compare_at_price > price }}
+          {{#var save_price = compare_at_price | minus(price) /}}
+          {{#var save_ratio = save_price | times(10000) | divided_by(compare_at_price) | divided_by(100) /}}
+          {{#var money_save_price = save_price | money_with_currency() /}}
+          <div
+            class="
+              product-price__item
+              product-price__save
+              product-price__save--{{ save_style }}-style
+              {{ save_font_size }}
+            "
+            style="--save-button-radius: {{ save_radius }}px;"
+          >
+            {{#switch discount_style }}
+              {{#case "ratio" /}}
+                {{{ "products.product_list.save_ratio" | t(price = save_ratio) }}}
+              {{#else/}}
+                {{{ "products.product_list.save_byjs" | t(priceDom = money_save_price) }}}
+            {{/switch}}
+          </div>
+        {{/if}}
+    {{/switch}}
+  {{/for}}
+</div>

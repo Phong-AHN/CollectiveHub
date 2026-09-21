@@ -1,0 +1,139 @@
+{
+  "sections": {
+    "main-search": {
+      "type": "main-search",
+      "blocks": {
+        "main-search__results": {
+          "type": "$results",
+          "blocks": {
+            "main-search__results__product-card": {
+              "type": "product-card/card",
+              "blocks": {
+                "main-search__results__product-card__image": {
+                  "type": "product-image",
+                  "blocks": {
+                    "main-search__results__product-card__image__layer-1": {
+                      "type": "product-card/_layer",
+                      "blocks": {
+                        "main-search__results__product-card__image__layer-1__discount-tag": {
+                          "type": "product-card/_discount-tag"
+                        }
+                      },
+                      "block_order": [
+                        "main-search__results__product-card__image__layer-1__discount-tag"
+                      ]
+                    },
+                    "main-search__results__product-card__image__layer-2": {
+                      "type": "product-card/_layer",
+                      "settings": {
+                        "layout": {
+                          "justify-content": "flex-end"
+                        }
+                      },
+                      "blocks": {
+                        "main-search__results__product-card__image__layer-2__quick-add": {
+                          "type": "product-card/_quick-add"
+                        }
+                      },
+                      "block_order": [
+                        "main-search__results__product-card__image__layer-2__quick-add"
+                      ]
+                    }
+                  },
+                  "block_order": [
+                    "main-search__results__product-card__image__layer-1",
+                    "main-search__results__product-card__image__layer-2"
+                  ]
+                },
+                "main-search__results__product-card__info": {
+                  "type": "product-card/_info",
+                  "blocks": {
+                    "main-search__results__product-card__info__title": {
+                      "type": "product-title"
+                    },
+                    "main-search__results__product-card__info__price": {
+                      "type": "product-price"
+                    },
+                    "main-search__results__product-card__info__description": {
+                      "type": "product-card/_description"
+                    },
+                    "main-search__results__product-card__info__buy-button": {
+                      "type": "product-buy-button"
+                    }
+                  },
+                  "block_order": [
+                    "main-search__results__product-card__info__title",
+                    "main-search__results__product-card__info__price",
+                    "main-search__results__product-card__info__description",
+                    "main-search__results__product-card__info__buy-button"
+                  ]
+                }
+              },
+              "block_order": [
+                "main-search__results__product-card__image",
+                "main-search__results__product-card__info"
+              ]
+            },
+            "main-search__results__article-card": {
+              "type": "article/card",
+              "blocks": {
+                "main-search__results__article-card__cover": {
+                  "type": "article/_cover"
+                },
+                "main-search__results__article-card__info": {
+                  "type": "article/_info",
+                  "blocks": {
+                    "main-search__results__article-card__title": {
+                      "type": "article/_title"
+                    },
+                    "main-search__results__article-card__date-author": {
+                      "type": "article/_date-author"
+                    },
+                    "main-search__results__article-card__excerpt": {
+                      "type": "article/_excerpt"
+                    }
+                  },
+                  "block_order": [
+                    "main-search__results__article-card__title",
+                    "main-search__results__article-card__date-author",
+                    "main-search__results__article-card__excerpt"
+                  ]
+                }
+              },
+              "block_order": [
+                "main-search__results__article-card__cover",
+                "main-search__results__article-card__info"
+              ]
+            },
+            "main-search__results__collection-card": {
+              "type": "collection/card",
+              "blocks": {
+                "main-search__results__collection-card__image": {
+                  "type": "collection/_image"
+                },
+                "main-search__results__collection-card__title": {
+                  "type": "collection/_title"
+                }
+              },
+              "block_order": [
+                "main-search__results__collection-card__image",
+                "main-search__results__collection-card__title"
+              ]
+            },
+            "main-search__results__page-card": {
+              "type": "$page-card"
+            }
+          },
+          "block_order": [
+            "main-search__results__product-card",
+            "main-search__results__article-card",
+            "main-search__results__collection-card",
+            "main-search__results__page-card"
+          ]
+        }
+      },
+      "block_order": ["main-search__results"]
+    }
+  },
+  "order": ["main-search"]
+}

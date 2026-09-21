@@ -1,0 +1,33 @@
+<div class="main-cart-footer__buttons {{ block.settings.spacing | class_list() }}" {{{ block.shopline_attributes }}}>
+  <div class="main-cart-footer__checkout">
+    {{#component "cart/widgets/cart-checkout" scene=props.scene /}}
+  </div>
+
+  <div class="main-cart-footer__tips">
+    {{#component "cart/widgets/cart-taxes" /}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_cart.blocks.cart_footer_buttons.name",
+  "deletable": false,
+  "icon": "button",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_cart.blocks.cart_footer_buttons.settings.spacing.label",
+      "default": {
+        "padding-top": "15px"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_cart.blocks.cart_footer_buttons.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

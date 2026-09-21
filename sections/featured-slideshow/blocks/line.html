@@ -1,0 +1,43 @@
+<div class="featured-slideshow__line {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}></div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_slideshow.blocks.line.name",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_slideshow.blocks.line.settings.spacing.label",
+      "default": {
+        "padding-top": "40px",
+        "padding-right": "20px",
+        "padding-bottom": "40px",
+        "padding-left": "20px",
+        "@media (--mobile)": {
+          "padding-top": "0",
+          "padding-bottom": "0"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_slideshow.blocks.line.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "180px",
+        "@media (--mobile)": {
+          "height": "32px"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_slideshow.blocks.line.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

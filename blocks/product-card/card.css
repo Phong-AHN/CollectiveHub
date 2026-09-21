@@ -1,0 +1,12 @@
+.block-product-card {
+  position: relative;
+}
+
+.block-product-card.product-card-style--card {
+  background-color: rgb(var(--color-card-background));
+}
+
+.block-product-card.product-card-style--card .block-product-price,
+.block-product-card.product-card-style--card .block-product-title {
+  padding-inline: 8px;
+}

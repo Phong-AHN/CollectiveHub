@@ -1,0 +1,141 @@
+{{#component "script" src="./compare.js" | asset_url() /}}
+
+{{#var dot_color = "#ffffff" /}}
+
+{{#if block.settings.handle_style == "#ffffff" }}
+  {{#set dot_color = "#000000" /}}
+{{/if}}
+
+{{#var aspect_ratio = props.aspect_ratio /}}
+{{#blocks}}
+  {{#if aspect_ratio == "unset" && forblock.index0 == 0 }}
+    {{#set aspect_ratio = forblock.settings.image.aspect_ratio | default("3/2") | append("") /}}
+  {{/if}}
+{{/blocks}}
+
+{{#if props.type == "text" }}
+  <div
+    class="
+      before-after__link-box before-after__compare-text-item {{#if props.ind != 1 }}hidden{{/if}}
+    "
+  >
+    {{#blocks}}
+      {{#if forblock.type == "$text-group" }}
+        {{#block/}}
+      {{/if}}
+    {{/blocks}}
+    {{#if block.settings.link }}
+      <a
+        class="before-after__link-element"
+        href="{{ block.settings.link }}"
+        {{#if block.settings.link_open_blank }}target="_blank"{{/if}}
+      >
+
+      </a>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if props.type == "image" }}
+  <theme-before-after-compare class="before-after__link-box before-after__item" {{{ block.shopline_attributes }}}>
+    {{#blocks}}
+      {{#if forblock.type == "$image-group" }}
+        {{#block aspect_ratio=props.aspect_ratio /}}
+      {{/if}}
+    {{/blocks}}
+
+    {{#if block.settings.link }}
+      <a
+        class="before-after__link-element"
+        href="{{ block.settings.link }}"
+        {{#if block.settings.link_open_blank }}target="_blank"{{/if}}
+      >
+
+      </a>
+    {{/if}}
+  </theme-before-after-compare>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.compare.name",
+  "icon": "content",
+  "tag": "",
+  "settings": [
+    {
+      "type": "url",
+      "label": "t:sections.before_after.blocks.compare.settings.link.label",
+      "id": "link"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.before_after.blocks.compare.settings.link_open_blank.label",
+      "id": "link_open_blank",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$image-group",
+      "limit": 1
+    },
+    {
+      "type": "$text-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.compare.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$text-group",
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "<strong><span style=\"font-size: 48px;\">92%</span></strong><br><span style=\"font-size: 16px;\">Consumer study results</span><br><span style=\"font-size: 22px;\"><strong>MY LIPS FELT SOOTHED AND PROTECTED FROM DRYNESS</strong></span>",
+                "text_align": "left"
+              }
+            }
+          ]
+        },
+        {
+          "type": "$image-group",
+          "blocks": [
+            {
+              "type": "$compare-image",
+              "blocks": [
+                {
+                  "type": "$group",
+                  "blocks": [
+                    {
+                      "type": "$group-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$compare-image",
+              "blocks": [
+                {
+                  "type": "$group",
+                  "blocks": [
+                    {
+                      "type": "$group-title",
+                      "settings": {
+                        "content": "After"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

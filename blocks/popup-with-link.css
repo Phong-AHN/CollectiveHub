@@ -1,0 +1,40 @@
+.block-popup {
+  width: var(--width);
+  height: var(--height);
+}
+
+.block-popup__main {
+  --modal-animation-name: animation-fade-in-center;
+
+  inset-block: 60px auto;
+  width: fit-content;
+  height: fit-content;
+}
+
+.block-popup__trigger {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+}
+
+.block-popup__content {
+  width: 100vw;
+  max-width: calc(100vw - var(--page-padding) * 2);
+  height: auto;
+  max-height: calc(100vh - 120px);
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+@media (min-width: 960px) {
+  .block-popup__content {
+    width: auto;
+    max-width: 90vw;
+  }
+}
+
+.block-popup__group {
+  max-width: 100%;
+  max-height: 100%;
+}

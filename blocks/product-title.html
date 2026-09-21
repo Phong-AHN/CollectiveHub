@@ -1,0 +1,151 @@
+{{#component "stylesheet" src="./product-title.css" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+{{#var placeholder_title = "onboarding.product_title" | t() /}}
+
+{{#var max_row /}}
+{{#switch settings.product_title_display_type }}
+  {{#case "max_1" /}}
+    {{#set max_row = 1 /}}
+  {{#case "max_2" /}}
+    {{#set max_row = 2 /}}
+  {{#else/}}
+{{/switch}}
+
+<a
+  href="{{ product.url | default(`javascript:;`) }}"
+  style="--background-color:{{ block.settings.background_color.hex }};"
+  class="
+    {{ block.settings.typography }}
+    block-product-title
+    text-{{ block.settings.text_align }}
+    {{ block.settings | class_list() }}
+    {{#if !settings.product_desktop_title_show }}hidden-desktop{{/if}}
+    {{#if !settings.product_mobile_title_show }}hidden-mobile{{/if}}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <span style="--max-row:{{ max_row }};">{{ product.title | default(placeholder_title) }}</span>
+</a>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_title.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_title.settings.product.label",
+      "info": "t:blocks.product_title.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product_title.settings.typography.label",
+      "id": "typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_title.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_title.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_title.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_title.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_title.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_title.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_title.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_title.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_title.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_title.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_title.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_title.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_title.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_title.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_title.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:blocks.product_title.settings.text_align.label",
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:blocks.product_title.settings.background_color.label",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product_title.settings.spacing.label",
+      "default": {
+        "padding-top": "4.8px",
+        "padding-right": "0px",
+        "padding-bottom": "4.8px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_title.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_title.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

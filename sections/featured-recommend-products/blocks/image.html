@@ -1,0 +1,94 @@
+<div
+  class="
+    featured-recommend-products__image-wrapper
+    {{#if block.settings.show_line }}featured-recommend-products__image-wrapper--show-line{{/if}}
+    product-card-border-shadow
+    {{ block.settings | class_list() }}
+  "
+  style="
+    flex-shrink: 0;
+    --image-object-fit: {{ block.settings.image_fit }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#var image_class = "featured-recommend-products__image" /}}
+  {{#var image_placeholder_class = "featured-recommend-products__image-placeholder" /}}
+  {{#if block.settings.mobile_image }}
+    {{#set image_class = image_class | append(" hidden-mobile") /}}
+    {{#set image_placeholder_class = image_placeholder_class | append(" hidden-mobile") /}}
+  {{/if}}
+
+  {{#if block.settings.image }}
+    {{#component "image" class=image_class data=block.settings.image desktop_size="1/4" mobile_size="100vw" /}}
+  {{#else/}}
+    {{#placeholder_svg "image" class=image_placeholder_class /}}
+  {{/if}}
+
+  {{#if block.settings.mobile_image }}
+    {{#component
+      "image"
+      class="featured-recommend-products__image hidden-desktop"
+      data=block.settings.mobile_image
+      desktop_size="1/4"
+      mobile_size="100vw"
+    /}}
+  {{#else if !block.settings.image /}}
+    {{#placeholder_svg "image" class="featured-recommend-products__image hidden-desktop" /}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_recommend_products.blocks.image.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "image",
+      "id": "image",
+      "label": "t:sections.featured_recommend_products.blocks.image.settings.image.label",
+      "info": "t:sections.featured_recommend_products.blocks.image.settings.image.info"
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": "t:sections.featured_recommend_products.blocks.image.settings.mobile_image.label",
+      "info": "t:sections.featured_recommend_products.blocks.image.settings.mobile_image.info"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "t:sections.featured_recommend_products.blocks.image.settings.image_fit.label",
+      "default": "cover",
+      "options": [
+        {
+          "value": "contain",
+          "label": "t:sections.featured_recommend_products.blocks.image.settings.image_fit.options_0.label"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.featured_recommend_products.blocks.image.settings.image_fit.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "show_line",
+      "label": "t:sections.featured_recommend_products.blocks.image.settings.show_line.label",
+      "default": true
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_recommend_products.blocks.image.settings.size.label",
+      "default": {
+        "@media (--mobile)": {
+          "width": "auto"
+        },
+        "width": "30%",
+        "height": "auto"
+      }
+    }
+  ]
+}
+{{/schema}}

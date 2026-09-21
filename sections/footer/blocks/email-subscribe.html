@@ -1,0 +1,160 @@
+<div
+  class="
+    footer__email-subscribe
+    {{ block.settings | class_list() }}
+    text-{{ block.settings.text_align }}
+    footer__email-subscribe--{{ block.settings.element_size }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.title }}
+    <h3 class="footer__email-subscribe-title {{ block.settings.title_typography }} rte">
+      {{{ block.settings.title }}}
+    </h3>
+
+    {{#content "blocks" /}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.footer.blocks.email_subscribe.name",
+  "icon": "email",
+  "tag": "",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "t:sections.footer.blocks.email_subscribe.settings.title.label",
+      "default": "Subscribe today and get 10% off your first purchase"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "element_size",
+      "label": "t:sections.footer.blocks.email_subscribe.settings.element_size.label",
+      "default": "small",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.element_size.options_0.label"
+        },
+        {
+          "value": "middle",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.element_size.options_1.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.footer.blocks.email_subscribe.settings.element_size.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:sections.footer.blocks.email_subscribe.settings.text_align.label",
+      "default": "left"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.footer.blocks.email_subscribe.settings.size.label",
+      "default": {
+        "width": "30%",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "email-subscription",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.blocks.email_subscribe.presets.presets_0.name",
+      "block": [
+        {
+          "type": "email-subscription",
+          "settings": {
+            "size": {
+              "width": "100%"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

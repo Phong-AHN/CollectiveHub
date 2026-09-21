@@ -1,0 +1,136 @@
+{{~#if taxonomy_collection ~}}
+  <ul
+    class="
+      {{ block.settings.typography }}
+      product-detail__breadcrumb
+      quick-add-modal-hidden
+      {{#if !block.settings.show_breadcrumb_desktop }}hidden-desktop{{/if}}
+      {{#if !block.settings.show_breadcrumb_mobile }}hidden-mobile{{/if}}
+      {{ block.settings | class_list() }}
+    "
+    style="--breadcrumb-column-gap: {{ block.settings.layout | css_var(`column-gap`) }};"
+  >
+    <li class="product-detail__breadcrumb-item">
+      
+      <a href="{{ routes.root_url }}" class="breadcrumb-label">
+        {{ "general.general.home" | t() }}
+      </a>
+    </li>
+
+    {{#component "product/breadcrumb-item" data=taxonomy_collection is_last=true /}}
+  </ul>
+{{~/if~}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_breadcrumb.name",
+  "tag": "",
+  "settings": [
+    {
+      "label": "t:blocks.product..detail_breadcrumb.settings.show_breadcrumb_desktop.label",
+      "id": "show_breadcrumb_desktop",
+      "type": "switch",
+      "default": true
+    },
+    {
+      "label": "t:blocks.product..detail_breadcrumb.settings.show_breadcrumb_mobile.label",
+      "id": "show_breadcrumb_mobile",
+      "type": "switch",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.product..detail_breadcrumb.settings.typography.label",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_breadcrumb.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.product..detail_breadcrumb.settings.layout.label",
+      "default": {
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "row-gap": "5px",
+        "column-gap": "10px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product..detail_breadcrumb.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_breadcrumb.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

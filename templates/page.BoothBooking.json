@@ -1,0 +1,558 @@
+{
+  "sections": {
+    "17884019047152ff72c6": {
+      "type": "booth-booking",
+      "settings": {
+        "border_radius": 0,
+        "button_text": "Book Your Booth",
+        "color_scheme": "scheme-7",
+        "consent": "denied",
+        "description": "\u003cp\u003eBrowse the live floor plan, check which tables are still open, then lock in your spot.\u003c/p\u003e",
+        "description_typography": "body3",
+        "embed_mode": "iframe",
+        "error_text": "The floor plan could not be loaded.",
+        "fallback_text": "Open the floor plan in a new tab",
+        "floorplan_url": "https://collectivehubevent-9-20.expofp.com",
+        "full_width": false,
+        "heading": "Pick Your Booth",
+        "heading_typography": "title2",
+        "height": 720,
+        "height_mobile": 520,
+        "layout": {
+          "@media (--mobile)": {
+            "column-gap": "16px",
+            "row-gap": "16px"
+          },
+          "align-items": "stretch",
+          "column-gap": "24px",
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "justify-content": "center",
+          "row-gap": "24px"
+        },
+        "load_button_text": "Open floor plan",
+        "load_mode": "view",
+        "loading_text": "Loading the floor plan…",
+        "show_button": false,
+        "size": {
+          "height": "auto",
+          "width": "100%"
+        },
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-block-end": "40px",
+            "padding-block-start": "40px",
+            "padding-inline-end": "20px",
+            "padding-inline-start": "20px"
+          },
+          "padding-block-end": "60px",
+          "padding-block-start": "60px",
+          "padding-inline-end": "70px",
+          "padding-inline-start": "70px"
+        },
+        "text_align": "center"
+      },
+      "disabled": false,
+      "blocks": {},
+      "name": "t:sections.booth_booking.presets.presets_0.name"
+    },
+    "178938804928726d012a": {
+      "type": "payment-gateway-setup",
+      "settings": {
+        "api_url": "https://6aa7e0369b08676cd32b9a36.mockapi.io/key",
+        "button_text": "Save \u0026 Connect",
+        "choice_label": "Which gateway are you connecting?",
+        "color_scheme": "scheme-2",
+        "default_gateway": "paypal",
+        "description": "\u003cp\u003eFollow the guide for your provider, then connect it below. This step only needs to be done once.\u003c/p\u003e",
+        "design_mode_text": "Saving is disabled inside the theme editor preview.",
+        "doc_link_text": "Read the instructions",
+        "error_text": "We could not save your details. Please try again.",
+        "heading": "Set Up Your Payment Gateway",
+        "heading_typography": "title2",
+        "hide_when_configured": true,
+        "layout": {
+          "@media (--mobile)": {
+            "column-gap": "16px",
+            "row-gap": "16px"
+          },
+          "align-items": "stretch",
+          "column-gap": "24px",
+          "flex-direction": "column",
+          "flex-wrap": "nowrap",
+          "justify-content": "center",
+          "row-gap": "24px"
+        },
+        "note": "Your credentials are sent straight to your own configuration endpoint.",
+        "paypal_client_id_label": "PayPal Client ID",
+        "paypal_doc_text": "How to create a PayPal pay button and get your credentials.",
+        "paypal_doc_title": "PayPal",
+        "paypal_doc_url": "https://expofp.com/pages/paypal-paybutton",
+        "paypal_secret_label": "PayPal Secret",
+        "required_text": "Please fill in every field before saving.",
+        "size": {
+          "height": "auto",
+          "width": "100%"
+        },
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-block-end": "40px",
+            "padding-block-start": "40px",
+            "padding-inline-end": "20px",
+            "padding-inline-start": "20px"
+          },
+          "padding-block-end": "60px",
+          "padding-block-start": "60px",
+          "padding-inline-end": "70px",
+          "padding-inline-start": "70px"
+        },
+        "stripe_api_key_label": "Stripe API Key",
+        "stripe_doc_text": "How to connect Stripe and find your API key.",
+        "stripe_doc_title": "Stripe",
+        "stripe_doc_url": "https://expofp.com/pages/stripe",
+        "success_text": "Saved. Your payment gateway is connected."
+      },
+      "disabled": true,
+      "blocks": {},
+      "name": "t:sections.payment_gateway_setup.presets.presets_0.name"
+    },
+    "1789714254022ec5f714": {
+      "type": "image-with-text",
+      "settings": {
+        "color_scheme": "scheme-7",
+        "layout": {
+          "@media (--mobile)": {
+            "align-items": "center",
+            "column-gap": "10px",
+            "flex-direction": "column",
+            "flex-wrap": "nowrap",
+            "justify-content": "center",
+            "row-gap": "20px"
+          },
+          "align-items": "center",
+          "column-gap": "70px",
+          "flex-direction": "row",
+          "flex-wrap": "nowrap",
+          "justify-content": "center",
+          "row-gap": "50px"
+        },
+        "overlap": false,
+        "size": {
+          "height": "auto",
+          "width": "100%"
+        },
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-block-end": "30px",
+            "padding-block-start": "30px",
+            "padding-inline-end": "20px",
+            "padding-inline-start": "20px"
+          },
+          "padding-block-end": "70px",
+          "padding-block-start": "70px",
+          "padding-inline-end": "70px",
+          "padding-inline-start": "70px"
+        }
+      },
+      "disabled": false,
+      "blocks": {
+        "17897142540238be9072": {
+          "type": "$group",
+          "settings": {
+            "color_scheme": "scheme-5",
+            "layout": {
+              "@media (--mobile)": {
+                "column-gap": "8px",
+                "row-gap": "10px"
+              },
+              "align-items": "flex-start",
+              "column-gap": "20px",
+              "flex-direction": "column",
+              "flex-wrap": "nowrap",
+              "justify-content": "center",
+              "row-gap": "10px"
+            },
+            "size": {
+              "@media (--mobile)": {
+                "width": "auto"
+              },
+              "height": "auto",
+              "width": "50%"
+            },
+            "spacing": {
+              "@media (--mobile)": {
+                "padding-block-end": "0px",
+                "padding-block-start": "0px",
+                "padding-inline-end": "0px",
+                "padding-inline-start": "0px"
+              },
+              "padding-block-end": "0px",
+              "padding-block-start": "0px",
+              "padding-inline-end": "0px",
+              "padding-inline-start": "0px"
+            }
+          },
+          "blocks": {
+            "178971425402358d8e7f": {
+              "type": "rich-text",
+              "settings": {
+                "content": "Lock in your booth for the upcoming Collective Hub Show. Scan to pay and finalize your vendor registration instantly.",
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "0px",
+                    "padding-block-start": "0px",
+                    "padding-inline-end": "0px",
+                    "padding-inline-start": "0px"
+                  },
+                  "padding-block-end": "0px",
+                  "padding-block-start": "10px",
+                  "padding-inline-end": "0px",
+                  "padding-inline-start": "0px"
+                },
+                "text_align": "left",
+                "typography": "body3"
+              },
+              "blocks": {}
+            },
+            "17897142540237c50c65": {
+              "type": "heading",
+              "settings": {
+                "text": "Complete Your Payment",
+                "text_align": "left",
+                "text_align_mobile": "left",
+                "typography": "title2"
+              },
+              "blocks": {}
+            },
+            "17897142540239f78451": {
+              "type": "group",
+              "settings": {
+                "color_scheme": "scheme-3",
+                "inherit_color_scheme": true,
+                "layout": {
+                  "@media (--mobile)": {
+                    "row-gap": "10px"
+                  },
+                  "align-items": "center",
+                  "flex-direction": "column",
+                  "flex-wrap": "nowrap",
+                  "justify-content": "center",
+                  "row-gap": "15px"
+                },
+                "open_in_new_tab": true,
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "10px",
+                    "padding-block-start": "10px",
+                    "padding-inline-end": "0px",
+                    "padding-inline-start": "0px"
+                  },
+                  "padding-block-end": "20px",
+                  "padding-block-start": "20px",
+                  "padding-inline-end": "20px",
+                  "padding-inline-start": "20px"
+                }
+              },
+              "blocks": {
+                "17897142540231acb294": {
+                  "type": "group",
+                  "settings": {
+                    "color_scheme": "scheme-3",
+                    "inherit_color_scheme": true,
+                    "layout": {
+                      "align-items": "center",
+                      "column-gap": "15px",
+                      "flex-direction": "row",
+                      "flex-wrap": "nowrap",
+                      "justify-content": "flex-start"
+                    },
+                    "open_in_new_tab": true,
+                    "size": {
+                      "width": "100%"
+                    },
+                    "spacing": {
+                      "@media (--mobile)": {
+                        "padding-block-end": "0px",
+                        "padding-block-start": "0px",
+                        "padding-inline-end": "0px",
+                        "padding-inline-start": "0px"
+                      },
+                      "padding-block-end": "0px",
+                      "padding-block-start": "0px",
+                      "padding-inline-end": "0px",
+                      "padding-inline-start": "0px"
+                    }
+                  },
+                  "blocks": {
+                    "1789714254023598eb0c": {
+                      "type": "text",
+                      "settings": {
+                        "background_color": "rgba(0,0,0,0)",
+                        "background_opacity": 100,
+                        "border_radius": 0,
+                        "size": {
+                          "height": "auto",
+                          "width": "100%"
+                        },
+                        "spacing": {
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "padding-right": "0px",
+                          "padding-top": "0px"
+                        },
+                        "text": "Get your confirmation email within 24 hours.",
+                        "text_align": "left",
+                        "text_align_mobile": "left",
+                        "typography": "body3",
+                        "use_custom_background_style": true
+                      },
+                      "blocks": {},
+                      "block_order": []
+                    },
+                    "1789714254023c6053d6": {
+                      "type": "icon/icon",
+                      "settings": {
+                        "desktop_width": 26,
+                        "icon": "checkbox",
+                        "image": "shopline://files/images/ico-check.svg",
+                        "mobile_width": 24,
+                        "open_in_new_tab": true,
+                        "size": {
+                          "height": "auto",
+                          "width": "auto"
+                        }
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "1789714254023c6053d6",
+                    "1789714254023598eb0c"
+                  ]
+                },
+                "1789714254023818d76b": {
+                  "type": "group",
+                  "settings": {
+                    "color_scheme": "scheme-3",
+                    "inherit_color_scheme": true,
+                    "layout": {
+                      "align-items": "center",
+                      "column-gap": "15px",
+                      "flex-direction": "row",
+                      "flex-wrap": "nowrap",
+                      "justify-content": "flex-start"
+                    },
+                    "open_in_new_tab": true,
+                    "size": {
+                      "width": "100%"
+                    },
+                    "spacing": {
+                      "@media (--mobile)": {
+                        "padding-block-end": "0px",
+                        "padding-block-start": "0px",
+                        "padding-inline-end": "0px",
+                        "padding-inline-start": "0px"
+                      },
+                      "padding-block-end": "0px",
+                      "padding-block-start": "0px",
+                      "padding-inline-end": "0px",
+                      "padding-inline-start": "0px"
+                    }
+                  },
+                  "blocks": {
+                    "178971425402312e0a0e": {
+                      "type": "text",
+                      "settings": {
+                        "background_color": "rgba(0,0,0,0)",
+                        "background_opacity": 100,
+                        "border_radius": 0,
+                        "size": {
+                          "height": "auto",
+                          "width": "100%"
+                        },
+                        "spacing": {
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "padding-right": "0px",
+                          "padding-top": "0px"
+                        },
+                        "text": "Scan the code with your camera or payment app.",
+                        "text_align": "left",
+                        "text_align_mobile": "left",
+                        "typography": "body3",
+                        "use_custom_background_style": true
+                      },
+                      "blocks": {},
+                      "block_order": []
+                    },
+                    "178971425402356bda79": {
+                      "type": "icon/icon",
+                      "settings": {
+                        "desktop_width": 26,
+                        "icon": "checkbox",
+                        "image": "shopline://files/images/ico-check.svg",
+                        "mobile_width": 24,
+                        "open_in_new_tab": true,
+                        "size": {
+                          "height": "auto",
+                          "width": "auto"
+                        }
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "178971425402356bda79",
+                    "178971425402312e0a0e"
+                  ]
+                },
+                "17897142540238ab309e": {
+                  "type": "group",
+                  "settings": {
+                    "color_scheme": "scheme-3",
+                    "inherit_color_scheme": true,
+                    "layout": {
+                      "align-items": "center",
+                      "column-gap": "15px",
+                      "flex-direction": "row",
+                      "flex-wrap": "nowrap",
+                      "justify-content": "flex-start"
+                    },
+                    "open_in_new_tab": true,
+                    "size": {
+                      "width": "100%"
+                    },
+                    "spacing": {
+                      "@media (--mobile)": {
+                        "padding-block-end": "0px",
+                        "padding-block-start": "0px",
+                        "padding-inline-end": "0px",
+                        "padding-inline-start": "0px"
+                      },
+                      "padding-block-end": "0px",
+                      "padding-block-start": "0px",
+                      "padding-inline-end": "0px",
+                      "padding-inline-start": "0px"
+                    }
+                  },
+                  "blocks": {
+                    "17897142540238e69bb8": {
+                      "type": "icon/icon",
+                      "settings": {
+                        "desktop_width": 26,
+                        "icon": "checkbox",
+                        "image": "shopline://files/images/ico-check.svg",
+                        "mobile_width": 24,
+                        "open_in_new_tab": true,
+                        "size": {
+                          "height": "auto",
+                          "width": "auto"
+                        }
+                      },
+                      "blocks": {}
+                    },
+                    "1789714254023f08a0d5": {
+                      "type": "text",
+                      "settings": {
+                        "background_color": "rgba(0,0,0,0)",
+                        "background_opacity": 100,
+                        "border_radius": 0,
+                        "size": {
+                          "height": "auto",
+                          "width": "100%"
+                        },
+                        "spacing": {
+                          "padding-bottom": "0px",
+                          "padding-left": "0px",
+                          "padding-right": "0px",
+                          "padding-top": "0px"
+                        },
+                        "text": "Add your Shop Name in the notes.",
+                        "text_align": "left",
+                        "text_align_mobile": "left",
+                        "typography": "body3",
+                        "use_custom_background_style": true
+                      },
+                      "blocks": {},
+                      "block_order": []
+                    }
+                  },
+                  "block_order": [
+                    "17897142540238e69bb8",
+                    "1789714254023f08a0d5"
+                  ]
+                }
+              },
+              "block_order": [
+                "1789714254023818d76b",
+                "17897142540238ab309e",
+                "17897142540231acb294"
+              ]
+            }
+          },
+          "block_order": [
+            "17897142540237c50c65",
+            "178971425402358d8e7f",
+            "17897142540239f78451"
+          ]
+        },
+        "1789714254023b59c79a": {
+          "type": "image/image",
+          "settings": {
+            "aspect_ratio": "1/1",
+            "image": "shopline://files/images/payment-method.png",
+            "size": {
+              "@media (--mobile)": {
+                "width": "auto"
+              },
+              "height": "auto",
+              "width": "50%"
+            }
+          },
+          "disabled": false,
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "1789714254023b59c79a",
+        "17897142540238be9072"
+      ],
+      "custom_css": [
+        ".block-image img {aspect-ratio: unset;}",
+        ".image-with-text-section {background: #F1E6D8}"
+      ],
+      "name": "t:sections.image_with_text.presets.presets_0.name"
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": true,
+      "blocks": {}
+    },
+    "undefined": {
+      "type": "undefined",
+      "settings": {},
+      "disabled": false,
+      "blocks": {}
+    }
+  },
+  "order": [
+    "main-page",
+    "17884019047152ff72c6",
+    "178938804928726d012a",
+    "1789714254022ec5f714"
+  ]
+}

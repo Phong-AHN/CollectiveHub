@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    },
+    "undefined": {
+      "type": "",
+      "settings": {},
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-page"
+  ]
+}

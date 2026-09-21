@@ -1,0 +1,36 @@
+{{#component "product/buy-buttons" product=props.product current_variant=props.current_variant block=block /}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_buy_buttons.name",
+  "tag": "",
+  "icon": "button",
+  "settings": [
+    {
+      "id": "button_position",
+      "label": "t:blocks.product..detail_buy_buttons.settings.button_position.label",
+      "type": "select",
+      "options": [
+        {
+          "value": "embed",
+          "label": "t:blocks.product..detail_buy_buttons.settings.button_position.options_0.label"
+        },
+        {
+          "value": "float",
+          "label": "t:blocks.product..detail_buy_buttons.settings.button_position.options_1.label"
+        },
+        {
+          "value": "both",
+          "label": "t:blocks.product..detail_buy_buttons.settings.button_position.options_2.label"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_buy_buttons.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

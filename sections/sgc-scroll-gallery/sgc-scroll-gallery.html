@@ -1,0 +1,301 @@
+{{#component "./components/importmap" /}}
+{{#component "./components/script" src="./sgc-scroll-gallery-list.js" | asset_url() /}}
+
+{{#component "./components/stylesheet" src="./sgc-scroll-gallery.css" | asset_url() /}}
+
+<style>{{{ section.settings.title_font_family | font_face() }}}</style>
+
+<div
+  class="
+    sgc-scroll-gallery
+    {{#if !section.settings.desktop_show }}sgc-hidden-desktop{{/if}}
+    {{#if !section.settings.mobile_show }}sgc-hidden-mobile{{/if}}
+    {{ block.settings | class_list() }}
+  "
+  style="
+    --desktop-max-width: {{ section.settings.desktop_max_width }}px;
+    --background-color: {{ section.settings.background_color.red }}, {{ section.settings.background_color.green }}, {{
+      section.settings.background_color.blue
+    }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div class="sgc-scroll-gallery-section">
+    {{#if section.settings.title }}
+      <div
+        class="sgc-scroll-gallery-text"
+        style="
+          --title-color: {{ section.settings.title_color.red }}, {{ section.settings.title_color.green }}, {{
+            section.settings.title_color.blue
+          }};
+          --title-font-family: '{{ section.settings.title_font_family.family }}', '{{
+            section.settings.title_font_family.fallback_families
+          }}';
+          --title-font-size: {{ section.settings.title_desktop_font_size }}px;
+          --title-mobile-font-size: {{ section.settings.title_mobile_font_size }}px;
+          --title-letter-spacing: {{ section.settings.title_letter_spacing | divided_by(1000, integer = false) }}em;
+          --title-line-height: {{ section.settings.title_line_height }};
+        "
+      >
+        <h2 class="sgc-scroll-gallery-title sgc-scroll-gallery-text-align-{{ section.settings.text_align }}">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+    {{/if}}
+    {{#if section.settings.description }}
+      <div
+        class="
+          sgc-scroll-gallery-description sgc-scroll-gallery-text sgc-scroll-gallery-text-align-{{
+            section.settings.text_align
+          }}
+        "
+      >
+        {{{ section.settings.description }}}
+      </div>
+    {{/if}}
+
+    <sgc-scroll-gallery-list class="sgc-scroll-gallery-list">
+      {{#blocks}}
+        {{#block/}}
+      {{/blocks}}
+    </sgc-scroll-gallery-list>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_gallery.name",
+  "icon": "gallery",
+  "class": "sgc-scroll-gallery",
+  "settings": [
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_gallery.settings.desktop_show.label",
+      "id": "desktop_show",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_gallery.settings.mobile_show.label",
+      "id": "mobile_show",
+      "default": true
+    },
+    {
+      "type": "text",
+      "label": "t:sections.sgc_scroll_gallery.settings.title.label",
+      "id": "title",
+      "default": "Gallery"
+    },
+    {
+      "type": "richtext",
+      "label": "t:sections.sgc_scroll_gallery.settings.description.label",
+      "id": "description",
+      "default": "This is a short description"
+    },
+    {
+      "type": "text_align",
+      "label": "t:sections.sgc_scroll_gallery.settings.text_align.label",
+      "id": "text_align",
+      "default": "center"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_gallery.settings.group_header_0.label"
+    },
+    {
+      "type": "font",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_font_family.label",
+      "id": "title_font_family",
+      "default": "Poppins"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_color.label",
+      "id": "title_color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_desktop_font_size.label",
+      "id": "title_desktop_font_size",
+      "default": 32,
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_mobile_font_size.label",
+      "id": "title_mobile_font_size",
+      "default": 24,
+      "min": 22,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_letter_spacing.label",
+      "id": "title_letter_spacing",
+      "default": 0,
+      "min": -75,
+      "max": 250,
+      "step": 25,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.settings.title_line_height.label",
+      "id": "title_line_height",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_gallery.settings.group_header_1.label"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_gallery.settings.background_color.label",
+      "id": "background_color",
+      "default": "无颜色"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.settings.desktop_max_width.label",
+      "id": "desktop_max_width",
+      "default": 1420,
+      "min": 1000,
+      "max": 1920,
+      "step": 1,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$gallery-list",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_gallery.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$gallery-list",
+          "blocks": [
+            {
+              "type": "$gallery-item",
+              "blocks": [
+                {
+                  "type": "$content-group",
+                  "blocks": [
+                    {
+                      "type": "$subtitle",
+                      "settings": {
+                        "text_align": "left",
+                        "desktop_title": "Improved",
+                        "font_family": "Montserrat 600",
+                        "desktop_font_size": 16,
+                        "mobile_font_size": 14,
+                        "letter_spacing": 300,
+                        "line_height": 1,
+                        "color": "#FFFFFF"
+                      }
+                    },
+                    {
+                      "type": "$description"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$gallery-item",
+              "blocks": [
+                {
+                  "type": "$content-group",
+                  "blocks": [
+                    {
+                      "type": "$subtitle",
+                      "settings": {
+                        "text_align": "left",
+                        "desktop_title": "Improved",
+                        "font_family": "Montserrat 600",
+                        "desktop_font_size": 16,
+                        "mobile_font_size": 14,
+                        "letter_spacing": 300,
+                        "line_height": 1,
+                        "color": "#FFFFFF"
+                      }
+                    },
+                    {
+                      "type": "$description"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$gallery-item",
+              "blocks": [
+                {
+                  "type": "$content-group",
+                  "blocks": [
+                    {
+                      "type": "$subtitle",
+                      "settings": {
+                        "text_align": "left",
+                        "desktop_title": "Improved",
+                        "font_family": "Montserrat 600",
+                        "desktop_font_size": 16,
+                        "mobile_font_size": 14,
+                        "letter_spacing": 300,
+                        "line_height": 1,
+                        "color": "#FFFFFF"
+                      }
+                    },
+                    {
+                      "type": "$description"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$gallery-item",
+              "blocks": [
+                {
+                  "type": "$content-group",
+                  "blocks": [
+                    {
+                      "type": "$subtitle",
+                      "settings": {
+                        "text_align": "left",
+                        "desktop_title": "Improved",
+                        "font_family": "Montserrat 600",
+                        "desktop_font_size": 16,
+                        "mobile_font_size": 14,
+                        "letter_spacing": 300,
+                        "line_height": 1,
+                        "color": "#FFFFFF"
+                      }
+                    },
+                    {
+                      "type": "$description"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "category": "Section Gallery"
+    }
+  ]
+}
+{{/schema}}

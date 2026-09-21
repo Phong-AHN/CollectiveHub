@@ -1,0 +1,77 @@
+<div class="block-map-button-group {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.map.blocks.btn_group.name",
+  "icon": "button",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.map.blocks.btn_group.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "wrap",
+        "align-items": "center",
+        "justify-content": "flex-start",
+        "column-gap": "20px",
+        "row-gap": "20px",
+        "@media (--mobile)": {
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.map.blocks.btn_group.settings.spacing.label",
+      "default": {
+        "padding-top": 0,
+        "padding-right": 0,
+        "padding-bottom": 0,
+        "padding-left": 0
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.map.blocks.btn_group.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$custom-btn",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.map.blocks.btn_group.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$custom-btn",
+          "settings": {
+            "text": "Get direcions"
+          }
+        },
+        {
+          "type": "$custom-btn",
+          "settings": {
+            "text": "LEARN MORE",
+            "style": "secondary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

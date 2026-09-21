@@ -1,0 +1,160 @@
+{{#component "stylesheet" src="./product-inventory.css" | asset_url() /}}
+
+{{#var product = block.settings.product | default(props.product) /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+{{#var current_variant /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+<theme-product-inventory
+  class="product-inventory {{ block.settings.typography }} title-font-bold hidden-empty"
+  data-rerender-id="{{ block.id }}-inventory"
+  {{{ block.shopline_attributes }}}
+>
+  {{~#if current_variant.inventory_management }}
+    {{#if current_variant.inventory_quantity > 0 }}
+      {{#if current_variant.inventory_quantity <= block.settings.inventory_threshold }}
+        <span class="low-stock">
+          {{#if block.settings.show_inventory_quantity }}
+            {{
+              "products.product_details.inventory_low_stock_show_count" |
+                t(quantity = current_variant.inventory_quantity)
+            }}
+          {{#else/}}
+            {{ "products.product_details.inventory_low_stock" | t() }}
+          {{/if}}
+        </span>
+      {{#else/}}
+        <span class="in-stock">
+          {{#if block.settings.show_inventory_quantity }}
+            {{
+              "products.product_details.inventory_in_stock_show_count" |
+                t(quantity = current_variant.inventory_quantity)
+            }}
+          {{#else/}}
+            {{ "products.product_details.inventory_in_stock" | t() }}
+          {{/if}}
+        </span>
+      {{/if}}
+    {{#else/}}
+      <span class="out-stock">
+        {{#if current_variant.inventory_policy == "continue" }}
+          {{ "products.product_details.inventory_out_of_stock_continue_selling" | t() }}
+        {{#else/}}
+          {{ "products.product_details.inventory_out_of_stock" | t() }}
+        {{/if}}
+      </span>
+    {{/if}}
+  {{/if~}}
+</theme-product-inventory>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_inventory.name",
+  "tag": "",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_inventory.settings.product.label",
+      "info": "t:blocks.product_inventory.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "range",
+      "id": "inventory_threshold",
+      "label": "t:blocks.product_inventory.settings.inventory_threshold.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "info": "t:blocks.product_inventory.settings.inventory_threshold.info",
+      "default": 10
+    },
+    {
+      "type": "switch",
+      "id": "show_inventory_quantity",
+      "label": "t:blocks.product_inventory.settings.show_inventory_quantity.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product_inventory.settings.typography.label",
+      "id": "typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_inventory.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_inventory.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_inventory.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_inventory.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_inventory.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_inventory.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_inventory.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_inventory.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_inventory.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_inventory.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_inventory.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_inventory.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_inventory.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_inventory.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_inventory.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_inventory.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

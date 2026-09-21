@@ -1,0 +1,76 @@
+<div class="image-promotion__content" {{{ block.shopline_attributes }}}>
+  {{#if block.settings.url }}
+    <a href="{{ block.settings.url }}" class="image-promotion__link"></a>
+  {{/if}}
+
+  {{#if block.settings.image }}
+    {{#component "image" data=block.settings.image class="image-promotion__bg-mage" /}}
+  {{#else/}}
+    {{#placeholder_svg "image" class="image-promotion__bg-mage" /}}
+  {{/if}}
+
+  <div class="image-promotion__content-inner {{ block.settings | class_list() }}">
+    {{#blocks}}
+      {{#block/}}
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_promotion.blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "image",
+      "id": "image",
+      "label": "t:sections.image_promotion.blocks.group.settings.image.label"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:sections.image_promotion.blocks.group.settings.url.label"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.image_promotion.blocks.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "0px",
+        "column-gap": "0px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_promotion.blocks.group.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "40px",
+        "padding-bottom": "0px",
+        "padding-left": "40px"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$heading",
+      "limit": 1
+    },
+    {
+      "type": "$subheading",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_promotion.blocks.group.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,36 @@
+{{#var links = props.links /}}
+{{#var highlighted_menu_items_color = props.highlighted_menu_items_color /}}
+{{#var highlighted_menu_items_background_color = props.highlighted_menu_items_background_color /}}
+
+<theme-nav-bar
+  style="
+    {{#if highlighted_menu_items_color }}
+      --nav-bar-highlighted-color: {{ highlighted_menu_items_color.rgb }};
+    {{/if}}
+    {{#if highlighted_menu_items_background_color }}
+      --nav-bar-highlighted-background-color: {{ highlighted_menu_items_background_color.rgb }};
+    {{/if}}
+  "
+>
+  <nav class="header-nav">
+    <ul class="header-nav__menu">
+      {{#for link in links }}
+        {{#component
+          "./nav-item"
+          link=link
+          level_2_menu_text_size=props.level_2_menu_text_size
+          level_2_menu_font_bold=props.level_2_menu_font_bold
+          level_3_menu_text_size=props.level_3_menu_text_size
+          enable_highlighted_menu_items=props.enable_highlighted_menu_items
+          highlighted_menu_items_pattern=props.highlighted_menu_items_pattern
+          replace_nav_image_items=props.replace_nav_image_items
+        /}}
+      {{/for}}
+
+      
+      {{#if props.append_super_gallery_navs }}
+        {{{ props.append_super_gallery_navs }}}
+      {{/if}}
+    </ul>
+  </nav>
+</theme-nav-bar>

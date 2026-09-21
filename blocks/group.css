@@ -1,0 +1,11 @@
+.block-group {
+  position: relative;
+  color: rgb(var(--color-text));
+  background-color: rgb(var(--color-background));
+}
+
+.block-group > .url {
+  position: absolute;
+  inset: 0;
+  display: block;
+}

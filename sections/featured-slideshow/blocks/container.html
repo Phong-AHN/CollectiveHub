@@ -1,0 +1,252 @@
+{{#var mobile_image = block.settings.mobile_image /}}
+{{#var desktop_image = block.settings.desktop_image /}}
+{{#var image_lazy = block.index0 != 0 /}}
+
+{{#capture mobile_image_element }}
+  {{#if mobile_image }}
+    {{#component "image" sizes="100%" data=mobile_image lazy=image_lazy /}}
+  {{#else/}}
+    {{#placeholder_svg "image" /}}
+  {{/if}}
+{{/capture}}
+
+{{#capture desktop_image_element }}
+  {{#if desktop_image }}
+    {{#component "image" sizes="100%" data=desktop_image lazy=image_lazy /}}
+  {{#else/}}
+    {{#placeholder_svg "image" /}}
+  {{/if}}
+{{/capture}}
+
+
+{{#var text_group_width = "0px" /}}
+{{#var text_group_height = "0px" /}}
+{{#blocks}}
+  {{#if forblock.type == "$text-group" }}
+    {{#set text_group_width = forblock.settings.size | css_var("width") /}}
+    {{#set text_group_height = forblock.settings.size | css_var("height") /}}
+  {{/if}}
+{{/blocks}}
+
+<li
+  class="featured-slideshow__item"
+  style="--text-group-width: {{ text_group_width }};--text-group-height: {{ text_group_height }};"
+>
+  <div class="{{ block.settings | class_list() }} featured-slideshow__container" {{{ block.shopline_attributes }}}>
+    {{#blocks}}
+      {{#block
+        mobile_image_element=mobile_image_element
+        desktop_image_element=desktop_image_element
+        url=block.settings.url
+        show_text_mask=block.settings.show_text_mask
+        text_mask_color=block.settings.text_mask_color
+        image_mask_opacity=block.settings.image_mask_opacity
+      /}}
+    {{/blocks}}
+  </div>
+</li>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_slideshow.blocks.container.name",
+  "icon": "image",
+  "tag": "",
+  "limit": 10,
+  "settings": [
+    {
+      "type": "image",
+      "id": "desktop_image",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.desktop_image.label",
+      "info": "t:sections.featured_slideshow.blocks.container.settings.desktop_image.info"
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.mobile_image.label",
+      "info": "t:sections.featured_slideshow.blocks.container.settings.mobile_image.info"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.url.label"
+    },
+    {
+      "type": "range",
+      "id": "image_mask_opacity",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.image_mask_opacity.label",
+      "default": 30,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%"
+    },
+    {
+      "type": "switch",
+      "id": "show_text_mask",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.show_text_mask.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.text_mask_color.label",
+      "id": "text_mask_color",
+      "default": "deep",
+      "options": [
+        {
+          "label": "t:sections.featured_slideshow.blocks.container.settings.text_mask_color.options_0.label",
+          "value": "deep"
+        },
+        {
+          "label": "t:sections.featured_slideshow.blocks.container.settings.text_mask_color.options_1.label",
+          "value": "light"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "0px",
+        "column-gap": "0px",
+        "@media (--mobile)": {
+          "flex-direction": "column"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_slideshow.blocks.container.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$image-group",
+      "limit": 1
+    },
+    {
+      "type": "$text-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_slideshow.blocks.container.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$image-group",
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "Subtitle",
+                "size": {
+                  "width": "auto"
+                },
+                "spacing": {
+                  "padding-top": "0px",
+                  "padding-right": "0px",
+                  "padding-bottom": "0px",
+                  "padding-left": "0px"
+                }
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Two Line\nTitle Slide",
+                "spacing": {
+                  "padding-top": "0px",
+                  "padding-right": "0px",
+                  "padding-bottom": "0px",
+                  "padding-left": "0px"
+                }
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "Shop Now",
+                "style": "primary"
+              }
+            }
+          ]
+        },
+        {
+          "type": "$text-group",
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "Subtitle",
+                "spacing": {
+                  "padding-top": "0px",
+                  "padding-right": "0px",
+                  "padding-bottom": "0px",
+                  "padding-left": "0px"
+                },
+                "size": {
+                  "width": "auto"
+                }
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Two Line\nTitle Slide",
+                "spacing": {
+                  "padding-top": "0px",
+                  "padding-right": "0px",
+                  "padding-bottom": "0px",
+                  "padding-left": "0px"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "And optional subtext",
+                "spacing": {
+                  "padding-top": "0px",
+                  "padding-right": "0px",
+                  "padding-bottom": "0px",
+                  "padding-left": "0px"
+                },
+                "size": {
+                  "width": "auto"
+                }
+              }
+            },
+            {
+              "type": "$line"
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "Shop Now",
+                "style": "link"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,76 @@
+{{#component "stylesheet" src="./image.css" | asset_url() /}}
+{{#var link = block.settings.url | default(`javascript:;`) /}}
+
+<a
+  href="{{ link }}"
+  class="count-down__image full-width hover-scale overflow-hidden hidden-desktop"
+  {{{ block.shopline_attributes }}}
+>
+  {{#var img /}}
+  {{#if block.settings.mobile_image }}
+    {{#set img = block.settings.mobile_image /}}
+  {{#else/}}
+    {{#set img = block.settings.pc_image /}}
+  {{/if}}
+  {{#if img }}
+    {{#component "image" data=img class="hover-scale__image" /}}
+  {{#else/}}
+    {{#placeholder_svg "image" class="empty-image-class" /}}
+  {{/if}}
+</a>
+
+<a
+  href="{{ link }}"
+  class="count-down__image full-width hover-scale overflow-hidden hidden-mobile"
+  {{{ block.shopline_attributes }}}
+  style="width: {{ block.settings.image_width }};"
+>
+  {{#if block.settings.pc_image }}
+    {{#component "image" data=block.settings.pc_image class="hover-scale__image" /}}
+  {{#else/}}
+    {{#placeholder_svg "image" class="empty-image-class" /}}
+  {{/if}}
+</a>
+
+{{#schema}}
+{
+  "name": "t:sections.count_down.blocks.image.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "id": "pc_image",
+      "info": "t:sections.count_down.blocks.image.settings.pc_image.info",
+      "label": "t:sections.count_down.blocks.image.settings.pc_image.label",
+      "type": "image"
+    },
+    {
+      "id": "image_width",
+      "label": "t:sections.count_down.blocks.image.settings.image_width.label",
+      "type": "select",
+      "default": "33%",
+      "options": [
+        {
+          "value": "33%",
+          "label": "t:sections.count_down.blocks.image.settings.image_width.options_0.label"
+        },
+        {
+          "value": "50%",
+          "label": "t:sections.count_down.blocks.image.settings.image_width.options_1.label"
+        }
+      ]
+    },
+    {
+      "id": "mobile_image",
+      "info": "t:sections.count_down.blocks.image.settings.mobile_image.info",
+      "label": "t:sections.count_down.blocks.image.settings.mobile_image.label",
+      "type": "image"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:sections.count_down.blocks.image.settings.url.label"
+    }
+  ]
+}
+{{/schema}}

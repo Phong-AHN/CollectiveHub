@@ -1,0 +1,203 @@
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+{{#component "script" src="./video-list-group.js" | asset_url() /}}
+
+{{#var middle_slide_index = block.blocks_size | divided_by(2, integer = false) | ceil() /}}
+
+<video-list-group class="shopping-video__product-video-list-group" {{{ block.shopline_attributes }}}>
+  <theme-carousel
+    data-scroll-snap-align="center"
+    data-loop="true"
+    data-restore-position="true"
+    data-clone-count="2"
+    class="{{ block.settings | class_list() }}"
+  >
+    <div
+      class="
+        shopping-video__product-video-list-group-track-container {{#if block.settings.indicator_style == "page" }}
+          shopping-video__product-video-list-group-track-container--page
+        {{/if}}
+      "
+    >
+      <ul
+        class="carousel__track shopping-video__product-video-list-group-track-container-wrapper"
+        style="
+          row-gap:{{ block.settings.layout | css_var("row-gap") }};
+          column-gap:{{ block.settings.layout | css_var("column-gap") }};
+        "
+      >
+        {{#blocks}}
+          <li
+            class="
+              shopping-video__product-video-list-group-track-wrapper-item {{#if forblock.index == middle_slide_index }}
+                is-active
+              {{/if}}
+            "
+          >
+            {{#block/}}
+          </li>
+        {{/blocks}}
+      </ul>
+
+      {{#if block.settings.indicator_style == "page" }}
+        <div
+          class="shopping-video__product-video-list-group-track-container-indicator-pager--pages-arrow hidden-mobile"
+        >
+          <button name="previous" data-step="1">
+            {{#component
+              "icons/arrow-transparent-right"
+              class="shopping-video__product-video-list-group-track-container-indicator-pager--arrow-icon--previous"
+            /}}
+          </button>
+          <button name="next" data-step="1">
+            {{#component
+              "icons/arrow-transparent-right"
+              class="shopping-video__product-video-list-group-track-container-indicator-pager--arrow-icon--next"
+            /}}
+          </button>
+        </div>
+      {{/if}}
+    </div>
+
+    <div class="shopping-video__product-video-list-group-track-indicator hidden-mobile">
+      {{#if block.settings.indicator_style == "dot" }}
+        {{#component "carousel-indicator/dot" size=block.blocks_size /}}
+      {{/if}}
+
+      {{#if block.settings.indicator_style == "progress" }}
+        <div class="shopping-video__product-video-list-group-track-indicator-pager--progresses">
+          {{#blocks}}
+            <button
+              class="shopping-video__product-video-list-group-track-indicator-pager--progress"
+              name="pager"
+              data-index="{{ forblock.index0 }}"
+            >
+              <div class="shopping-video__product-video-list-group-track-indicator-pager--progress-inner"></div>
+            </button>
+          {{/blocks}}
+        </div>
+      {{/if}}
+
+      {{#if block.settings.indicator_style == "arrow" }}
+        <div class="shopping-video__product-video-list-group-track-indicator-pager--arrows">
+          <button name="previous" data-step="1">
+            {{#component
+              "icons/arrow-down"
+              class="shopping-video__product-video-list-group-track-indicator-pager--arrow-icon--previous"
+            /}}
+          </button>
+          <button name="next">
+            {{#component
+              "icons/arrow-down"
+              class="shopping-video__product-video-list-group-track-indicator-pager--arrow-icon--next"
+            /}}
+          </button>
+        </div>
+      {{/if}}
+
+      {{#if block.settings.indicator_style == "page" }}
+        <div class="shopping-video__product-video-list-group-track-indicator-pager--pages body2">
+          <span name="current"></span>
+          /
+          <span name="total"></span>
+        </div>
+      {{/if}}
+    </div>
+  </theme-carousel>
+</video-list-group>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.video_list_group.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "select",
+      "id": "indicator_style",
+      "label": "t:sections.shopping_video.blocks.video_list_group.settings.indicator_style.label",
+      "default": "dot",
+      "options": [
+        {
+          "value": "dot",
+          "label": "t:sections.shopping_video.blocks.video_list_group.settings.indicator_style.options_0.label"
+        },
+        {
+          "value": "progress",
+          "label": "t:sections.shopping_video.blocks.video_list_group.settings.indicator_style.options_1.label"
+        },
+        {
+          "value": "arrow",
+          "label": "t:sections.shopping_video.blocks.video_list_group.settings.indicator_style.options_2.label"
+        },
+        {
+          "value": "page",
+          "label": "t:sections.shopping_video.blocks.video_list_group.settings.indicator_style.options_3.label"
+        }
+      ]
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_video.blocks.video_list_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "align-items": "center",
+        "column-gap": "40px",
+        "row-gap": "40px",
+        "@media (--mobile)": {
+          "column-gap": "20px",
+          "row-gap": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$video-group",
+      "limit": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.blocks.video_list_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$video-group",
+          "blocks": [
+            {
+              "type": "$video",
+              "blocks": [
+                {
+                  "type": "$product-text-group",
+                  "blocks": [
+                    {
+                      "type": "$heading"
+                    },
+                    {
+                      "type": "$description",
+                      "settings": {
+                        "text_align": "left"
+                      }
+                    },
+                    {
+                      "type": "$button"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$product-card-group",
+              "blocks": [
+                {
+                  "type": "$product-card"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

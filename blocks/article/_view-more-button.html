@@ -1,0 +1,140 @@
+<div
+  class="
+    block-article-card__button
+    {{ block.settings | class_list() }}
+    {{#if props.has_view_all_button }}hidden-mobile{{/if}}
+  "
+>
+  <span
+    class="
+      block-article-card__view-more-button
+      button button--{{ block.settings.button_style }}
+      {{ block.settings.typography }}
+    "
+    data-open-in-new-tab="{{ block.settings.open_in_new_tab }}"
+  >
+    {{ block.settings.text }}
+  </span>
+  {{#if block.settings.button_style == "link" }}
+    {{#component "icons/arrow-thin" class=block.settings.typography /}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.article..view_more_button.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:blocks.article..view_more_button.settings.text.label",
+      "default": "View more"
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.article..view_more_button.settings.typography.label",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.article..view_more_button.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:blocks.article..view_more_button.settings.button_style.label",
+      "default": "link",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:blocks.article..view_more_button.settings.button_style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:blocks.article..view_more_button.settings.button_style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:blocks.article..view_more_button.settings.button_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "open_in_new_tab",
+      "label": "t:blocks.article..view_more_button.settings.open_in_new_tab.label",
+      "default": true
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.article..view_more_button.settings.spacing.label"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.article..view_more_button.settings.size.label"
+    }
+  ]
+}
+{{/schema}}

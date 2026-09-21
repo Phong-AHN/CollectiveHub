@@ -1,0 +1,55 @@
+{{#capture media_layer }}{{#content "blocks" /}}{{/capture}}
+
+<div
+  class="featured-product__media product-detail__col {{ block.settings | class_list() }}"
+  style="--detail-col-width: {{ block.settings.size | css_var(`width`) }};"
+>
+  {{#component
+    "product/media"
+    block=block
+    product=props.product
+    current_variant=props.current_variant
+    section=section
+    media_layer=media_layer
+  /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_product.blocks.product_media.name",
+  "tag": "",
+  "icon": "textColumnsWithIcons",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "video_loop",
+      "label": "t:sections.featured_product.blocks.product_media.settings.video_loop.label",
+      "default": false
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_product.blocks.product_media.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-media-layer",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_product.blocks.product_media.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

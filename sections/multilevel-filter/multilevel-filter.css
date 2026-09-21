@@ -1,0 +1,112 @@
+.multilevel-filter {
+  position: relative;
+  display: block;
+}
+
+.multilevel-filter__media {
+  position: relative;
+  height: var(--desktop-section-height);
+  background-color: rgb(var(--color-background));
+}
+
+@media (max-width: 959px) {
+  .multilevel-filter__media {
+    height: var(--mobile-section-height);
+  }
+}
+
+.multilevel-filter__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.multilevel-filter__image-mask {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(var(--color-mask));
+  opacity: var(--section-image-mask-opacity);
+}
+
+.multilevel-filter__content-wrapper {
+  position: absolute;
+  inset: 0;
+  height: fit-content;
+  margin: auto;
+}
+
+.multilevel-filter__form {
+  --column-gap: 14px;
+
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .multilevel-filter__form--one-line .multilevel-filter__selector {
+    flex: 1 0 0;
+    max-width: 500px;
+  }
+
+  .multilevel-filter__form--one-line .multilevel-filter__search-button {
+    flex: 0;
+    min-width: fit-content;
+  }
+  .multilevel-filter__form--two-line .multilevel-filter__selector,
+  .multilevel-filter__form--two-line .multilevel-filter__search-button,
+  .multilevel-filter__form--three-line .multilevel-filter__selector,
+  .multilevel-filter__form--three-line .multilevel-filter__search-button {
+    flex-shrink: 0;
+    width: calc((100% - 3 * var(--column-gap)) / 4);
+  }
+}
+
+.multilevel-filter__selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: start;
+}
+
+@media (max-width: 959px) {
+  .multilevel-filter__selector-label {
+    display: none;
+  }
+}
+
+.multilevel-filter__selector-input {
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .multilevel-filter__selector-input .select-component__main {
+    max-width: 100%;
+  }
+}
+
+.multilevel-filter__search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 959px) {
+  .multilevel-filter--natural-text .multilevel-filter__media {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .multilevel-filter--natural-text .multilevel-filter__content-wrapper {
+    position: relative;
+    transform: none;
+  }
+}

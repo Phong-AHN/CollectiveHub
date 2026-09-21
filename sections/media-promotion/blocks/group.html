@@ -1,0 +1,156 @@
+<div class="media-group-wrapper ">
+  <div
+    class="
+      media-group-content
+      {{#if !block.settings.inherit_color_scheme }}
+        color-{{ block.settings.color_scheme.id }}
+      {{/if}}
+      {{ block.settings | class_list() }}
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    <div class="media-group-text-container">
+      {{#content "blocks" /}}
+      {{#if props.show_text_mask }}
+        <div class="media-text-mask media-text-mask-{{ props.text_mask_color }}"></div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:sections.media_promotion.blocks.group.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.media_promotion.blocks.group.settings.color_scheme.label",
+      "default": "scheme-2",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.media_promotion.blocks.group.settings.link.label",
+      "default": ""
+    },
+    {
+      "type": "switch",
+      "id": "link_target_blank",
+      "label": "t:sections.media_promotion.blocks.group.settings.link_target_blank.label",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.media_promotion.blocks.group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "wrap",
+        "align-items": "flex-start",
+        "justify-content": "flex-end",
+        "row-gap": "10px",
+        "column-gap": "0px",
+        "@media (--mobile)": {
+          "row-gap": "0px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.media_promotion.blocks.group.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-end": "40px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "40px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "40px",
+          "padding-inline-start": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.media_promotion.blocks.group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "limit": 1
+    },
+    {
+      "type": "button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.group.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Deep Cleaning",
+            "text_align": "left",
+            "spacing": {
+              "padding": "0px",
+              "@media (--mobile)": {
+                "padding": "0px"
+              }
+            }
+          }
+        },
+        {
+          "type": "description",
+          "settings": {
+            "content": "Rich in amino acids",
+            "text_align": "left",
+            "size": {
+              "width": "auto",
+              "height": "auto"
+            },
+            "spacing": {
+              "padding": "0px",
+              "@media (--mobile)": {
+                "padding": "0px"
+              }
+            }
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "text": "View Detail",
+            "style": "primary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

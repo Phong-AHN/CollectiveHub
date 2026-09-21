@@ -1,0 +1,190 @@
+{{#component "script" src="./count-down-date.js" | asset_url() /}}
+{{#component "stylesheet" src="./count-down-date.css" | asset_url() /}}
+
+{{#if block.settings.deadline || block.settings.result }}
+  <div class="count-down__timer-container {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+    <count-down-date
+      data-deadline="{{ block.settings.deadline }}"
+      class="loading {{ block.settings.deadline_font_size }}"
+    >
+      {{#component "icons/loading-spinner" class="loading" /}}
+    </count-down-date>
+
+    {{#if block.settings.result }}
+      <div class="count-down__result {{ block.settings.result_font_size }}">
+        {{{ block.settings.result }}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.count_down.blocks.count_down_date.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "deadline",
+      "info": "t:sections.count_down.blocks.count_down_date.settings.deadline.info",
+      "label": "t:sections.count_down.blocks.count_down_date.settings.deadline.label"
+    },
+    {
+      "type": "select",
+      "id": "deadline_font_size",
+      "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.label",
+      "default": "title1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.deadline_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "info": "t:sections.count_down.blocks.count_down_date.settings.result.info",
+      "label": "t:sections.count_down.blocks.count_down_date.settings.result.label",
+      "type": "richtext"
+    },
+    {
+      "type": "select",
+      "id": "result_font_size",
+      "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.label",
+      "default": "title1",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.count_down.blocks.count_down_date.settings.result_font_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.count_down.blocks.count_down_date.settings.spacing.label",
+      "default": {
+        "padding-top": "0",
+        "padding-bottom": "0",
+        "@media (--mobile)": {
+          "padding-top": "0",
+          "padding-bottom": "0"
+        }
+      }
+    }
+  ],
+  "presets": []
+}
+{{/schema}}

@@ -1,0 +1,408 @@
+{{#capture media_layer }}{{#content "blocks" /}}{{/capture}}
+
+{{#component
+  "product/media"
+  product=props.product
+  current_variant=props.current_variant
+  section=section
+  block=block
+  media_layer=media_layer
+/}}
+
+{{#schema}}
+{
+  "name": "t:sections.main_product.blocks.product_media.name",
+  "tag": "",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.label",
+      "options": [
+        {
+          "value": "flatten",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.options_0.label"
+        },
+        {
+          "value": "two-columns",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.options_1.label"
+        },
+        {
+          "value": "thumbnail-flatten",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.options_2.label"
+        },
+        {
+          "value": "thumbnail-carousel",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.options_3.label"
+        },
+        {
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_layout.options_4.label",
+          "value": "stacked"
+        }
+      ],
+      "default": "thumbnail-carousel"
+    },
+    {
+      "type": "select",
+      "id": "desktop_image_fill_type",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_fill_type.label",
+      "options": [
+        {
+          "value": "cover",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_fill_type.options_0.label"
+        },
+        {
+          "value": "contain",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_fill_type.options_1.label"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "select",
+      "id": "desktop_image_ratio",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_ratio.label",
+      "options": [
+        {
+          "value": "original",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_ratio.options_0.label"
+        },
+        {
+          "value": "adapt_first_image",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_ratio.options_1.label"
+        },
+        {
+          "value": "1/1",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_ratio.options_2.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_image_ratio.options_4.label"
+        }
+      ],
+      "default": "original"
+    },
+    {
+      "type": "select",
+      "id": "desktop_switch_style",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_switch_style.label",
+      "info": "t:sections.main_product.blocks.product_media.settings.desktop_switch_style.info",
+      "default": "hide",
+      "options": [
+        {
+          "value": "number",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_switch_style.options_0.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_switch_style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_quality",
+      "label": "t:sections.main_product.blocks.product_media.settings.image_quality.label",
+      "info": "t:sections.main_product.blocks.product_media.settings.image_quality.info",
+      "default": 80,
+      "options": [
+        {
+          "label": "t:sections.main_product.blocks.product_media.settings.image_quality.options_0.label",
+          "value": 100
+        },
+        {
+          "label": "t:sections.main_product.blocks.product_media.settings.image_quality.options_1.label",
+          "value": 90
+        },
+        {
+          "label": "t:sections.main_product.blocks.product_media.settings.image_quality.options_2.label",
+          "value": 80
+        },
+        {
+          "label": "t:sections.main_product.blocks.product_media.settings.image_quality.options_3.label",
+          "value": 70
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_layout.label",
+      "options": [
+        {
+          "value": "two-columns",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_layout.options_0.label"
+        },
+        {
+          "value": "hide-thumbnail",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_layout.options_1.label"
+        },
+        {
+          "value": "show-thumbnail",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_layout.options_2.label"
+        },
+        {
+          "value": "fullscreen",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_layout.options_3.label"
+        }
+      ],
+      "default": "fullscreen"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_fill_type",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_fill_type.label",
+      "options": [
+        {
+          "value": "cover",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_fill_type.options_0.label"
+        },
+        {
+          "value": "contain",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_fill_type.options_1.label"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_ratio",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_ratio.label",
+      "options": [
+        {
+          "value": "original",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_ratio.options_0.label"
+        },
+        {
+          "value": "adapt_first_image",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_ratio.options_1.label"
+        },
+        {
+          "value": "1/1",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_ratio.options_2.label"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_image_ratio.options_4.label"
+        }
+      ],
+      "default": "original"
+    },
+    {
+      "type": "select",
+      "id": "mobile_switch_style",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.label",
+      "info": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.info",
+      "default": "number",
+      "options": [
+        {
+          "value": "number",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.options_0.label"
+        },
+        {
+          "value": "progress",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.options_1.label"
+        },
+        {
+          "value": "dot",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.options_2.label"
+        },
+        {
+          "value": "slider-bar",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.options_3.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_style.options_4.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_switch_position",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_position.label",
+      "default": "inner",
+      "options": [
+        {
+          "value": "inner",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_position.options_0.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_switch_position.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main_product.blocks.product_media.settings.group_header_0.label"
+    },
+    {
+      "type": "select",
+      "id": "desktop_thumbnail_position",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_position.label",
+      "options": [
+        {
+          "value": "beside",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_position.options_0.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_position.options_1.label"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "desktop_thumbnail_size",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_size.label",
+      "options": [
+        {
+          "value": "large",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_size.options_0.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_size.options_1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_thumbnail_size.options_2.label"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "mobile_thumbnail_size",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_thumbnail_size.label",
+      "options": [
+        {
+          "value": "large",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_thumbnail_size.options_0.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_thumbnail_size.options_1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_thumbnail_size.options_2.label"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main_product.blocks.product_media.settings.group_header_1.label"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.main_product.blocks.product_media.settings.enable_zoom.label",
+      "id": "enable_zoom",
+      "info": "t:sections.main_product.blocks.product_media.settings.enable_zoom.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_product.blocks.product_media.settings.desktop_zoom_type.label",
+      "id": "desktop_zoom_type",
+      "default": "list",
+      "options": [
+        {
+          "value": "slider",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_zoom_type.options_0.label"
+        },
+        {
+          "value": "list",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_zoom_type.options_1.label"
+        },
+        {
+          "value": "inner",
+          "label": "t:sections.main_product.blocks.product_media.settings.desktop_zoom_type.options_2.label"
+        }
+      ],
+      "visible_if": "{{ block.settings.enable_zoom == true }}"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_product.blocks.product_media.settings.mobile_zoom_type.label",
+      "id": "mobile_zoom_type",
+      "default": "slider",
+      "options": [
+        {
+          "value": "slider",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_zoom_type.options_0.label"
+        },
+        {
+          "value": "list",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_zoom_type.options_1.label"
+        },
+        {
+          "value": "lens",
+          "label": "t:sections.main_product.blocks.product_media.settings.mobile_zoom_type.options_2.label"
+        }
+      ],
+      "visible_if": "{{ block.settings.enable_zoom == true }}"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.main_product.blocks.product_media.settings.show_zoom_icon.label",
+      "id": "show_zoom_icon",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_zoom == true }}"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.main_product.blocks.product_media.settings.group_header_2.label"
+    },
+    {
+      "type": "switch",
+      "id": "video_loop",
+      "label": "t:sections.main_product.blocks.product_media.settings.video_loop.label",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "video_autoplay",
+      "label": "t:sections.main_product.blocks.product_media.settings.video_autoplay.label",
+      "info": "t:sections.main_product.blocks.product_media.settings.video_autoplay.info",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "hidden_video_controls",
+      "label": "t:sections.main_product.blocks.product_media.settings.hidden_video_controls.label",
+      "info": "t:sections.main_product.blocks.product_media.settings.hidden_video_controls.info",
+      "default": false
+    },
+    {
+      "type": "switch",
+      "id": "youtube_simple_style",
+      "label": "t:sections.main_product.blocks.product_media.settings.youtube_simple_style.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-media-layer",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_product.blocks.product_media.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

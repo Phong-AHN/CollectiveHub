@@ -1,0 +1,30 @@
+<style>
+  .decorative-line {
+    background-color: rgba(var(--color-text));
+  }
+</style>
+
+<div class="decorative-line {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}></div>
+
+{{#schema}}
+{
+  "name": "t:sections.rich_text.blocks.decorative_line.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.rich_text.blocks.decorative_line.settings.size.label",
+      "default": {
+        "width": "1px",
+        "height": "43px"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.rich_text.blocks.decorative_line.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

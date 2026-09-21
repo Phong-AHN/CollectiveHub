@@ -1,0 +1,452 @@
+{{#var mobile_columns = block.settings.mobile_columns | times(1) /}}
+
+{{#var scroll_width_mb = block.blocks_size | divided_by(mobile_columns, integer = false) | times(100) /}}
+
+{{#var origin_scroll_position = "calc(-scroll_width% - var(--column-gap))" /}}
+
+{{#var scroll_start_position_mb = "0" /}}
+{{#var scroll_start_position_pc = "0" /}}
+{{#var scroll_end_position_mb = origin_scroll_position | replace("scroll_width", scroll_width_mb) /}}
+{{#var scroll_end_position_pc = origin_scroll_position | replace("scroll_width", "100") /}}
+{{#if block.settings.scroll_direction == "ltr" }}
+  {{#set scroll_start_position_mb = origin_scroll_position | replace("scroll_width", scroll_width_mb) /}}
+  {{#set scroll_start_position_pc = origin_scroll_position | replace("scroll_width", "100") /}}
+  {{#set scroll_end_position_mb = "0" /}}
+  {{#set scroll_end_position_pc = "0" /}}
+{{/if}}
+
+{{#capture scroll_content }}
+  <div
+    class="
+      sgc-scroll-gallery__gallery-list-inner-content
+      {{#if block.settings.text_display_mode == "hover" }}
+        sgc-scroll-gallery__gallery-list-inner-content--hover
+      {{/if}}
+      {{#if !block.settings.enable_scroll }}
+        sgc-scroll-gallery__gallery-list-inner-content--{{ block.settings.mobile_show_style }}
+      {{/if}}
+      {{ block.settings.layout | class_list() }}
+    "
+  >
+    {{#blocks}}
+      <div class="sgc-scroll-gallery__gallery-list-inner-content-item">
+        {{#block
+          text_display_mode=block.settings.text_display_mode
+          enable_hover_zoom=block.settings.enable_hover_zoom
+        /}}
+      </div>
+    {{/blocks}}
+  </div>
+{{/capture}}
+
+<div
+  class="
+    sgc-scroll-gallery__gallery-list
+    {{ block.settings.spacing | class_list() }}
+    {{ block.settings.size | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div
+    class="sgc-scroll-gallery__gallery-list-inner"
+    style="
+      --column-gap: {{ block.settings.layout | css_var(`column-gap`) }};
+      --row-gap: {{ block.settings.layout | css_var(`row-gap`) }};
+      --item-count: {{ block.blocks_size }};
+      --mobile-columns: {{ block.settings.mobile_columns }};
+    "
+    data-enable-scroll="{{ block.settings.enable_scroll }}"
+    data-indicator-style="{{ block.settings.indicator_style }}"
+    data-mobile-show-style="{{ block.settings.mobile_show_style }}"
+    data-hover-press-pause="{{ block.settings.hover_press_pause }}"
+  >
+    <div
+      class="
+        sgc-scroll-gallery__gallery-list-inner-scroll
+        {{#if block.settings.enable_scroll }}
+          sgc-scroll-gallery__gallery-list-inner-scroll--enable
+        {{#else/}}
+          sgc-scroll-gallery__gallery-list-inner-scroll--disable
+          sgc-scroll-gallery__gallery-list-inner-scroll--disable-{{ block.settings.indicator_style }}
+        {{/if}}
+        {{#if block.settings.hover_press_pause }}
+          sgc-scroll-gallery__gallery-list-inner-scroll--hover-press-pause
+        {{/if}}
+      "
+      style="
+        --scroll-width-mb:{{ scroll_width_mb }}%;
+        --scroll-start-position-mb: {{ scroll_start_position_mb }};
+        --scroll-end-position-mb: {{ scroll_end_position_mb }};
+        --scroll-start-position-pc: {{ scroll_start_position_pc }};
+        --scroll-end-position-pc: {{ scroll_end_position_pc }};
+        --scroll-desktop-duration: {{ block.settings.desktop_autoplay_interval }}s;
+        --scroll-mobile-duration: {{ block.settings.mobile_autoplay_interval }}s;
+        --scroll-desktop-height: {{ block.settings.desktop_image_height }}px;
+        --scroll-mobile-height: {{ block.settings.mobile_image_height }}px;
+      "
+    >
+      {{{ scroll_content }}}
+      {{#if block.settings.enable_scroll }}
+        {{{ scroll_content }}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if !block.settings.enable_scroll && block.settings.mobile_show_style == "carousel" }}
+    <div class="
+        sgc-scroll-gallery__gallery-list-indicator sgc-hidden-desktop">
+      {{#if
+        block.settings.indicator_style == "arrows" &&
+        block.blocks_size > block.settings.mobile_columns | times(1)
+      }}
+        <div class="sgc-scroll-gallery__gallery-list-arrows">
+          <div
+            data-direction="-1"
+            data-step="{{ block.settings.mobile_columns }}"
+            class="
+          sgc-scroll-gallery__gallery-list-arrows-btn 
+          sgc-scroll-gallery__gallery-list-arrows-btn--left"
+          >
+            {{#component "../components/icons/arrow" /}}
+          </div>
+          <div
+            data-direction="1"
+            data-step="{{ block.settings.mobile_columns }}"
+            class="
+          sgc-scroll-gallery__gallery-list-arrows-btn 
+          sgc-scroll-gallery__gallery-list-arrows-btn--right"
+          >
+            {{#component "../components/icons/arrow" /}}
+          </div>
+        </div>
+      {{#else if block.settings.indicator_style == "progress" /}}
+        <div class="sgc-scroll-gallery__gallery-list-progress">
+          <div class="sgc-scroll-gallery__gallery-list-progress-inner">
+
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_gallery.blocks.gallery_list.name",
+  "icon": "gallery",
+  "settings": [
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.text_display_mode.label",
+      "id": "text_display_mode",
+      "default": "hover",
+      "options": [
+        {
+          "value": "hover",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.text_display_mode.options_0.label"
+        },
+        {
+          "value": "always",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.text_display_mode.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.desktop_image_height.label",
+      "id": "desktop_image_height",
+      "default": 332,
+      "min": 150,
+      "max": 500,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_image_height.label",
+      "id": "mobile_image_height",
+      "default": 166,
+      "min": 150,
+      "max": 500,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_columns.label",
+      "id": "mobile_columns",
+      "default": 2,
+      "options": [
+        {
+          "value": 1,
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_columns.options_0.label"
+        },
+        {
+          "value": 2,
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_columns.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.enable_hover_zoom.label",
+      "id": "enable_hover_zoom",
+      "default": true
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_show_style.label",
+      "id": "mobile_show_style",
+      "default": "carousel",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_show_style.options_0.label"
+        },
+        {
+          "value": "tiling",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_show_style.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.indicator_style.label",
+      "id": "indicator_style",
+      "info": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.indicator_style.info",
+      "default": "none",
+      "options": [
+        {
+          "value": "arrows",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.indicator_style.options_0.label"
+        },
+        {
+          "value": "progress",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.indicator_style.options_1.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.indicator_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.group_header_0.label"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.enable_scroll.label",
+      "id": "enable_scroll",
+      "default": true
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.scroll_direction.label",
+      "id": "scroll_direction",
+      "default": "ltr",
+      "options": [
+        {
+          "value": "ltr",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.scroll_direction.options_0.label"
+        },
+        {
+          "value": "rtl",
+          "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.scroll_direction.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.hover_press_pause.label",
+      "id": "hover_press_pause",
+      "info": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.hover_press_pause.info",
+      "default": false
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.desktop_autoplay_interval.label",
+      "id": "desktop_autoplay_interval",
+      "default": 12,
+      "min": 7,
+      "max": 20,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.mobile_autoplay_interval.label",
+      "id": "mobile_autoplay_interval",
+      "default": 5,
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "style.layout",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.layout.label",
+      "id": "layout",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "flex-direction": "row",
+          "flex-wrap": "wrap",
+          "align-items": "center",
+          "justify-content": "flex-start",
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.spacing.label",
+      "id": "spacing",
+      "default": {
+        "padding-block-start": "0px",
+        "padding-inline-end": "0px",
+        "padding-block-end": "0px",
+        "padding-inline-start": "0px",
+        "@media (--mobile)": {
+          "padding-block-start": "0px",
+          "padding-inline-end": "0px",
+          "padding-block-end": "0px",
+          "padding-inline-start": "0px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "label": "t:sections.sgc_scroll_gallery.blocks.gallery_list.settings.size.label",
+      "id": "size",
+      "default": {
+        "width": "100%",
+        "height": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$gallery-item",
+      "limit": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_gallery.blocks.gallery_list.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$gallery-item",
+          "blocks": [
+            {
+              "type": "$content-group",
+              "blocks": [
+                {
+                  "type": "$subtitle",
+                  "settings": {
+                    "text_align": "left",
+                    "desktop_title": "Improved",
+                    "font_family": "Montserrat 600",
+                    "desktop_font_size": 16,
+                    "mobile_font_size": 14,
+                    "letter_spacing": 300,
+                    "line_height": 1,
+                    "color": "#FFFFFF"
+                  }
+                },
+                {
+                  "type": "$description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$gallery-item",
+          "blocks": [
+            {
+              "type": "$content-group",
+              "blocks": [
+                {
+                  "type": "$subtitle",
+                  "settings": {
+                    "text_align": "left",
+                    "desktop_title": "Improved",
+                    "font_family": "Montserrat 600",
+                    "desktop_font_size": 16,
+                    "mobile_font_size": 14,
+                    "letter_spacing": 300,
+                    "line_height": 1,
+                    "color": "#FFFFFF"
+                  }
+                },
+                {
+                  "type": "$description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$gallery-item",
+          "blocks": [
+            {
+              "type": "$content-group",
+              "blocks": [
+                {
+                  "type": "$subtitle",
+                  "settings": {
+                    "text_align": "left",
+                    "desktop_title": "Improved",
+                    "font_family": "Montserrat 600",
+                    "desktop_font_size": 16,
+                    "mobile_font_size": 14,
+                    "letter_spacing": 300,
+                    "line_height": 1,
+                    "color": "#FFFFFF"
+                  }
+                },
+                {
+                  "type": "$description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$gallery-item",
+          "blocks": [
+            {
+              "type": "$content-group",
+              "blocks": [
+                {
+                  "type": "$subtitle",
+                  "settings": {
+                    "text_align": "left",
+                    "desktop_title": "Improved",
+                    "font_family": "Montserrat 600",
+                    "desktop_font_size": 16,
+                    "mobile_font_size": 14,
+                    "letter_spacing": 300,
+                    "line_height": 1,
+                    "color": "#FFFFFF"
+                  }
+                },
+                {
+                  "type": "$description"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

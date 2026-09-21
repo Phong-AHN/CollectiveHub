@@ -1,0 +1,297 @@
+{{#component "stylesheet" src="./shopping-video.css" | asset_url() /}}
+
+<div
+  class="
+    shopping-video-section {{#if !section.settings.is_full_screen }}page-width{{/if}} color-{{
+      section.settings.color_scheme.id
+    }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div class="shopping-video-section-wrapper {{ section.settings | class_list() }}">
+    {{#blocks}}
+      {{#if forblock.type == "$video-list-group" }}
+        <div class="shopping-video-section-wrapper__video-list-group-wrapper">
+          {{#block/}}
+        </div>
+      {{#else/}}
+        {{#block/}}
+      {{/if}}
+    {{/blocks}}
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.name",
+  "icon": "productImage",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.shopping_video.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "switch",
+      "id": "is_full_screen",
+      "label": "t:sections.shopping_video.settings.is_full_screen.label",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_video.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "align-items": "center"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.shopping_video.settings.size.label"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.shopping_video.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-block-end": "60px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-block-end": "40px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "limit": 1
+    },
+    {
+      "type": "$video-list-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.presets.presets_0.name",
+      "category": "t:sections.shopping_video.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "SHOP VIDEO",
+            "spacing": {
+              "padding-block-start": "0px",
+              "padding-block-end": "20px",
+              "padding-inline-start": "0px",
+              "padding-inline-end": "0px"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "Let‘s follow the routine.",
+            "typography": "body3",
+            "spacing": {
+              "padding-block-start": "0px",
+              "padding-block-end": "40px",
+              "padding-inline-start": "0px",
+              "padding-inline-end": "0px"
+            }
+          }
+        },
+        {
+          "type": "$video-list-group",
+          "blocks": [
+            {
+              "type": "$video-group",
+              "blocks": [
+                {
+                  "type": "$video",
+                  "blocks": [
+                    {
+                      "type": "$product-text-group",
+                      "blocks": [
+                        {
+                          "type": "$heading"
+                        },
+                        {
+                          "type": "$description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "$button"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$product-card-group",
+                  "blocks": [
+                    {
+                      "type": "$product-card"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$video-group",
+              "blocks": [
+                {
+                  "type": "$video",
+                  "blocks": [
+                    {
+                      "type": "$product-text-group",
+                      "blocks": [
+                        {
+                          "type": "$heading"
+                        },
+                        {
+                          "type": "$description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "$button"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$product-card-group",
+                  "blocks": [
+                    {
+                      "type": "$product-card"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$video-group",
+              "blocks": [
+                {
+                  "type": "$video",
+                  "blocks": [
+                    {
+                      "type": "$product-text-group",
+                      "blocks": [
+                        {
+                          "type": "$heading"
+                        },
+                        {
+                          "type": "$description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "$button"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$product-card-group",
+                  "blocks": [
+                    {
+                      "type": "$product-card"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$video-group",
+              "blocks": [
+                {
+                  "type": "$video",
+                  "blocks": [
+                    {
+                      "type": "$product-text-group",
+                      "blocks": [
+                        {
+                          "type": "$heading"
+                        },
+                        {
+                          "type": "$description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "$button"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$product-card-group",
+                  "blocks": [
+                    {
+                      "type": "$product-card"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$video-group",
+              "blocks": [
+                {
+                  "type": "$video",
+                  "blocks": [
+                    {
+                      "type": "$product-text-group",
+                      "blocks": [
+                        {
+                          "type": "$heading"
+                        },
+                        {
+                          "type": "$description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "$button"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "$product-card-group",
+                  "blocks": [
+                    {
+                      "type": "$product-card"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

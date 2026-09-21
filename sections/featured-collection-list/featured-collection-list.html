@@ -1,0 +1,106 @@
+{{#component "stylesheet" src="./featured-collection-list.css" | asset_url() /}}
+
+<div class="featured-collection-list__wrapper color-{{ section.settings.color_scheme.id }}">
+  <div class="page-width">
+    <div
+      class="
+        featured-collection-list
+        {{ section.settings | class_list() }}
+      "
+    >
+      {{#blocks}}
+        {{#block/}}
+      {{/blocks}}
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_collection_list.name",
+  "icon": "collectionList",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.featured_collection_list.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_collection_list.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "40px",
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_collection_list.settings.spacing.label",
+      "default": {
+        "padding-top": "24px",
+        "padding-right": "0px",
+        "padding-bottom": "24px",
+        "padding-left": "0px",
+        "@media (--mobile)": {
+          "padding-top": "24px",
+          "padding-right": "0px",
+          "padding-bottom": "24px",
+          "padding-left": "0px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "$list",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.featured_collection_list.presets.presets_0.category",
+      "name": "t:sections.featured_collection_list.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Collection List"
+          }
+        },
+        {
+          "type": "$list",
+          "blocks": [
+            {
+              "type": "$collection"
+            },
+            {
+              "type": "$collection"
+            },
+            {
+              "type": "$collection"
+            },
+            {
+              "type": "$collection"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

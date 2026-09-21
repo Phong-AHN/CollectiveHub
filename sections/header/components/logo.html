@@ -1,0 +1,38 @@
+{{#var class = props.class /}}
+{{#var logo_image = props.logo_image /}}
+{{#var desktop_size = props.desktop_size | append("px") /}}
+{{#var mobile_size = props.mobile_size | append("px") /}}
+
+
+<a class="header__logo-link {{ class }}" href="{{ routes.root_url }}">
+  {{#var alt = shop.name /}}
+  {{#if logo_image.alt.default }}
+    {{#set alt = logo_image.alt.default /}}
+  {{/if}}
+
+  {{#var style = "--desktop-size:" | append(desktop_size) | append(";--mobile-size:") | append(mobile_size) /}}
+  {{#if logo_image }}
+    {{#component
+      "image"
+      class="header__logo-image"
+      data=logo_image
+      desktop_size=desktop_size
+      mobile_size=mobile_size
+      style=style
+      alt=alt
+    /}}
+    
+  {{#else if settings.logo /}}
+    {{#component
+      "image"
+      class="header__logo-image"
+      data=settings.logo
+      desktop_size=desktop_size
+      mobile_size=mobile_size
+      style=style
+      alt=alt
+    /}}
+  {{#else/}}
+    <span class="header__logo-text">{{ shop.name }}</span>
+  {{/if}}
+</a>

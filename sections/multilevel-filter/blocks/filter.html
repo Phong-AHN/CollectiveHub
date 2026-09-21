@@ -1,0 +1,174 @@
+<div class="multilevel-filter__selector" {{{ block.shopline_attributes }}}>
+  <span class="multilevel-filter__selector-label {{ block.settings.title_typography }}">
+    {{ block.settings.title }}
+  </span>
+  <theme-select
+    class="multilevel-filter__selector-input {{ block.settings.text_typography }}"
+    data-position="bottom"
+    data-filter="{{ block.settings.title }}"
+    data-size="large"
+    disabled="true"
+  >
+    <select name="{{ block.id }}" title="{{ block.settings.title }}" {{#if block.index0 == 0 }}required{{/if}}>
+      <option value data-mobile-label="{{ block.settings.title }}" selected hidden disabled>
+        {{ "general.select.placeholder" | t() }}
+      </option>
+    </select>
+    {{#component "icons/loading" class="theme-select__loading" /}}
+    {{#component "icons/arrow-thin" class="theme-select__arrow" /}}
+  </theme-select>
+</div>
+
+{{#schema}}
+{
+  "tag": "",
+  "name": "t:sections.multilevel_filter.blocks.filter.name",
+  "icon": "normal",
+  "limit": 8,
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "t:sections.multilevel_filter.blocks.filter.settings.title.label",
+      "info": "t:sections.multilevel_filter.blocks.filter.settings.title.info",
+      "default": "Filter title"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.label",
+      "id": "text_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.multilevel_filter.blocks.filter.settings.text_typography.options_14.label"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

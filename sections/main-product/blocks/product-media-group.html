@@ -1,0 +1,60 @@
+<div
+  class="
+    {{ block.settings | class_list() }}
+    product-detail__col
+    product-detail__media-group
+    {{#if block.settings.desktop_sticky }}product-detail__media-group--sticky{{/if}}
+  "
+  style="--detail-col-width: {{ block.settings.size | css_var(`width`) }};"
+>
+  {{#blocks}}
+    {{#block product=props.product current_variant=props.current_variant /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.main_product.blocks.product_media_group.name",
+  "tag": "",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "switch",
+      "id": "desktop_sticky",
+      "label": "t:sections.main_product.blocks.product_media_group.settings.desktop_sticky.label",
+      "default": true
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.main_product.blocks.product_media_group.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "$product-media",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_product.blocks.product_media_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$product-media"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,44 @@
+<div class="custom-sline-block {{{ block.settings | class_list() }}}" {{{ block.shopline_attributes }}}>
+  {{{ block.settings.sline }}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.custom_sline.name",
+  "icon": "code",
+  "tag": "",
+  "settings": [
+    {
+      "id": "sline",
+      "label": "t:blocks.custom_sline.settings.sline.label",
+      "type": "sline",
+      "info": "t:blocks.custom_sline.settings.sline.info"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.custom_sline.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-right": "0px",
+        "padding-bottom": "20px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.custom_sline.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.custom_sline.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

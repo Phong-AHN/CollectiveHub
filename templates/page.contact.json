@@ -1,0 +1,61 @@
+{
+  "sections": {
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "size": {
+          "@media (--mobile)": {
+            "height": "auto",
+            "width": "100%"
+          },
+          "height": "auto",
+          "width": "1000px"
+        },
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "60px",
+          "padding-top": "60px"
+        },
+        "title": "",
+        "title_size": "title3",
+        "title_size_mobile": "title3"
+      },
+      "disabled": false,
+      "blocks": {}
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "40px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "80px",
+          "padding-left": "210px",
+          "padding-right": "210px",
+          "padding-top": "80px"
+        }
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": []
+    },
+    "undefined": {
+      "type": "",
+      "settings": {},
+      "blocks": {},
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-page",
+    "form"
+  ]
+}

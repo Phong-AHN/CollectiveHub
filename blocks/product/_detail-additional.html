@@ -1,0 +1,267 @@
+<theme-collapse class="product-detail__additional quick-add-modal-hidden" {{{ block.shopline_attributes }}}>
+  {{#component "script" src="components/collapse/index.js" | asset_url() /}}
+
+  <details {{#if !block.settings.enabled_fold }}open{{/if}}>
+    <summary class="additional__trigger">
+      {{#if block.settings.custom_icon }}
+        {{#component "image" class="additional__icon" data=block.settings.custom_icon sizes="24px" lazy=true /}}
+      {{#else/}}
+        {{#component "product/additional-icon" icon=block.settings.icon /}}
+      {{/if}}
+
+      <div class="additional__title {{ block.settings.typography }} title-font-bold">{{ block.settings.title }}</div>
+
+      {{#component "icons/arrow-thin" class="additional__arrow" /}}
+    </summary>
+
+    {{#if block.settings.enabled_fold }}<template>{{/if}}
+    <div class="additional__content {{ block.settings.description_typography }} rte">
+      {{{ block.settings.description }}}
+      {{{ block.settings.custom_page.content }}}
+    </div>
+    {{#if block.settings.enabled_fold }}</template>{{/if}}
+  </details>
+</theme-collapse>
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_additional.name",
+  "tag": "",
+  "icon": "content",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "t:blocks.product..detail_additional.settings.title.label",
+      "default": "Example title"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product..detail_additional.settings.typography.label",
+      "id": "typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_additional.settings.typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "id": "icon",
+      "type": "select",
+      "label": "t:blocks.product..detail_additional.settings.icon.label",
+      "default": "none",
+      "options": [
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_0.label",
+          "value": "none"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_1.label",
+          "value": "pay"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_2.label",
+          "value": "package"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_3.label",
+          "value": "email"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_4.label",
+          "value": "position"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_5.label",
+          "value": "customer"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_6.label",
+          "value": "chat"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_7.label",
+          "value": "gift"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_8.label",
+          "value": "phone"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_9.label",
+          "value": "faq"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_10.label",
+          "value": "logistics"
+        },
+        {
+          "label": "t:blocks.product..detail_additional.settings.icon.options_11.label",
+          "value": "discount"
+        }
+      ]
+    },
+    {
+      "id": "custom_icon",
+      "type": "image",
+      "label": "t:blocks.product..detail_additional.settings.custom_icon.label"
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "t:blocks.product..detail_additional.settings.description.label",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product..detail_additional.settings.description_typography.label",
+      "id": "description_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_additional.settings.description_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "id": "custom_page",
+      "type": "page",
+      "label": "t:blocks.product..detail_additional.settings.custom_page.label",
+      "default": ""
+    },
+    {
+      "id": "enabled_fold",
+      "type": "switch",
+      "label": "t:blocks.product..detail_additional.settings.enabled_fold.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_additional.presets.presets_0.name",
+      "settings": {
+        "title": "Example title",
+        "icon": "none",
+        "description": "",
+        "custom_page": "",
+        "enabled_fold": true
+      }
+    }
+  ]
+}
+{{/schema}}

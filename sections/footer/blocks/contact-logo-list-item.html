@@ -1,0 +1,69 @@
+<div class="footer__icon-text-item {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.footer.blocks.contact_logo_list_item.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.footer.blocks.contact_logo_list_item.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "justify-content": "flex-start",
+        "row-gap": "10px",
+        "column-gap": "10px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.footer.blocks.contact_logo_list_item.settings.spacing.label",
+      "default": {
+        "padding-block-start": "15px"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon/icon",
+      "limit": 1
+    },
+    {
+      "type": "$icon-text",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.blocks.contact_logo_list_item.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "icon/icon",
+          "settings": {
+            "icon": "location",
+            "desktop_width": 24,
+            "mobile_width": 24,
+            "spacing": {
+              "padding-block-end": "0px",
+              "padding-block-start": "0px"
+            }
+          }
+        },
+        {
+          "type": "$icon-text",
+          "settings": {
+            "text": "Fast and free delivery"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,173 @@
+{{#var column_gap = "20px" /}}
+
+{{#var scroll_start_pos = "calc(-100% - var(--column-gap))" /}}
+{{#var scroll_end_pos = "0" /}}
+{{#if block.settings.scroll_direction == "rtl" }}
+  {{#set scroll_start_pos = "0" /}}
+  {{#set scroll_end_pos = "calc(-100% - var(--column-gap))" /}}
+{{/if}}
+
+{{#capture banner_content }}
+  <div class="sgc-scroll-banner__banner-content">
+    {{#blocks}}
+      {{#block/}}
+    {{/blocks}}
+  </div>
+{{/capture}}
+
+<sgc-scroll-banner
+  class="sgc-scroll-banner__banner"
+  style="
+    --column-gap: {{ column_gap }};
+    --scroll-start-pos: {{ scroll_start_pos }};
+    --scroll-end-pos: {{ scroll_end_pos }};
+    --tilt-angle: {{ block.settings.tilt_angle }}deg;
+    --background-color: {{ block.settings.background_color.red }}, {{ block.settings.background_color.green }}, {{
+      block.settings.background_color.blue
+    }};
+    --background-gradient-color: {{ block.settings.background_gradient_color }};
+    --banner-height-desktop: {{ block.settings.desktop_banner_height }}px;
+    --banner-height-mobile: {{ block.settings.mobile_banner_height }}px;
+  "
+  data-enable-scroll="{{ block.settings.enable_scroll }}"
+  data-pause-on-hover="{{ block.settings.pause_on_hover }}"
+  {{{ block.shopline_attributes }}}
+>
+  <div
+    class="
+      sgc-scroll-banner__banner-inner
+    "
+    style="
+      --scroll-start-pos: {{ scroll_start_pos }};
+      --scroll-end-pos: {{ scroll_end_pos }};
+      --scroll-duration-desktop: {{ block.settings.desktop_scroll_duration }}s;
+      --scroll-duration-mobile: {{ block.settings.mobile_scroll_duration }}s;
+    "
+  >
+    {{{ banner_content }}}
+  </div>
+</sgc-scroll-banner>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_banner.blocks.banner.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.group_header_0.label"
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.enable_scroll.label",
+      "id": "enable_scroll",
+      "default": true
+    },
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.scroll_direction.label",
+      "id": "scroll_direction",
+      "default": "ltr",
+      "options": [
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.scroll_direction.options_0.label",
+          "value": "ltr"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.scroll_direction.options_1.label",
+          "value": "rtl"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.tilt_angle.label",
+      "id": "tilt_angle",
+      "default": 0,
+      "min": -10,
+      "max": 10,
+      "step": 1
+    },
+    {
+      "type": "switch",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.pause_on_hover.label",
+      "id": "pause_on_hover",
+      "info": "t:sections.sgc_scroll_banner.blocks.banner.settings.pause_on_hover.info",
+      "default": true
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.desktop_scroll_duration.label",
+      "id": "desktop_scroll_duration",
+      "default": 12,
+      "min": 7,
+      "max": 20,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.mobile_scroll_duration.label",
+      "id": "mobile_scroll_duration",
+      "default": 12,
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.desktop_banner_height.label",
+      "id": "desktop_banner_height",
+      "default": 40,
+      "min": 20,
+      "max": 140,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.mobile_banner_height.label",
+      "id": "mobile_banner_height",
+      "default": 36,
+      "min": 20,
+      "max": 54,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.background_color.label",
+      "id": "background_color"
+    },
+    {
+      "type": "color_background",
+      "label": "t:sections.sgc_scroll_banner.blocks.banner.settings.background_gradient_color.label",
+      "id": "background_gradient_color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$title",
+      "limit": 5
+    },
+    {
+      "type": "$icon",
+      "limit": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_banner.blocks.banner.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$title"
+        },
+        {
+          "type": "$icon"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,291 @@
+{{#var block = props.block /}}
+{{#var section = props.section /}}
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+{{#var media_layer = props.media_layer /}}
+
+{{#var video_loop = block.settings.video_loop | default(false, allow_false = true) /}}
+{{#var video_autoplay = block.settings.video_autoplay | default(false, allow_false = true) /}}
+{{#var hidden_video_controls = block.settings.hidden_video_controls | default(false, allow_false = true) /}}
+{{#var youtube_simple_style = block.settings.youtube_simple_style | default(false, allow_false = true) /}}
+{{#var hide_other_variants = section.settings.hide_other_variants | default(false, allow_false = true) /}}
+{{#var image_quality = block.settings.image_quality | default(80) /}}
+{{#var desktop_layout = block.settings.desktop_layout | default("thumbnail-carousel") /}}
+{{#var mobile_layout = block.settings.mobile_layout | default("hide-thumbnail") /}}
+{{#var desktop_image_fill_type = block.settings.desktop_image_fill_type | default("contain") /}}
+{{#var mobile_image_fill_type = block.settings.mobile_image_fill_type | default("contain") /}}
+{{#var desktop_thumbnail_size = block.settings.desktop_thumbnail_size | default("medium") /}}
+{{#var mobile_thumbnail_size = block.settings.mobile_thumbnail_size | default("medium") /}}
+{{#var desktop_thumbnail_position = block.settings.desktop_thumbnail_position | default("bottom") /}}
+{{#var desktop_switch_style = block.settings.desktop_switch_style | default("hide") /}}
+{{#var mobile_switch_style = block.settings.mobile_switch_style | default("number") /}}
+{{#var mobile_switch_position = block.settings.mobile_switch_position | default("bottom") /}}
+{{#var enable_zoom = block.settings.enable_zoom | default(false, allow_false = true) /}}
+{{#var desktop_zoom_type = block.settings.desktop_zoom_type | default("list") /}}
+{{#var mobile_zoom_type = block.settings.mobile_zoom_type | default("slider") /}}
+{{#var show_zoom_icon = block.settings.show_zoom_icon | default(true, allow_false = true) /}}
+{{#if !enable_zoom }}
+  {{#set show_zoom_icon = false /}}
+{{/if}}
+{{#var enable_hover_zoom = enable_zoom && desktop_zoom_type == "inner" /}}
+{{#var first_featured_media = product.media | first() /}}
+{{#var current_featured_media = current_variant.featured_media | default(first_featured_media) /}}
+{{#var should_sticky_current_featured_media = false /}}
+{{#if desktop_layout == "two-columns" || desktop_layout == "flatten" || desktop_layout == "stacked" }}
+  {{#set should_sticky_current_featured_media = true /}}
+{{/if}}
+
+{{#var desktop_thumbnail_item_width /}}
+{{#switch desktop_thumbnail_size }}
+  {{#case "large" /}}
+    {{#set desktop_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 4) / 5)" /}}
+  {{#case "medium" /}}
+    {{#set desktop_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 5) / 6)" /}}
+  {{#case "small" /}}
+    {{#set desktop_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 6) / 7)" /}}
+{{/switch}}
+{{#var mobile_thumbnail_item_width /}}
+{{#switch mobile_thumbnail_size }}
+  {{#case "large" /}}
+    {{#set mobile_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 3) / 3.3)" /}}
+  {{#case "medium" /}}
+    {{#set mobile_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 4) / 4.4)" /}}
+  {{#case "small" /}}
+    {{#set mobile_thumbnail_item_width = "calc((100% - var(--thumbnail-gap, 0px) * 5) / 5.5)" /}}
+{{/switch}}
+
+{{#var first_aspect_ratio = first_featured_media.aspect_ratio | default(1) | append("") /}}
+{{#var
+  min_aspect_ratio = product.media |
+    map("preview_image") |
+    where("aspect_ratio") |
+    map("aspect_ratio") |
+    sort() |
+    first() |
+    append("")
+/}}
+{{#var desktop_aspect_ratio = block.settings.desktop_image_ratio | default("original") /}}
+{{#var mobile_aspect_ratio = block.settings.mobile_image_ratio | default("original") /}}
+
+{{#if desktop_aspect_ratio == "adapt_first_image" }}
+  {{#set desktop_aspect_ratio = first_aspect_ratio /}}
+{{/if}}
+{{#if mobile_aspect_ratio == "adapt_first_image" }}
+  {{#set mobile_aspect_ratio = first_aspect_ratio /}}
+{{/if}}
+
+{{#var desktop_placeholder_aspect_ratio = desktop_aspect_ratio /}}
+{{#var mobile_placeholder_aspect_ratio = mobile_aspect_ratio /}}
+{{#if desktop_aspect_ratio == "original" }}
+  {{#set desktop_placeholder_aspect_ratio = min_aspect_ratio /}}
+{{/if}}
+{{#if mobile_aspect_ratio == "original" }}
+  {{#set mobile_placeholder_aspect_ratio = min_aspect_ratio /}}
+{{/if}}
+
+{{#var media_total = product.media | size() /}}
+
+{{#if media_total <= 6 && desktop_layout == "thumbnail-carousel" }}
+  {{#set desktop_layout = "thumbnail-flatten" /}}
+{{/if}}
+{{#if mobile_layout == "show-thumbnail" }}
+  {{#set mobile_switch_style = "hide" /}}
+{{/if}}
+
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+{{#component "script" src="./media-gallery.js" | asset_url() /}}
+{{#if enable_hover_zoom }}
+  {{#component "script" src="./media-hover-preview.js" | asset_url() /}}
+{{/if}}
+
+<theme-product-media-gallery
+  class="product-detail__media-gallery"
+  style="
+    --desktop-image-fill-type: {{ desktop_image_fill_type }};
+    --mobile-image-fill-type: {{ mobile_image_fill_type }};
+    --desktop-aspect-ratio: {{ desktop_aspect_ratio }};
+    --mobile-aspect-ratio: {{ mobile_aspect_ratio }};
+    --desktop-placeholder-aspect-ratio: {{ desktop_placeholder_aspect_ratio }};
+    --mobile-placeholder-aspect-ratio: {{ mobile_placeholder_aspect_ratio }};
+  "
+  data-desktop-layout="{{ desktop_layout }}"
+  data-mobile-layout="{{ mobile_layout }}"
+  data-desktop-thumbnail-position="{{ desktop_thumbnail_position }}"
+  data-desktop-aspect-ratio="{{ desktop_aspect_ratio }}"
+  data-mobile-aspect-ratio="{{ mobile_aspect_ratio }}"
+  data-desktop-switch-style="{{ desktop_switch_style }}"
+  data-mobile-switch-style="{{ mobile_switch_style }}"
+  data-mobile-switch-position="{{ mobile_switch_position }}"
+  data-media-total="{{#if media_total > 0 }}{{ media_total }}{{#else/}}1{{/if}}"
+  data-hide-other-variants="{{ hide_other_variants }}"
+  data-video-autoplay="{{ video_autoplay }}"
+  data-desktop-disabled-preview="{{ enable_hover_zoom }}"
+  data-disabled-preview="{{ !enable_zoom }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{#if enable_zoom }}
+    {{#component
+      "product/media-preview"
+      medias=product.media
+      current_variant=current_variant
+      hide_other_variants=hide_other_variants
+      video_loop=video_loop
+      video_autoplay=video_autoplay
+      desktop_zoom_type=desktop_zoom_type
+      mobile_zoom_type=mobile_zoom_type
+    /}}
+  {{/if}}
+
+  <theme-carousel
+    class="media-gallery__content"
+    style="
+      {{#if current_featured_media }}
+        --current-media-aspect-ratio: {{ current_featured_media.preview_image.aspect_ratio }};
+      {{/if}}
+    "
+    data-restore-position="true"
+    data-direction="horizontal"
+  >
+    <div class="media-gallery__list-wrapper">
+      {{#if should_sticky_current_featured_media }}
+        <div class="media-gallery__sticky-wrapper">
+          {{#component
+            "product/media-item"
+            media=current_featured_media
+            video_loop=video_loop
+            video_autoplay=video_autoplay
+            hidden_video_controls=hidden_video_controls
+            youtube_simple_style=youtube_simple_style
+            image_lazy=false
+            image_quality=image_quality
+            enable_zoom=enable_zoom
+            show_zoom_icon=show_zoom_icon
+            enable_hover_zoom=enable_hover_zoom
+          /}}
+        </div>
+      {{/if}}
+      <ul class="carousel__track media-gallery__list">
+        {{#if media_total > 0 }}
+          {{#for media in product.media }}
+            {{#var is_active = media.id == current_featured_media.id /}}
+            {{#var is_hidden = current_variant && hide_other_variants && media.variants | size() > 0 && !is_active /}}
+
+            {{#capture media_class }}
+              {{#if is_active }}is-active is-select{{/if}}
+              {{#if is_hidden }}hidden{{/if}}
+            {{/capture}}
+
+            {{#component
+              "product/media-item"
+              tag="li"
+              class=media_class
+              media=media
+              video_loop=video_loop
+              video_autoplay=video_autoplay
+              hidden_video_controls=hidden_video_controls
+              youtube_simple_style=youtube_simple_style
+              image_lazy=!is_active
+              image_quality=image_quality
+              show_zoom_icon=show_zoom_icon
+              enable_hover_zoom=enable_hover_zoom
+            /}}
+          {{/for}}
+        {{#else/}}
+          <li class="media-gallery__item is-active">
+            <div class="media-gallery__placeholder">
+              {{#placeholder_svg "image" class="product-image-placeholder" /}}
+            </div>
+          </li>
+        {{/if}}
+      </ul>
+      {{{ media_layer }}}
+    </div>
+
+    {{#if media_total > 0 }}
+      <div class="media-gallery__indicator">
+        {{#component "carousel-indicator/dot" class="media-gallery__dots" size=media_total /}}
+
+        {{#component "carousel-indicator/progress" class="media-gallery__progress" size=media_total /}}
+
+        {{#component "carousel-indicator/capsule" class="media-gallery__pagination" size=media_total page_size=1 /}}
+
+        <div class="media-gallery__arrows body2 mobile-body4">
+          <button name="previous" class="media-gallery__arrow">
+            {{#component "icons/arrow-thin" /}}
+          </button>
+          <div class="media-gallery__status">
+            <span name="current">1</span>
+            /
+            <span name="total">{{ media_total }}</span>
+          </div>
+          <button name="next" class="media-gallery__arrow">
+            {{#component "icons/arrow-thin" /}}
+          </button>
+        </div>
+      </div>
+
+      {{#if
+        desktop_layout == "thumbnail-flatten" ||
+        desktop_layout == "thumbnail-carousel" ||
+        mobile_layout == "show-thumbnail"
+      }}
+        {{#var desktop_thumbnail_direction = "horizontal" /}}
+        {{#if desktop_thumbnail_position == "beside" }}
+          {{#set desktop_thumbnail_direction = "vertical" /}}
+        {{/if}}
+
+        <theme-carousel
+          class="media-gallery__thumbnails"
+          style="
+            --desktop-thumbnail-size: {{ desktop_thumbnail_item_width }};
+            --mobile-thumbnail-size: {{ mobile_thumbnail_item_width }};
+          "
+          data-restore-position="true"
+          data-desktop-direction="{{ desktop_thumbnail_direction }}"
+        >
+          <div class="carousel__track media-gallery__thumbnail-list">
+            {{#for media in product.media }}
+              {{#var is_active = media.id == current_featured_media.id /}}
+              {{#var is_hidden = current_variant && hide_other_variants && media.variants | size() > 0 && !is_active /}}
+
+              <button
+                class="
+                  media-gallery__thumbnail
+                  {{#if is_active }}is-select is-active{{/if}}
+                  {{#if is_hidden }}hidden{{/if}}
+                "
+                data-media-id="{{ media.id }}"
+                data-variant-media="{{ media.variants && media.variants | size() > 0 }}"
+                data-aspect-ratio="{{ media.preview_image.aspect_ratio }}"
+              >
+                {{#component
+                  "image"
+                  class="media-gallery__thumbnail-image"
+                  data=media.preview_image
+                  quality=image_quality
+                  lazy=true
+                  desktop_size="1/12"
+                  mobile_size="1/3"
+                  fetchpriority="auto"
+                /}}
+
+                {{#if media.media_type == "video" || media.media_type == "external_video" }}
+                  {{#component "icons/video-play" class="media-gallery__thumbnail-play-icon" /}}
+                {{/if}}
+              </button>
+            {{/for}}
+          </div>
+          <div class="media-gallery__thumbnail-arrows">
+            <button name="previous" class="media-gallery__arrow" data-step="3">
+              {{#component "icons/arrow-thin" /}}
+            </button>
+            <button name="next" class="media-gallery__arrow" data-step="3">
+              {{#component "icons/arrow-thin" /}}
+            </button>
+          </div>
+        </theme-carousel>
+      {{/if}}
+    {{/if}}
+  </theme-carousel>
+</theme-product-media-gallery>

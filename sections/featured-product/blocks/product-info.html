@@ -1,0 +1,178 @@
+<div
+  class="product-detail__info product-detail__col {{ block.settings | class_list() }}"
+  style="
+    --info-row-gap: {{ block.settings.layout | css_var(`row-gap`) }};
+    --detail-col-width: {{ block.settings.size | css_var(`width`) }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#block product=props.product current_variant=props.current_variant /}}
+  {{/blocks}}
+
+  <a class="product-detail__view-details button button--link" href="{{ props.product.url | default(`javascript:;`) }}">
+    {{ "products.product_details.view_details" | t() }}
+  </a>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_product.blocks.product_info.name",
+  "tag": "",
+  "icon": "generalSection",
+  "deletable": false,
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_product.blocks.product_info.settings.layout.label",
+      "default": {
+        "flex-wrap": "nowrap",
+        "flex-direction": "column",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "row-gap": "10px",
+          "column-gap": "10px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_product.blocks.product_info.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "$product-info-group"
+    },
+    {
+      "type": "product/_detail-heading",
+      "limit": 1
+    },
+    {
+      "type": "product/_detail-price",
+      "limit": 1
+    },
+    {
+      "type": "product/_detail-variant-picker",
+      "limit": 1
+    },
+    {
+      "type": "product/_detail-quantity-selector",
+      "limit": 1
+    },
+    {
+      "type": "$product-buy-buttons",
+      "limit": 1
+    },
+    {
+      "type": "product/_detail-buy-button-group",
+      "limit": 1
+    },
+    {
+      "type": "share",
+      "limit": 1
+    },
+    {
+      "type": "custom-sline"
+    },
+    {
+      "type": "popup-with-link"
+    },
+    {
+      "type": "popup-with-text/popup-with-text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "icon/icon"
+    },
+    {
+      "type": "image/image"
+    },
+    {
+      "type": "logo/logo"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "rich-text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_product.blocks.product_info.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product/_detail-heading",
+          "settings": {}
+        },
+        {
+          "type": "product/_detail-price",
+          "settings": {}
+        },
+        {
+          "type": "product/_detail-variant-picker",
+          "settings": {}
+        },
+        {
+          "type": "product/_detail-quantity-selector",
+          "settings": {}
+        },
+        {
+          "type": "product/_detail-buy-button-group",
+          "blocks": [
+            {
+              "type": "product-buy-button-group/_bundle",
+              "settings": {
+                "layout": {
+                  "column-gap": "16px",
+                  "row-gap": "16px",
+                  "@media (--mobile)": {
+                    "flex-direction": "column",
+                    "align-items": "flex-start"
+                  }
+                }
+              },
+              "blocks": [
+                {
+                  "type": "product-buy-button-group/_quantity-selector",
+                  "settings": {}
+                },
+                {
+                  "type": "product-buy-button-group/_buy-button",
+                  "settings": {
+                    "style": "secondary"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "product-buy-button-group/_payment-button",
+              "settings": {}
+            }
+          ]
+        },
+        {
+          "type": "share",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

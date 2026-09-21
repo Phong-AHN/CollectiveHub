@@ -1,0 +1,97 @@
+{{#var product = props.product /}}
+{{#var first_variant = product | get_variants() | first() /}}
+{{#var current_variant = product.selected_or_first_available_variant | default(first_variant) /}}
+
+<div
+  class="
+    block-product-card-info
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#block product=props.product current_variant=current_variant /}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.product_info.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.media_promotion.blocks.product_info.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "row-gap": "8px",
+        "column-gap": "8px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.media_promotion.blocks.product_info.settings.spacing.label",
+      "default": {
+        "padding-block-start": "20px",
+        "padding-inline-end": "20px",
+        "padding-block-end": "20px",
+        "padding-inline-start": "20px",
+        "@media (--mobile)": {
+          "padding-block-start": "20px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "20px",
+          "padding-inline-start": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.media_promotion.blocks.product_info.settings.size.label",
+      "default": {
+        "width": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-title",
+      "limit": 1
+    },
+    {
+      "type": "product-price",
+      "limit": 1
+    },
+    {
+      "type": "product-card/_description",
+      "limit": 1
+    },
+    {
+      "type": "product-buy-button",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.product_info.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-title"
+        },
+        {
+          "type": "product-price"
+        },
+        {
+          "type": "product-card/_description"
+        },
+        {
+          "type": "product-buy-button"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

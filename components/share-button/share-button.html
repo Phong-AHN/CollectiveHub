@@ -1,0 +1,53 @@
+{{#component "stylesheet" src="components/modal/index.css" | asset_url() /}}
+{{#component "stylesheet" src="./share-button.css" | asset_url() /}}
+{{#component "script" src="components/modal/index.js" | asset_url() /}}
+{{#component "script" src="./share-button.js" | asset_url() /}}
+
+{{#var button_typography = props.button_typography | default("body2") /}}
+{{#var content_typography = props.content_typography | default("body3") /}}
+{{#var content_button_typography = props.content_button_typography | default("body2") /}}
+
+<theme-share-button
+  class="share-button"
+  href="{{ props.href }}"
+  data-theme-modal="true"
+  data-esc-to-exit="true"
+  data-mask-closable="true"
+>
+  <details>
+    <summary class="share-button__trigger {{ button_typography }} body-font-bold">
+      {{#component "icons/share" class="share-button__icon" /}}
+      {{ "general.share_button_text" | t() }}
+    </summary>
+    <div class="modal__content share-button__content modal-border-shadow">
+      <p
+        class="share-button__href {{ content_typography }}"
+        data-success-text="{{ `general.copy_success_text` | t() }}"
+      >
+        {{ props.href }}
+      </p>
+
+      <button class="share-button__close-button modal__close-control" name="close">
+        {{#component "icons/close" /}}
+      </button>
+
+      <button
+        class="
+          share-button__copy-button button button--fill
+          {{ content_button_typography }}
+        "
+      >
+        {{ "general.copy_button_text" | t() }}
+      </button>
+
+      <button
+        class="
+          share-button__copy-success-button button button--secondary button--fill hidden
+          {{ content_button_typography }}
+        "
+      >
+        {{#component "icons/check" /}}
+      </button>
+    </div>
+  </details>
+</theme-share-button>

@@ -1,0 +1,140 @@
+<div class="map-block-bottom-content {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.map.blocks.bottom_content.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.map.blocks.bottom_content.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "justify-content": "center",
+        "row-gap": 0,
+        "column-gap": 0,
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.map.blocks.bottom_content.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-right": 0,
+        "padding-bottom": 0,
+        "padding-left": 0,
+        "@media (--mobile)": {
+          "padding-top": "10px",
+          "padding-right": 0,
+          "padding-bottom": 0,
+          "padding-left": 0
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.map.blocks.bottom_content.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "100%",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "100%"
+        }
+      }
+    }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "$text-content",
+      "limit": 1
+    },
+    {
+      "type": "$map-style",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.map.blocks.bottom_content.presets.presets_0.name",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$text-content",
+          "blocks": [
+            {
+              "type": "text",
+              "settings": {
+                "text": "DEMURE",
+                "text_align": "left",
+                "spacing": {
+                  "padding-top": 0,
+                  "padding-bottom": 0
+                }
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "text": "OUR STORE",
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<div>\n<div>London, UK</div>\n<div>Mon - Fri, 10am - 9pm</div>\n<div>Saturday, 10am - 9pm</div>\n<div>Sunday, 11am - 5pm</div>\n</div>",
+                "text_align": "left",
+                "spacing": {
+                  "padding-top": "168px",
+                  "@media (--mobile)": {
+                    "padding-top": "35px"
+                  }
+                }
+              }
+            },
+            {
+              "type": "$btn-group",
+              "blocks": [
+                {
+                  "type": "$custom-btn",
+                  "settings": {
+                    "text": "Get direcions",
+                    "link": "",
+                    "style": "primary"
+                  }
+                },
+                {
+                  "type": "$custom-btn",
+                  "settings": {
+                    "text": "LEARN MORE",
+                    "link": "",
+                    "style": "secondary",
+                    "is_show_pushpin": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$map-style"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

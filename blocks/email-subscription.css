@@ -1,0 +1,46 @@
+.block-subscription {
+  display: flex;
+  max-width: 100%;
+}
+
+.block-subscription form {
+  width: 100%;
+}
+
+.block-subscription .field__info {
+  display: inline-block;
+  line-height: 1.6;
+}
+
+.block-subscription .field__info--error {
+  color: rgb(227 38 25);
+}
+
+.block-subscription .field__info > svg {
+  margin-inline-end: 4px;
+  vertical-align: middle;
+}
+
+.block-subscription__inline-form {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+  justify-content: center;
+}
+
+.block-subscription__inline-form .field {
+  flex: 1;
+  margin-block-end: 0;
+}
+
+.block-subscription__inline-form .button {
+  max-width: 50%;
+  word-break: break-all;
+  white-space: normal;
+}
+
+@media (max-width: 959px) {
+  .block-subscription__inline-form .button {
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,151 @@
+{{#component "stylesheet" src="./heading-with-link.css" | asset_url() /}}
+
+<div class="heading-with-link" {{{ block.shopline_attributes }}}>
+  <{{ block.settings.text_tag }} class="{{ block.settings.text_size }} title-font-bold heading-with-link__title">
+    {{ block.settings.text }}
+  </{{ block.settings.text_tag }}>
+
+  {{#if block.settings.link_text }}
+    <a class="body1 heading-with-link__view-more" href="{{ props.url | default(`javascript:;`) }}">
+      <span>{{ block.settings.link_text }}</span>
+      {{#component "icons/arrow" /}}
+    </a>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.heading_with_link.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:blocks.heading_with_link.settings.text.label",
+      "default": "Heading with link"
+    },
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "t:blocks.heading_with_link.settings.text_tag.label",
+      "info": "t:blocks.heading_with_link.settings.text_tag.info",
+      "default": "h1",
+      "options": [
+        {
+          "value": "div",
+          "label": "t:blocks.heading_with_link.settings.text_tag.options_0.label"
+        },
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "P"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:blocks.heading_with_link.settings.text_size.label",
+      "default": "title3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.heading_with_link.settings.text_size.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:blocks.heading_with_link.settings.link_text.label",
+      "info": "t:blocks.heading_with_link.settings.link_text.info",
+      "default": "View more"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.heading_with_link.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

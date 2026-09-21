@@ -1,0 +1,24 @@
+<div class="sgc-scroll-gallery__description" {{{ block.shopline_attributes }}}>
+  {{{ block.settings.description }}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_gallery.blocks.description.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "richtext",
+      "label": "t:sections.sgc_scroll_gallery.blocks.description.settings.description.label",
+      "id": "description",
+      "default": "Make an image shoppable by adding hotspots that link to various products."
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_gallery.blocks.description.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

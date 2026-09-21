@@ -1,0 +1,170 @@
+{{#component "script" src="./menu.js" | asset_url() /}}
+
+<theme-footer-menu class="
+    footer__menu
+    {{ block.settings | class_list() }}
+    text-{{ block.settings.text_align }}
+  " {{{ block.shopline_attributes }}} {{#if block.settings.default_expand }}open{{/if}}>
+  <h3 class="footer__menu-title {{ props.title_typography }}">
+    {{ block.settings.title }}
+    <span class="icon__arrow">{{#component "icons/arrow-thin" /}}</span>
+    <span class="icon__minus">{{#component
+      "icons/minus"
+    /}}</span>
+  </h3>
+  <div class="footer__menu-content {{ props.content_typography }}">
+    {{#content "blocks" /}}
+  </div>
+</theme-footer-menu>
+
+{{#schema}}
+{
+  "name": "t:sections.footer.blocks.logo_list.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.footer.blocks.logo_list.settings.title.label",
+      "default": "Service"
+    },
+    {
+      "type": "switch",
+      "id": "default_expand",
+      "label": "t:sections.footer.blocks.logo_list.settings.default_expand.label",
+      "default": false
+    },
+    {
+      "type": "text_align",
+      "id": "text_align",
+      "label": "t:sections.footer.blocks.logo_list.settings.text_align.label",
+      "default": "left"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.footer.blocks.logo_list.settings.spacing.label",
+      "default": {
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.footer.blocks.logo_list.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$logo-list-item"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer.blocks.logo_list.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$logo-list-item",
+          "blocks": [
+            {
+              "type": "icon/icon",
+              "settings": {
+                "icon": "van",
+                "desktop_width": 24,
+                "mobile_width": 24,
+                "spacing": {
+                  "padding-block-end": "0px",
+                  "padding-block-start": "0px"
+                }
+              }
+            },
+            {
+              "type": "$icon-text",
+              "settings": {
+                "text": "Fast and free delivery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "$logo-list-item",
+          "blocks": [
+            {
+              "type": "icon/icon",
+              "settings": {
+                "icon": "package",
+                "desktop_width": 24,
+                "mobile_width": 24,
+                "spacing": {
+                  "padding-block-end": "0px",
+                  "padding-block-start": "0px"
+                }
+              }
+            },
+            {
+              "type": "$icon-text",
+              "settings": {
+                "text": "30 day refund guarantee"
+              }
+            }
+          ]
+        },
+        {
+          "type": "$logo-list-item",
+          "blocks": [
+            {
+              "type": "icon/icon",
+              "settings": {
+                "icon": "lock",
+                "desktop_width": 24,
+                "mobile_width": 24,
+                "spacing": {
+                  "padding-block-end": "0px",
+                  "padding-block-start": "0px"
+                }
+              }
+            },
+            {
+              "type": "$icon-text",
+              "settings": {
+                "text": "Worry free guarantee"
+              }
+            }
+          ]
+        },
+        {
+          "type": "$logo-list-item",
+          "blocks": [
+            {
+              "type": "icon/icon",
+              "settings": {
+                "icon": "checkbox",
+                "desktop_width": 24,
+                "mobile_width": 24,
+                "spacing": {
+                  "padding-block-end": "0px",
+                  "padding-block-start": "0px"
+                }
+              }
+            },
+            {
+              "type": "$icon-text",
+              "settings": {
+                "text": "Lifetime customer support"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,115 @@
+{{#component "stylesheet" src="./image-floating.css" | asset_url() /}}
+
+<div
+  class="
+    section-image-floating-wrapper
+    color-{{ section.settings.color_scheme.id }}
+    {{ section.settings.spacing | class_list() }}
+  "
+  data-mobile-duration="{{ section.settings.mobile_slide_duration }}"
+  style="--image-height: {{ section.settings.image_height }}px;"
+>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.image_floating.name",
+  "icon": "largeImageWithTextBox",
+  "settings": [
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "t:sections.image_floating.settings.image_height.label",
+      "min": 600,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "mobile_slide_duration",
+      "label": "t:sections.image_floating.settings.mobile_slide_duration.label",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "t:sections.image_floating.settings.mobile_slide_duration.unit",
+      "default": 3
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.image_floating.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.image_floating.settings.spacing.label",
+      "default": {
+        "padding-block-start": "80px",
+        "padding-inline-start": "0px",
+        "padding-block-end": "80px",
+        "padding-inline-end": "0px",
+        "@media (--mobile)": {
+          "padding-block-start": "24px",
+          "padding-inline-start": "0px",
+          "padding-block-end": "24px",
+          "padding-inline-end": "0px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$text-group",
+      "limit": 1
+    },
+    {
+      "type": "$image-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_floating.presets.presets_0.name",
+      "category": "t:sections.image_floating.presets.presets_0.category",
+      "blocks": [
+        {
+          "type": "$text-group",
+          "blocks": [
+            {
+              "type": "$heading"
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text_align": "left",
+                "typography": "body3"
+              }
+            },
+            {
+              "type": "$icon"
+            }
+          ]
+        },
+        {
+          "type": "$image-group",
+          "blocks": [
+            {
+              "type": "$image"
+            },
+            {
+              "type": "$image"
+            },
+            {
+              "type": "$image"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

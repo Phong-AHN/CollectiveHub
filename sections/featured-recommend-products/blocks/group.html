@@ -1,0 +1,174 @@
+<div class="{{ block.settings | class_list() }} featured-recommend-products__group" {{{ block.shopline_attributes }}}>
+  {{#blocks}}
+    {{#if forblock.type == "product-list/list" }}
+      <div class="featured-recommend-products__list">
+        {{#block collection=section.settings.collection product_placeholder=true /}}
+      </div>
+    {{#else/}}
+      {{#block/}}
+    {{/if}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.featured_recommend_products.blocks.group.name",
+  "icon": "general",
+  "tag": "",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.featured_recommend_products.blocks.group.settings.layout.label",
+      "default": {
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "20px"
+        },
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "flex-start",
+        "row-gap": "40px",
+        "column-gap": "40px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.featured_recommend_products.blocks.group.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.featured_recommend_products.blocks.group.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group"
+    },
+    {
+      "type": "product-list/list",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_recommend_products.blocks.group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "layout": {
+              "@media (--mobile)": {
+                "row-gap": "12px"
+              },
+              "align-items": "flex-start",
+              "column-gap": "0px",
+              "flex-direction": "column",
+              "flex-wrap": "nowrap",
+              "justify-content": "space-between",
+              "row-gap": "15px"
+            },
+            "spacing": {
+              "padding-top": "0px",
+              "padding-right": "0px",
+              "padding-bottom": "0px",
+              "padding-left": "0px"
+            }
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text": "Two Line Title Slide",
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "description",
+              "settings": {
+                "content": "Pair large text with a full-width video to showcase your brand’s lifestyle video or to describe and showcase an important detail of your products.",
+                "text_align": "left"
+              }
+            },
+            {
+              "type": "button",
+              "settings": {
+                "text": "Shop this",
+                "style": "link"
+              }
+            }
+          ]
+        },
+        {
+          "type": "product-list/list",
+          "settings": {
+            "page_size": 12,
+            "desktop_columns": 3,
+            "mobile_columns": 2,
+            "desktop_enable_slider": true,
+            "mobile_enable_slider": true
+          },
+          "blocks": [
+            {
+              "type": "product-card/card",
+              "blocks": [
+                {
+                  "type": "product-image",
+                  "blocks": [
+                    {
+                      "type": "product-card/_layer",
+                      "blocks": [
+                        {
+                          "type": "product-card/_discount-tag"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "product-card/_layer",
+                      "settings": {
+                        "layout": {
+                          "justify-content": "flex-end"
+                        }
+                      },
+                      "blocks": [
+                        {
+                          "type": "product-card/_quick-add"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "product-card/_info",
+                  "blocks": [
+                    {
+                      "type": "product-title"
+                    },
+                    {
+                      "type": "product-price"
+                    },
+                    {
+                      "type": "product-card/_description"
+                    },
+                    {
+                      "type": "product-buy-button"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

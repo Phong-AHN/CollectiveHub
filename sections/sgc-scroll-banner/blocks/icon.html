@@ -1,0 +1,77 @@
+{{#var icon_type = block.settings.icon_type /}}
+{{#capture icon_svg }}
+  {{#if icon_type == "line" }}
+    {{#component "../components/icons/line" /}}
+  {{#else if icon_type == "triangle" /}}
+    {{#component "../components/icons/triangle" /}}
+  {{#else if icon_type == "star" /}}
+    {{#component "../components/icons/star" /}}
+  {{#else if icon_type == "circle" /}}
+    {{#component "../components/icons/circle" /}}
+  {{/if}}
+{{/capture}}
+
+<div class="sgc-scroll-banner__banner-icon" {{{ block.shopline_attributes }}}>
+  {{#if block.settings.custom_image }}
+    <div class="sgc-scroll-banner__banner-icon-image">
+      {{#component "../components/image" data=block.settings.custom_image /}}
+    </div>
+  {{#else/}}
+    <div
+      class="sgc-scroll-banner__banner-icon-svg sgc-scroll-banner__banner-icon-svg--{{ icon_type }}"
+      style="
+        --icon-color: {{ block.settings.icon_color.red }}, {{ block.settings.icon_color.green }}, {{
+          block.settings.icon_color.blue
+        }};
+      "
+    >
+      {{{ icon_svg }}}
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_banner.blocks.icon.name",
+  "icon": "general",
+  "settings": [
+    {
+      "type": "select",
+      "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_type.label",
+      "id": "icon_type",
+      "default": "line",
+      "options": [
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_type.options_0.label",
+          "value": "line"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_type.options_1.label",
+          "value": "triangle"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_type.options_2.label",
+          "value": "star"
+        },
+        {
+          "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_type.options_3.label",
+          "value": "circle"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.custom_image.label",
+      "id": "custom_image"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_banner.blocks.icon.settings.icon_color.label",
+      "id": "icon_color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [],
+  "presets": []
+}
+{{/schema}}

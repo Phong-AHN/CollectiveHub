@@ -1,0 +1,318 @@
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+
+{{#component "stylesheet" src="./media-promotion.css" | asset_url() /}}
+
+{{#var total_pages = section.blocks_size /}}
+
+<div
+  class="
+    media-promotion
+    color-{{ section.settings.color_scheme.id }}
+  "
+  style="
+    --media-promotion-padding-inline-start: {{ section.settings.spacing | css_var(`padding-inline-start`) }};
+    --media-promotion-padding-inline-end: {{ section.settings.spacing | css_var(`padding-inline-start`) }};
+    --media-promotion-padding-block-start: {{ section.settings.spacing | css_var(`padding-block-start`) }};
+    --media-promotion-padding-block-end: {{ section.settings.spacing | css_var(`padding-block-end`) }};
+  "
+>
+  <theme-carousel
+    data-direction="horizontal"
+    data-autoplay="{{ section.settings.auto_switch }}"
+    data-autoplay-speed="{{ section.settings.switch_interval }}"
+    style="--media-promotion-speed:{{ section.settings.switch_interval }}s;"
+  >
+    <ul class="carousel__track">
+      {{#blocks}}
+        {{#block block_index=forblock.index0 total_pages=total_pages /}}
+      {{/blocks}}
+    </ul>
+  </theme-carousel>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.name",
+  "icon": "productImage",
+  "tag": "",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.media_promotion.settings.color_scheme.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "t:sections.media_promotion.settings.pagination_style.label",
+      "default": "progress",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "t:sections.media_promotion.settings.pagination_style.options_0.label"
+        },
+        {
+          "value": "progress",
+          "label": "t:sections.media_promotion.settings.pagination_style.options_1.label"
+        },
+        {
+          "value": "dot",
+          "label": "t:sections.media_promotion.settings.pagination_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "id": "auto_switch",
+      "type": "switch",
+      "label": "t:sections.media_promotion.settings.auto_switch.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "switch_interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "t:sections.media_promotion.settings.switch_interval.label",
+      "default": 7
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.media_promotion.settings.spacing.label",
+      "default": {
+        "padding-block-start": "40px",
+        "padding-inline-end": "40px",
+        "padding-block-end": "40px",
+        "padding-inline-start": "40px",
+        "@media (--mobile)": {
+          "padding-block-start": "40px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "40px",
+          "padding-inline-start": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-group",
+      "limit": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.presets.presets_0.name",
+      "category": "t:sections.media_promotion.presets.presets_0.category",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "$product-group",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$media-container",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$video",
+                  "settings": {},
+                  "blocks": [
+                    {
+                      "type": "$group",
+                      "settings": {},
+                      "blocks": [
+                        {
+                          "type": "heading",
+                          "settings": {
+                            "text": "Deep Cleaning",
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "description",
+                          "settings": {
+                            "content": "Rich in amino acids",
+                            "text_align": "left",
+                            "size": {
+                              "width": "auto",
+                              "height": "auto"
+                            },
+                            "spacing": {
+                              "padding": "0px",
+                              "@media (--mobile)": {
+                                "padding": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "settings": {
+                            "text": "View Detail",
+                            "style": "primary"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$product-container",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$product-card",
+                  "settings": {},
+                  "blocks": [
+                    {
+                      "type": "$product-info",
+                      "settings": {
+                        "spacing": {
+                          "padding-block-start": "20px",
+                          "padding-inline-end": "20px",
+                          "padding-block-end": "20px",
+                          "padding-inline-start": "20px",
+                          "@media (--mobile)": {
+                            "padding-block-start": "20px",
+                            "padding-inline-end": "20px",
+                            "padding-block-end": "20px",
+                            "padding-inline-start": "20px"
+                          }
+                        }
+                      },
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$product-group",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$media-container",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$video",
+                  "settings": {},
+                  "blocks": [
+                    {
+                      "type": "$group",
+                      "settings": {},
+                      "blocks": [
+                        {
+                          "type": "heading",
+                          "settings": {
+                            "text": "Deep Cleaning",
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "description",
+                          "settings": {
+                            "content": "Rich in amino acids",
+                            "text_align": "left",
+                            "size": {
+                              "width": "auto",
+                              "height": "auto"
+                            },
+                            "spacing": {
+                              "padding": "0px",
+                              "@media (--mobile)": {
+                                "padding": "0px"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "settings": {
+                            "text": "View Detail",
+                            "style": "primary"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "$product-container",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$product-card",
+                  "settings": {},
+                  "blocks": [
+                    {
+                      "type": "$product-info",
+                      "settings": {
+                        "spacing": {
+                          "padding-block-start": "20px",
+                          "padding-inline-end": "20px",
+                          "padding-block-end": "20px",
+                          "padding-inline-start": "20px",
+                          "@media (--mobile)": {
+                            "padding-block-start": "20px",
+                            "padding-inline-end": "20px",
+                            "padding-block-end": "20px",
+                            "padding-inline-start": "20px"
+                          }
+                        }
+                      },
+                      "blocks": [
+                        {
+                          "type": "product-title"
+                        },
+                        {
+                          "type": "product-price"
+                        },
+                        {
+                          "type": "product-card/_description",
+                          "settings": {
+                            "text_align": "left"
+                          }
+                        },
+                        {
+                          "type": "product-buy-button"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

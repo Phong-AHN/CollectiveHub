@@ -1,0 +1,62 @@
+<div class="{{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#content "blocks" /}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.text_group.name",
+  "icon": "general",
+  "limit": 1,
+  "tag": "",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.before_after.blocks.text_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "20px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.before_after.blocks.text_group.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.before_after.blocks.text_group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "limit": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.text_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "<strong><span style=\"font-size: 48px;\">92%</span></strong><br><span style=\"font-size: 16px;\">Consumer study results</span><br><span style=\"font-size: 22px;\"><strong>MY LIPS FELT SOOTHED AND PROTECTED FROM DRYNESS</strong></span>",
+            "text_align": "left",
+            "typography": "body3"
+          }
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

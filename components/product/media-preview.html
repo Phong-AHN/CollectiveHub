@@ -1,0 +1,106 @@
+{{#component "stylesheet" src="components/modal/index.css" | asset_url() /}}
+{{#component "stylesheet" src="components/carousel/index.css" | asset_url() /}}
+
+{{#component "script" src="components/modal/index.js" | asset_url() /}}
+{{#component "script" src="components/carousel/index.js" | asset_url() /}}
+{{#component "script" src="./media-preview.js" | asset_url() /}}
+
+{{#var current_variant = props.current_variant /}}
+{{#var hide_other_variants = props.hide_other_variants /}}
+
+{{#var video_loop = props.video_loop /}}
+{{#var video_muted = props.video_muted /}}
+{{#var video_autoplay = props.video_autoplay /}}
+{{#var desktop_zoom_type = props.desktop_zoom_type | default("list") /}}
+{{#var mobile_zoom_type = props.mobile_zoom_type | default("slider") /}}
+
+<theme-product-media-preview
+  data-theme-modal="true"
+  data-popup-container="body"
+  data-desktop-zoom-type="{{ desktop_zoom_type }}"
+  data-mobile-zoom-type="{{ mobile_zoom_type }}"
+>
+  <details
+    class="product-media-preview color-{{ section.settings.color_scheme.id }}"
+    data-desktop-zoom-type="{{ desktop_zoom_type }}"
+    data-mobile-zoom-type="{{ mobile_zoom_type }}"
+  >
+    <summary></summary>
+
+    <theme-carousel class="modal__content product-media-preview__main">
+      <button class="modal__close-control product-media-preview__close-control" type="button" name="close">
+        {{#component "icons/close" /}}
+      </button>
+
+      <div class="carousel__track product-media-preview__content">
+        {{#for media in props.medias }}
+          {{#var is_active = current_variant && media.id == current_variant.featured_media.id /}}
+          {{#var is_hidden = current_variant && hide_other_variants && media.variants | size() > 0 && !is_active /}}
+
+          <div
+            class="product-media-preview__media {{#if is_hidden }}hidden{{/if}}"
+            style="--aspect-ratio: {{ media.preview_image.aspect_ratio }};"
+            data-media-id="{{ media.id }}"
+            data-variant-media="{{ media.variants && media.variants | size() > 0 }}"
+            data-video-autoplay="{{ video_autoplay }}"
+          >
+            {{#switch media.media_type }}
+              {{#case "video" /}}
+                {{#component
+                  "media/video-media"
+                  local_media=media
+                  muted=video_muted
+                  autoplay=video_autoplay
+                  loop=video_loop
+                  controls=!props.hidden_video_controls
+                  poster_image_lazy=true
+                /}}
+              {{#case "external_video" /}}
+                {{#component
+                  "media/video-media"
+                  external_media=media
+                  muted=video_muted
+                  autoplay=video_autoplay
+                  loop=video_loop
+                  controls=!props.youtube_simple_style
+                  poster_image_lazy=true
+                /}}
+              {{#else/}}
+                {{#component
+                  "image"
+                  class="product-media-preview__image"
+                  data=media.preview_image
+                  quality=image_quality
+                  original=true
+                  lazy=true
+                  fetchpriority="auto"
+                /}}
+            {{/switch}}
+          </div>
+        {{/for}}
+      </div>
+
+      <div class="product-media-preview__tools">
+        {{#if props.medias | size() > 0 }}
+          <button name="previous" class="product-media-preview__tool-button product-media-preview__arrow">
+            {{#component "icons/arrow-large" /}}
+          </button>
+        {{/if}}
+
+        <button
+          class="product-media-preview__tool-button product-media-preview__tool-close-control"
+          type="button"
+          name="close"
+        >
+          {{#component "icons/close" /}}
+        </button>
+
+        {{#if props.medias | size() > 0 }}
+          <button name="next" class="product-media-preview__tool-button product-media-preview__arrow">
+            {{#component "icons/arrow-large" /}}
+          </button>
+        {{/if}}
+      </div>
+    </theme-carousel>
+  </details>
+</theme-product-media-preview>

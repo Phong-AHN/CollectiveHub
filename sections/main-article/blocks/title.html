@@ -1,0 +1,129 @@
+{{#var text_tag = block.settings.text_tag | default("div") /}}
+
+<{{ text_tag }} class="{{ block.settings.typography }} main-article__title" {{{ block.shopline_attributes }}}>
+  {{ article.title }}
+</{{ text_tag }}>
+
+{{#schema}}
+{
+  "name": "t:sections.main_article.blocks.title.name",
+  "icon": "title",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_tag",
+      "label": "t:sections.main_article.blocks.title.settings.text_tag.label",
+      "info": "t:sections.main_article.blocks.title.settings.text_tag.info",
+      "default": "div",
+      "options": [
+        {
+          "value": "div",
+          "label": "t:sections.main_article.blocks.title.settings.text_tag.options_0.label"
+        },
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "P"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:sections.main_article.blocks.title.settings.typography.label",
+      "default": "title4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_article.blocks.title.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_article.blocks.title.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

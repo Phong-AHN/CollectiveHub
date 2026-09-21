@@ -1,0 +1,263 @@
+{{#component "stylesheet" src="./email-subscription.css" | asset_url() /}}
+
+<div
+  id="{{ block.id }}"
+  class="
+    block-subscription
+    {{ block.settings | class_list() }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#var return_to_url = request.path | append("?positioned_id=") | append(block.id) /}}
+
+  {{#customer_form return_to=return_to_url }}
+    <div class="block-subscription__inline-form" {{{ block.shopline_attributes }}}>
+      {{#component
+        "input/input-email"
+        input_id="subscribe-form-email"
+        input_name="contact[email]"
+        input_required=true
+        input_placeholder=block.settings.placeholder
+        input_class_name=block.settings.input_text_typography
+        placeholder_class_name=block.settings.input_text_typography
+      /}}
+
+      {{#var style_secondary = false /}}
+      {{#var style_link = false /}}
+
+      {{#switch block.settings.style }}
+        {{#case "secondary" /}}
+          {{#set style_secondary = true /}}
+          {{#set style_link = false /}}
+        {{#case "link" /}}
+          {{#set style_secondary = false /}}
+          {{#set style_link = true /}}
+      {{/switch}}
+
+      {{#if block.settings.button_text }}
+        {{#component
+          "button"
+          text=block.settings.button_text
+          style_secondary=style_secondary
+          style_link=style_link
+          class_name=block.settings.button_typography
+        /}}
+      {{/if}}
+    </div>
+
+    {{#if form.errors.messages }}
+      <p class="field__info field__info--error">
+        {{#component "icons/warning" /}}
+        {{ form.errors.messages }}
+      </p>
+    {{/if}}
+
+    {{#if form.posted_successfully }}
+      <p class="field__info">
+        {{#component "icons/success" /}}
+        {{ "general.footer.subscribe_success" | t() }}
+      </p>
+    {{/if}}
+  {{/customer_form}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.email_subscription.name",
+  "icon": "email",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "t:blocks.email_subscription.settings.placeholder.label",
+      "default": "Enter your email"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.email_subscription.settings.input_text_typography.label",
+      "id": "input_text_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.email_subscription.settings.input_text_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:blocks.email_subscription.settings.button_text.label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.email_subscription.settings.button_typography.label",
+      "id": "button_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.email_subscription.settings.button_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:blocks.email_subscription.settings.style.label",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:blocks.email_subscription.settings.style.options_0.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:blocks.email_subscription.settings.style.options_1.label"
+        },
+        {
+          "value": "link",
+          "label": "t:blocks.email_subscription.settings.style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.email_subscription.settings.spacing.label",
+      "default": {}
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.email_subscription.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto",
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.email_subscription.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

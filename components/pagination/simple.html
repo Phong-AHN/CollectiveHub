@@ -1,0 +1,40 @@
+{{#var paginate = props.paginate /}}
+
+{{#if paginate.pages > 1 }}
+  {{#component "stylesheet" src="./simple.css" | asset_url() /}}
+
+  <div class="pagination-simple-container">
+    <div class="pagination-simple">
+      <a
+        href="{{ paginate.previous.url | default(`javascript:;`) }}"
+        class="pagination-simple__button pagination-simple__button--previous {{#if !paginate.previous }}disabled{{/if}}"
+      >
+        {{#component "icons/arrow" /}}
+      </a>
+
+      <div class="body3 pagination-simple__pager">
+        {{ paginate.current_page }} / {{ paginate.pages }}
+      </div>
+
+      <a
+        href="{{ paginate.next.url | default(`javascript:;`) }}"
+        class="pagination-simple__button pagination-simple__button--next {{#if !paginate.next }}disabled{{/if}}"
+      >
+        {{#component "icons/arrow" /}}
+      </a>
+    </div>
+
+    {{#var last_current_offset = paginate.current_offset | plus(paginate.page_size) /}}
+
+    {{#if paginate.current_page == paginate.pages }}
+      {{#set last_current_offset = paginate.items /}}
+    {{/if}}
+    <div class="body4 pagination-simple__offset">
+      {{#var current_offset = paginate.current_offset | plus(1) /}}
+      {{
+        "pagination.offset_info" |
+          t(current_offset = current_offset, last_current_offset = last_current_offset, total = paginate.items)
+      }}
+    </div>
+  </div>
+{{/if}}

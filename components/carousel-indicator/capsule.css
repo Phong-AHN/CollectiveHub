@@ -1,0 +1,23 @@
+.theme-carousel-indicator__capsule {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 75%;
+}
+.theme-carousel-indicator__capsule-item {
+  flex: 1 0 0;
+  max-width: 30px;
+  height: 3px;
+  padding: 0;
+  background-color: rgba(var(--color-text), 0.2);
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+.theme-carousel-indicator__capsule-item.is-active {
+  background-color: rgb(var(--color-text));
+}

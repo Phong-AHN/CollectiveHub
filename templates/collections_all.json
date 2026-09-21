@@ -1,0 +1,60 @@
+{
+  "sections": {
+    "main-collections-all": {
+      "type": "main-collections-all",
+      "settings": {
+        "color_scheme": "scheme-1"
+      },
+      "disabled": false,
+      "blocks": {
+        "main-collections-all__heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Collections",
+            "typography": "title2"
+          },
+          "blocks": {}
+        },
+        "main-collections-all__list": {
+          "type": "$list",
+          "settings": {
+            "mobile_columns": 1
+          },
+          "blocks": {
+            "main-collections-all__list__card": {
+              "type": "collection/card",
+              "settings": {},
+              "blocks": {
+                "main-collections-all__list__card__image": {
+                  "type": "collection/_image",
+                  "settings": {},
+                  "blocks": {}
+                },
+                "main-collections-all__list__card__title": {
+                  "type": "collection/_title",
+                  "settings": {},
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "main-collections-all__list__card__image",
+                "main-collections-all__list__card__title"
+              ]
+            }
+          },
+          "block_order": [
+            "main-collections-all__list__card"
+          ]
+        }
+      },
+      "block_order": [
+        "main-collections-all__heading",
+        "main-collections-all__list"
+      ],
+      "custom_css": []
+    }
+  },
+  "order": [
+    "main-collections-all"
+  ]
+}

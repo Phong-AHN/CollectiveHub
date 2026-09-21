@@ -1,0 +1,79 @@
+{{#component "stylesheet" src="./logo.css" | asset_url() /}}
+
+<span
+  class="block-logo title5 {{ block.settings | class_list() }}"
+  style="
+    --logo-desktop-width: {{ block.settings.desktop_width }}px;
+    --logo-mobile-width: {{ block.settings.mobile_width }}px;
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.logo }}
+    {{#component "image" data=block.settings.logo /}}
+  {{#else if settings.logo /}}
+    {{#component "image" data=settings.logo /}}
+  {{#else/}}
+    {{ request.host }}
+  {{/if}}
+</span>
+
+{{#schema}}
+{
+  "name": "t:blocks.logo.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "image",
+      "id": "logo",
+      "label": "t:blocks.logo.settings.logo.label",
+      "info": "t:blocks.logo.settings.logo.info"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width",
+      "label": "t:blocks.logo.settings.desktop_width.label",
+      "default": 150,
+      "min": 50,
+      "max": 400,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "t:blocks.logo.settings.mobile_width.label",
+      "default": 100,
+      "min": 50,
+      "max": 400,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.logo.settings.spacing.label",
+      "default": {
+        "padding-top": "20px",
+        "padding-right": "0px",
+        "padding-bottom": "20px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.logo.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.logo.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

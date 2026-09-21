@@ -1,0 +1,14 @@
+{{#component "stylesheet" src="./capsule.css" | asset_url() /}}
+{{#var size = props.size | minus(1) /}}
+
+<div class="theme-carousel-indicator__capsule {{ props.class }}">
+  {{#for index in 0 | range(size) }}
+    <button
+      class="theme-carousel-indicator__capsule-item"
+      name="pager"
+      data-index="{{ index | times(props.page_size) }}"
+    >
+
+    </button>
+  {{/for}}
+</div>

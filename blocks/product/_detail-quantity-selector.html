@@ -1,0 +1,251 @@
+{{#var product = props.product /}}
+{{#var current_variant = props.current_variant /}}
+
+<div
+  class="
+    product-detail__quantity-selector
+    product-detail__quantity-selector--{{ block.settings.width }}
+    product-detail__row
+  "
+  {{{ block.shopline_attributes }}}
+>
+  <div
+    class="
+      product-detail__row
+      product-detail__row--direction-{{ block.settings.layout_direction }}
+    "
+  >
+    <div class="{{ block.settings.title_typography }} title-font-bold">
+      {{ "products.product_details.amount" | t() }}
+    </div>
+
+    {{#capture input_attributes }}
+      data-rerender-id="{{ block.id }}-quantity-input"
+      data-rerender-attrs="min,max,step"
+    {{/capture}}
+
+    {{#component
+      "input/input-number"
+      class="quantity-selector__input"
+      border_style=block.settings.border_style
+      name="quantity"
+      value=current_variant.quantity_rule.min
+      min=current_variant.quantity_rule.min
+      max=current_variant.quantity_rule.max
+      step=current_variant.quantity_rule.increment
+      input_attributes=input_attributes
+    /}}
+  </div>
+
+  {{#if product.quantity_price_breaks_configured }}
+    {{#var current_price_break /}}
+    {{#for price_break in current_variant.quantity_price_breaks }}
+      {{#if current_variant.quantity_rule.min >= price_break.minimum_quantity }}
+        {{#set current_price_break = price_break.price /}}
+      {{/if}}
+    {{/for}}
+
+    <div
+      class="volume-pricing__tip body4 body-font-bold hidden-empty"
+      data-rerender-id="{{ block.id }}-volume-pricing-tip"
+    >
+      {{~#if current_variant ~}}
+        {{#var current_price_str = current_price_break | default(current_variant.price) | money_with_currency() /}}
+        {{{ "products.product_details.each_price" | t(price = current_price_str) }}}
+      {{~/if~}}
+    </div>
+  {{/if}}
+
+  <div class="quantity-selector__rules hidden-empty body4" data-rerender-id="{{ block.id }}-quantity-rules">
+    {{~#if current_variant.quantity_rule.increment > 1 }}
+      <span>
+        {{ "products.product_details.moq_increment" | t(num = current_variant.quantity_rule.increment) }}
+      </span>
+    {{/if~}}
+    {{~#if current_variant.quantity_rule.min > 1 }}
+      <span>
+        {{ "products.product_details.moq_minimum" | t(num = current_variant.quantity_rule.min) }}
+      </span>
+    {{/if~}}
+    {{~#if current_variant.quantity_rule.max > 1 }}
+      <span>
+        {{ "products.product_details.moq_maximum" | t(num = current_variant.quantity_rule.max) }}
+      </span>
+    {{/if~}}
+  </div>
+</div>
+
+
+{{#if product.quantity_price_breaks_configured }}
+  {{#component "stylesheet" src="product/volume-pricing.css" | asset_url() /}}
+  {{#component "script" src="product/volume-pricing.js" | asset_url() /}}
+
+  <theme-product-volume-pricing
+    class="product-detail__volume-pricing hidden-empty"
+    data-rerender-id="{{ block.id }}-volume-pricing"
+  >
+    {{~#if current_variant.quantity_price_breaks | size() > 0 }}
+      <theme-show-more class="product-detail__row">
+        <div class="body3 title-font-bold">
+          {{ "products.product_details.price_break_title" | t() }}
+        </div>
+
+        <ul class="volume-pricing__list body3">
+          <li class="volume-pricing__item">
+            <span>{{ current_variant.quantity_rule.min }} +</span>
+            {{#var selected_variant_price = current_variant.price | money_with_currency() /}}
+            <span>{{{ "products.product_details.each_price" | t(price = selected_variant_price) }}}</span>
+          </li>
+          {{#for price_break in current_variant.quantity_price_breaks }}
+            <li class="volume-pricing__item" {{#if forloop.index0 >= 2 }}data-more="true"{{/if}}>
+              <span>{{ price_break.minimum_quantity }} +</span>
+              {{#var price_break_price = price_break.price | money_with_currency() /}}
+              <span>{{{ "products.product_details.each_price" | t(price = price_break_price) }}}</span>
+            </li>
+          {{/for}}
+        </ul>
+        <div>
+          <button class="button button--link" name="toggle-more" type="button">
+            <span class="view-more">{{ "products.product_details.price_breaks_view_more" | t() }}</span>
+            <span class="view-less">{{ "products.product_details.price_breaks_view_less" | t() }}</span>
+          </button>
+        </div>
+      </theme-show-more>
+    {{/if~}}
+  </theme-product-volume-pricing>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.product..detail_quantity_selector.name",
+  "tag": "",
+  "icon": "number",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:blocks.product..detail_quantity_selector.settings.width.label",
+      "default": "full",
+      "options": [
+        {
+          "value": "half",
+          "label": "t:blocks.product..detail_quantity_selector.settings.width.options_0.label"
+        },
+        {
+          "value": "full",
+          "label": "t:blocks.product..detail_quantity_selector.settings.width.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "layout_direction",
+      "label": "t:blocks.product..detail_quantity_selector.settings.layout_direction.label",
+      "default": "row",
+      "options": [
+        {
+          "value": "column",
+          "label": "t:blocks.product..detail_quantity_selector.settings.layout_direction.options_0.label"
+        },
+        {
+          "value": "row",
+          "label": "t:blocks.product..detail_quantity_selector.settings.layout_direction.options_1.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "border_style",
+      "label": "t:blocks.product..detail_quantity_selector.settings.border_style.label",
+      "default": "outline",
+      "options": [
+        {
+          "value": "line",
+          "label": "t:blocks.product..detail_quantity_selector.settings.border_style.options_0.label"
+        },
+        {
+          "value": "outline",
+          "label": "t:blocks.product..detail_quantity_selector.settings.border_style.options_1.label"
+        },
+        {
+          "value": "none",
+          "label": "t:blocks.product..detail_quantity_selector.settings.border_style.options_2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product..detail_quantity_selector.settings.title_typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product..detail_quantity_selector.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

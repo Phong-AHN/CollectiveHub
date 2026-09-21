@@ -1,0 +1,109 @@
+{{#var product = block.settings.product | default(props.product) /}}
+
+{{#var has_default_variant = props.has_default_variant | default(true, allow_false = true) /}}
+{{#var current_variant /}}
+{{#if has_default_variant || block_attributes.block_mode == "csr" }}
+  {{#set current_variant = product.selected_or_first_available_variant /}}
+  {{#if !current_variant }}
+    {{#set current_variant = product | get_variants() | first() /}}
+  {{/if}}
+{{/if}}
+
+<theme-product-variant-sku
+  class="product-variant-sku {{ block.settings.typography }} hidden-empty"
+  data-rerender-id="{{ block.id }}-variant-sku"
+  {{{ block.shopline_attributes }}}
+>
+  {{~ current_variant.sku ~}}
+</theme-product-variant-sku>
+
+{{#schema}}
+{
+  "tag": "",
+  "name": "t:blocks.product_variant_sku.name",
+  "icon": "productSku",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.product_variant_sku.settings.product.label",
+      "info": "t:blocks.product_variant_sku.settings.product.info",
+      "default": "${closest.product}"
+    },
+    {
+      "type": "select",
+      "id": "typography",
+      "label": "t:blocks.product_variant_sku.settings.typography.label",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:blocks.product_variant_sku.settings.typography.options_14.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_variant_sku.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,30 @@
+{{#var image = props.image /}}
+{{#var position = props.position /}}
+{{#var title = props.title /}}
+{{#var link = props.link /}}
+{{#var link_text = props.link_text /}}
+
+{{#if image }}
+  <div class="header-nav-with-images-dropdown-panel__item {{ position }}">
+    {{#component "image" data=image desktop_size="1/1" lazy=true /}}
+
+    <div class="header-nav-with-images-dropdown-panel__item-inner">
+      {{#if title }}
+        <h6 class="header-nav-with-images-dropdown-panel__title">{{ title }}</h6>
+      {{/if}}
+
+      {{#if link_text }}
+        <a
+          class="
+            header-nav-with-images-dropdown-panel__link
+            {{#if props.button_style == "primary" }}button{{/if}}
+            {{#if props.button_style == "secondary" }}button button--secondary{{/if}}
+          "
+          href="{{#if link }}{{ link }}{{#else/}}javascript:;{{/if}}"
+        >
+          {{ link_text }}
+        </a>
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

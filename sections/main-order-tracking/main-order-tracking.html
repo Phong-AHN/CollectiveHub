@@ -1,0 +1,393 @@
+{{#component "stylesheet" src="./main-order-tracking.css" | asset_url() /}}
+{{#component "script" src="./main-order-tracking.js" | asset_url() /}}
+
+<div
+  class="page-width color-{{ section.settings.color_scheme.id }}"
+  style="background-color: rgb(var(--color-background));"
+>
+  <div class="main-order-tracking {{ section.settings | class_list() }}">
+    <div class="main-order-tracking__wrapper">
+      <div class="{{ section.settings.title_typography }} text-center main-order-tracking__title">
+        {{ section.settings.title }}
+      </div>
+      <theme-order-tracking>
+        {{#order_tracking_form}}
+          <div class="text-center main-order-tracking__tabs">
+            <span class="{{ section.settings.tab_typography }} active" data-type="email">
+              {{ "general.order_tracking.email" | t() }}
+            </span>
+            <span class="{{ section.settings.tab_typography }}" data-type="phone">
+              {{ "general.order_tracking.phone" | t() }}
+            </span>
+          </div>
+
+          <div class="main-order-tracking__panes {{ section.settings.input_text_typography }}">
+            <div data-type="email">
+              {{#component
+                "input/input-email"
+                input_class="field__input"
+                input_name="order_tracking[email]"
+                input_required=true
+                input_placeholder="general.order_tracking.other_email" | t()
+                input_class_name=section.settings.input_text_typography
+                placeholder_class_name=section.settings.input_text_typography
+              /}}
+            </div>
+
+            <div class="hidden" data-type="phone">
+              {{#component
+                "input/input-phone"
+                all_country_dialing_code=all_country_dialing_code
+                input_name="order_tracking[phone]"
+                code_name="order_tracking[phone_area_code]"
+                input_required=true
+                input_disabled=true
+                country_iso_code=localization.country.iso_code
+                class=section.settings.input_text_typography
+                input_class_name=section.settings.input_text_typography
+                placeholder_class_name=section.settings.input_text_typography
+              /}}
+            </div>
+
+            <p class="body6 error-message" id="account-error-message"></p>
+
+            <label class="field" id="order_number_field">
+              <input
+                type="text"
+                class="field__input {{ section.settings.input_text_typography }}"
+                id="order_number"
+                name="order_tracking[order_number]"
+                required
+                placeholder="{{ `general.order_tracking.orderId` | t() }}"
+              />
+              <span for="order_number" class="field__label {{ section.settings.input_text_typography }}">
+                {{ "general.order_tracking.orderId" | t() }}
+              </span>
+            </label>
+
+            <p class="body6 error-message" id="order-error-message"></p>
+
+            <button class="button main-order-tracking__submit {{ section.settings.btn_typography }}" type="submit">
+              {{ section.settings.btn_text | default("View Order", allow_empty_str = false) }}
+              {{#component "icons/loading-spinner" /}}
+            </button>
+          </div>
+        {{/order_tracking_form}}
+      </theme-order-tracking>
+    </div>
+  </div>
+</div>
+{{#schema}}
+{
+  "name": "t:sections.main_order_tracking.name",
+  "icon": "vector",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_order_tracking.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_order_tracking.settings.spacing.label",
+      "default": {
+        "padding-top": "80px",
+        "padding-bottom": "80px",
+        "@media (--mobile)": {
+          "padding-top": "40px",
+          "padding-bottom": "40px"
+        }
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.main_order_tracking.settings.title.label",
+      "default": "Order Tracking"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_order_tracking.settings.title_typography.label",
+      "id": "title_typography",
+      "default": "title5",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_order_tracking.settings.title_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_order_tracking.settings.tab_typography.label",
+      "info": "t:sections.main_order_tracking.settings.tab_typography.info",
+      "id": "tab_typography",
+      "default": "body3",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_order_tracking.settings.tab_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_order_tracking.settings.input_text_typography.label",
+      "info": "t:sections.main_order_tracking.settings.input_text_typography.info",
+      "id": "input_text_typography",
+      "default": "body4",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_order_tracking.settings.input_text_typography.options_14.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "t:sections.main_order_tracking.settings.btn_text.label",
+      "default": "View Order"
+    },
+    {
+      "type": "select",
+      "label": "t:sections.main_order_tracking.settings.btn_typography.label",
+      "id": "btn_typography",
+      "default": "body2",
+      "options": [
+        {
+          "value": "typography-default",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_0.label"
+        },
+        {
+          "value": "title0",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_1.label"
+        },
+        {
+          "value": "title1",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_2.label"
+        },
+        {
+          "value": "title2",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_3.label"
+        },
+        {
+          "value": "title3",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_4.label"
+        },
+        {
+          "value": "title4",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_5.label"
+        },
+        {
+          "value": "title5",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_6.label"
+        },
+        {
+          "value": "title6",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_7.label"
+        },
+        {
+          "value": "body0",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_8.label"
+        },
+        {
+          "value": "body1",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_9.label"
+        },
+        {
+          "value": "body2",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_10.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_11.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_12.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_13.label"
+        },
+        {
+          "value": "body6",
+          "label": "t:sections.main_order_tracking.settings.btn_typography.options_14.label"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

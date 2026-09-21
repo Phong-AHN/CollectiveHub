@@ -1,0 +1,31 @@
+{{#component "stylesheet" src="components/modal/index.css" | asset_url() /}}
+{{#component "script" src="components/modal/index.js" | asset_url() /}}
+{{#component "stylesheet" src="./quick-add-modal.css" | asset_url() /}}
+{{#component "script" src="./quick-add-modal.js" | asset_url() /}}
+
+{{#var product = props.product /}}
+{{#var shopline_attributes = props.shopline_attributes /}}
+{{#var summary = props.summary /}}
+{{#var current_variant = props.current_variant /}}
+
+<theme-quick-add-modal
+  class="{{ props.class }}"
+  data-theme-modal
+  data-mask-closable
+  data-esc-to-exit
+  data-popup-container="body"
+  data-variant-id="{{ current_variant.id }}"
+  product-url="{{ product.url }}"
+  {{{ shopline_attributes }}}
+>
+  <details>
+    {{{ summary }}}
+    <div class="quick-add-modal__modal">
+      <div class="quick-add-modal__modal-content-desktop hidden-mobile"></div>
+      <div class="quick-add-modal__modal-content-mobile hidden-desktop"></div>
+      <button name="close" class="modal__close-control quick-add-modal__modal-close">
+        {{#component "icons/close" class="icon-close" /}}
+      </button>
+    </div>
+  </details>
+</theme-quick-add-modal>

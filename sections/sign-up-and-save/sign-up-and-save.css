@@ -1,0 +1,9 @@
+.sign-up-and-save-section {
+  word-break: break-all;
+}
+.sign-up-and-save__container {
+  background-color: rgb(var(--color-background));
+}
+.sign-up-and-save__content {
+  box-sizing: border-box;
+}

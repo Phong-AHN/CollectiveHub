@@ -1,0 +1,185 @@
+{{#component "stylesheet" src="./_info.css" | asset_url() /}}
+<div
+  class="
+    block-product-card-info
+    {{ block.settings | class_list() }}
+    {{#if !block.settings.inherit_color_scheme }}
+      color-{{ block.settings.color_scheme.id }}
+    {{/if}}
+    {{#if block.settings.layer }}block-product-card-info--layer{{/if}}
+  "
+  style="
+    --layer-opacity: {{ block.settings.layer_opacity }}%;
+    --info-padding-start: {{ block.settings.spacing | css_var(`padding-left`) }};
+    --info-padding-end: {{ block.settings.spacing | css_var(`padding-right`) }};
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.layer }}
+    {{#capture buy_button }}
+      {{#blocks}}
+        {{#if forblock.type == "product-card/_buy-button" }}
+          {{#block
+            product=props.product
+            current_variant=props.current_variant
+            has_default_variant=props.has_default_variant
+          /}}
+        {{/if}}
+      {{/blocks}}
+    {{/capture}}
+
+    {{#capture info }}
+      {{#blocks}}
+        {{#if forblock.type != "product-card/_buy-button" }}
+          {{#block
+            product=props.product
+            current_variant=props.current_variant
+            has_default_variant=props.has_default_variant
+          /}}
+        {{/if}}
+      {{/blocks}}
+    {{/capture}}
+
+    <div class="block-product-card-info__content {{ block.settings | class_list() }}">
+      {{{ info }}}
+    </div>
+    {{{ buy_button }}}
+  {{#else/}}
+    {{#blocks}}
+      {{#block
+        product=props.product
+        current_variant=props.current_variant
+        has_default_variant=props.has_default_variant
+      /}}
+    {{/blocks}}
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:blocks.product_card..info.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "inherit_color_scheme",
+      "label": "t:blocks.product_card..info.settings.inherit_color_scheme.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:blocks.product_card..info.settings.color_scheme.label",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "switch",
+      "id": "layer",
+      "label": "t:blocks.product_card..info.settings.layer.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "layer_opacity",
+      "label": "t:blocks.product_card..info.settings.layer_opacity.label",
+      "default": 70,
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:blocks.product_card..info.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "row-gap": "8px",
+        "column-gap": "8px"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.product_card..info.settings.spacing.label",
+      "default": {
+        "@media(--mobile)": {
+          "padding-top": "10px",
+          "padding-right": "8px",
+          "padding-bottom": "10px",
+          "padding-left": "8px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.product_card..info.settings.size.label",
+      "default": {
+        "width": "100%"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@blocks"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "product-title",
+      "limit": 1
+    },
+    {
+      "type": "product-price",
+      "limit": 1
+    },
+    {
+      "type": "product-inventory",
+      "limit": 1
+    },
+    {
+      "type": "product-card/_description",
+      "limit": 1
+    },
+    {
+      "type": "product-variant-sku",
+      "limit": 1
+    },
+    {
+      "type": "product-buy-button",
+      "limit": 1
+    },
+    {
+      "type": "product-buy-button-group/group",
+      "limit": 1
+    },
+    {
+      "type": "product-variant-picker",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_card..info.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "product-title"
+        },
+        {
+          "type": "product-price"
+        },
+        {
+          "type": "product-card/_description"
+        },
+        {
+          "type": "product-buy-button"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,227 @@
+{{#component "stylesheet" src="./icon.css" | asset_url() /}}
+
+<a
+  class="block-icon {{ block.settings | class_list() }}"
+  style="
+    --icon-desktop-width: {{ block.settings.desktop_width }}px;
+    --icon-mobile-width: {{ block.settings.mobile_width }}px;
+  "
+  href="{{ block.settings.url | default(`javascript:;`) }}"
+  {{#if block.settings.url && block.settings.open_in_new_tab }}target="_blank"{{/if}}
+  {{{ block.shopline_attributes }}}
+>
+  {{#if block.settings.image }}
+    {{#component "image" data=block.settings.image /}}
+  {{#else/}}
+    {{#component "block-icons/" | append(block.settings.icon) /}}
+  {{/if}}
+</a>
+
+{{#schema}}
+{
+  "name": "t:blocks.icon.name",
+  "icon": "image",
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "t:blocks.icon.settings.icon.label",
+      "default": "checkbox",
+      "options": [
+        {
+          "value": "checkbox",
+          "label": "t:blocks.icon.settings.icon.options_0.label"
+        },
+        {
+          "value": "earth",
+          "label": "t:blocks.icon.settings.icon.options_1.label"
+        },
+        {
+          "value": "env-friendly",
+          "label": "t:blocks.icon.settings.icon.options_2.label"
+        },
+        {
+          "value": "package",
+          "label": "t:blocks.icon.settings.icon.options_3.label"
+        },
+        {
+          "value": "lock",
+          "label": "t:blocks.icon.settings.icon.options_4.label"
+        },
+        {
+          "value": "van",
+          "label": "t:blocks.icon.settings.icon.options_5.label"
+        },
+        {
+          "value": "location",
+          "label": "t:blocks.icon.settings.icon.options_6.label"
+        },
+        {
+          "value": "phone",
+          "label": "t:blocks.icon.settings.icon.options_7.label"
+        },
+        {
+          "value": "mobile",
+          "label": "t:blocks.icon.settings.icon.options_8.label"
+        },
+        {
+          "value": "wechat",
+          "label": "t:blocks.icon.settings.icon.options_9.label"
+        },
+        {
+          "value": "email",
+          "label": "t:blocks.icon.settings.icon.options_10.label"
+        },
+        {
+          "value": "facebook",
+          "label": "t:blocks.icon.settings.icon.options_11.label"
+        },
+        {
+          "value": "x",
+          "label": "t:blocks.icon.settings.icon.options_12.label"
+        },
+        {
+          "value": "pinterest",
+          "label": "t:blocks.icon.settings.icon.options_13.label"
+        },
+        {
+          "value": "instagram",
+          "label": "t:blocks.icon.settings.icon.options_14.label"
+        },
+        {
+          "value": "snapchat",
+          "label": "t:blocks.icon.settings.icon.options_15.label"
+        },
+        {
+          "value": "tiktok",
+          "label": "t:blocks.icon.settings.icon.options_16.label"
+        },
+        {
+          "value": "youtube",
+          "label": "t:blocks.icon.settings.icon.options_17.label"
+        },
+        {
+          "value": "vimeo",
+          "label": "t:blocks.icon.settings.icon.options_18.label"
+        },
+        {
+          "value": "tumblr",
+          "label": "t:blocks.icon.settings.icon.options_19.label"
+        },
+        {
+          "value": "linkedin",
+          "label": "t:blocks.icon.settings.icon.options_20.label"
+        },
+        {
+          "value": "whatsapp",
+          "label": "t:blocks.icon.settings.icon.options_21.label"
+        },
+        {
+          "value": "line",
+          "label": "t:blocks.icon.settings.icon.options_22.label"
+        },
+        {
+          "value": "kakao",
+          "label": "t:blocks.icon.settings.icon.options_23.label"
+        },
+        {
+          "value": "chat-bubble",
+          "label": "t:blocks.icon.settings.icon.options_24.label"
+        },
+        {
+          "value": "gluten-free",
+          "label": "t:blocks.icon.settings.icon.options_25.label"
+        },
+        {
+          "value": "heart",
+          "label": "t:blocks.icon.settings.icon.options_26.label"
+        },
+        {
+          "value": "iron",
+          "label": "t:blocks.icon.settings.icon.options_27.label"
+        },
+        {
+          "value": "leaf",
+          "label": "t:blocks.icon.settings.icon.options_28.label"
+        },
+        {
+          "value": "leather",
+          "label": "t:blocks.icon.settings.icon.options_29.label"
+        },
+        {
+          "value": "lightning",
+          "label": "t:blocks.icon.settings.icon.options_30.label"
+        },
+        {
+          "value": "lipstick",
+          "label": "t:blocks.icon.settings.icon.options_31.label"
+        },
+        {
+          "value": "clipboard",
+          "label": "t:blocks.icon.settings.icon.options_32.label"
+        },
+        {
+          "value": "pepper",
+          "label": "t:blocks.icon.settings.icon.options_33.label"
+        },
+        {
+          "value": "perfume",
+          "label": "t:blocks.icon.settings.icon.options_34.label"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "image",
+      "label": "t:blocks.icon.settings.image.label",
+      "info": "t:blocks.icon.settings.image.info"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "t:blocks.icon.settings.url.label"
+    },
+    {
+      "type": "switch",
+      "id": "open_in_new_tab",
+      "label": "t:blocks.icon.settings.open_in_new_tab.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "desktop_width",
+      "label": "t:blocks.icon.settings.desktop_width.label",
+      "default": 24,
+      "min": 12,
+      "max": 240,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "t:blocks.icon.settings.mobile_width.label",
+      "default": 24,
+      "min": 12,
+      "max": 240,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:blocks.icon.settings.spacing.label"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.icon.settings.size.label",
+      "default": {
+        "width": "auto",
+        "height": "auto"
+      }
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,69 @@
+
+<div class="predictive-search-section">
+  {{#var count = predictive_search.products | size() /}}
+
+  {{#if count }}
+    <header class="predictive-search__header">
+      <span class="predictive-search__title body4 body-font-bold">
+        {{ "search.product_list.title" | t() }}
+      </span>
+      <span class="predictive-search__count body4 body-font-bold">
+        {{ "products.product_search.ount_results" | t(count = count) }}
+      </span>
+    </header>
+  {{/if}}
+
+  <div class="predictive-search__body">
+    {{#if count }}
+      <ul class="predictive-search__results">
+        {{#for product in predictive_search.products }}
+          <li class="predictive-search__result-item">
+            <a href="{{ product.url }}">
+              {{#product_item product class="predictive-search__product" }}
+                <div class="predictive-search__product-image-wrap">
+                  {{#if product.featured_image_v2 }}
+                    {{#component "image" data=product.featured_image_v2 class="predictive-search__product-image" /}}
+                  {{#else/}}
+                    {{#placeholder_svg "image" class="predictive-search__product-image" /}}
+                  {{/if}}
+                </div>
+
+                <div class="predictive-search__product-content">
+                  <h3 class="predictive-search__product-title">{{ product.title }}</h3>
+                  <span class="predictive-search__product-price">
+                    {{{ product.price | money() }}}
+                    {{#if product.compare_at_price > product.price }}
+                      <span class="predictive-search__product-save-price">
+                        {{{ product.compare_at_price | money() }}}
+                      </span>
+                    {{/if}}
+                  </span>
+                </div>
+              {{/product_item}}
+            </a>
+          </li>
+        {{/for}}
+      </ul>
+    {{/if}}
+
+    <footer class="predictive-search__footer">
+      <input type="hidden" name="keyword" value="__QUERY_KEY__"/>
+      <button class="predictive-search__more button body3" type="submit" data-role="search-bar-more">
+        {{~ "general.search.search_hint" | t(key = "__QUERY_KEY__") | trim() ~}}
+      </button>
+    </footer>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.predictive_search.name",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "product-card/card",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}

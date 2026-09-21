@@ -1,0 +1,22 @@
+{{#var image = props.image /}}
+{{#var title = props.title /}}
+{{#var link = props.link /}}
+{{#var show_placeholder = props.show_placeholder /}}
+
+{{#if image }}
+  <a class="header-super-nav-dropdown-panel__item" href="{{#if link }}{{ link }}{{#else/}}javascript:;{{/if}}">
+    {{#component "image" data=image lazy=true /}}
+
+    <div class="header-super-nav-dropdown-panel__item-inner">
+      {{#if title }}
+        <h6 class="header-super-nav-dropdown-panel__title">{{ title }}</h6>
+      {{/if}}
+    </div>
+  </a>
+{{#else/}}
+  {{#if show_placeholder }}
+    <a class="header-super-nav-dropdown-panel__item" href="{{#if link }}{{ link }}{{#else/}}javascript:;{{/if}}">
+      {{#placeholder_svg "image" /}}
+    </a>
+  {{/if}}
+{{/if}}

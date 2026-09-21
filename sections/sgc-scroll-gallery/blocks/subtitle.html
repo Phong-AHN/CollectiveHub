@@ -1,0 +1,114 @@
+{{#var desktop_title = block.settings.desktop_title /}}
+{{#var mobile_title = block.settings.mobile_title /}}
+
+{{#component
+  "../components/basic-style"
+  selector="#" | append(block.id)
+  color=block.settings.color
+  font_family=block.settings.font_family
+  font_size=block.settings.desktop_font_size
+  mobile_font_size=block.settings.mobile_font_size
+  line_height=block.settings.line_height
+  letter_spacing=block.settings.letter_spacing
+/}}
+
+<div
+  id="{{ block.id }}"
+  class="sgc-block-subtitle sgc-basic-style sgc-text-align-{{ block.settings.text_align }}"
+  {{{ block.shopline_attributes }}}
+>
+  {{#if mobile_title }}
+    <span class="sgc-hidden-mobile">{{{ desktop_title }}}</span>
+    <span class="sgc-hidden-desktop">{{{ mobile_title }}}</span>
+  {{#else/}}
+    <span>{{{ desktop_title }}}</span>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.sgc_scroll_gallery.blocks.subtitle.name",
+  "tag": "",
+  "icon": "title",
+  "settings": [
+    {
+      "type": "text",
+      "id": "desktop_title",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.desktop_title.label",
+      "default": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "mobile_title",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.mobile_title.label",
+      "info": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.mobile_title.info"
+    },
+    {
+      "type": "group_header",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.group_header_0.label"
+    },
+    {
+      "type": "font",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.font_family.label",
+      "id": "font_family",
+      "default": "Montserrat:600"
+    },
+    {
+      "type": "color",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.color.label",
+      "id": "color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.desktop_font_size.label",
+      "id": "desktop_font_size",
+      "default": 16,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.mobile_font_size.label",
+      "id": "mobile_font_size",
+      "default": 14,
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.letter_spacing.label",
+      "id": "letter_spacing",
+      "default": 300,
+      "min": -75,
+      "max": 250,
+      "step": 25,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.line_height.label",
+      "default": 1,
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1
+    },
+    {
+      "id": "text_align",
+      "type": "text_align",
+      "label": "t:sections.sgc_scroll_gallery.blocks.subtitle.settings.text_align.label",
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sgc_scroll_gallery.blocks.subtitle.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

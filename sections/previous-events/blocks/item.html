@@ -1,0 +1,60 @@
+<div class="swiper-slide previous-events__slide" {{{ block.shopline_attributes }}}>
+  {{#capture card_inner }}
+    <div class="previous-events__card-media">
+      {{#if block.settings.image }}
+        {{#component
+          "image"
+          data=block.settings.image
+          class="previous-events__card-image"
+          mobile_size="90vw"
+          desktop_size="30vw"
+        /}}
+      {{#else/}}
+        <div class="previous-events__card-placeholder">
+          {{#placeholder_svg "image" /}}
+        </div>
+      {{/if}}
+    </div>
+  {{/capture}}
+
+  {{#if block.settings.link }}
+    <a class="previous-events__card" href="{{ block.settings.link }}" {{#if block.settings.open_in_new_tab }}target="_blank" rel="noopener noreferrer"{{/if}}>
+      {{{ card_inner }}}
+    </a>
+  {{#else/}}
+    <div class="previous-events__card">
+      {{{ card_inner }}}
+    </div>
+  {{/if}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.previous_events.blocks.item.name",
+  "tag": "",
+  "icon": "image",
+  "settings": [
+    {
+      "type": "image",
+      "id": "image",
+      "label": "t:sections.previous_events.blocks.item.settings.image.label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.previous_events.blocks.item.settings.link.label"
+    },
+    {
+      "type": "switch",
+      "id": "open_in_new_tab",
+      "label": "t:sections.previous_events.blocks.item.settings.open_in_new_tab.label",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.previous_events.blocks.item.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

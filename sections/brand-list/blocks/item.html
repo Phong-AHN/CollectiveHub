@@ -1,0 +1,42 @@
+<div {{{ block.shopline_attributes }}} class="block-brand-card__image-wrapper ratio">
+  <a
+    {{#if block.settings.jump_link }}href="{{ block.settings.jump_link }}"{{#else/}}href="javascript:;"{{/if}}
+    class="block-brand-list__link"
+    block-collection-card
+    {{ block.settings | class_list() }}
+  >
+    {{#if block.settings.image }}
+      {{#capture mobile_size }}1/{{ props.mobile_columns | default("1") }}{{/capture}}
+      {{#capture desktop_size }}1/{{ props.desktop_columns | default("1") }}{{/capture}}
+      {{#component "image" data=block.settings.image mobile_size=mobile_size desktop_size=desktop_size /}}
+    {{#else/}}
+      {{#placeholder_svg "image" /}}
+    {{/if}}
+  </a>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.brand_list.blocks.item.name",
+  "tag": "",
+  "icon": "image",
+  "limit": 12,
+  "settings": [
+    {
+      "id": "image",
+      "type": "image",
+      "label": "t:sections.brand_list.blocks.item.settings.image.label"
+    },
+    {
+      "id": "jump_link",
+      "type": "url",
+      "label": "t:sections.brand_list.blocks.item.settings.jump_link.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.brand_list.blocks.item.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,11 @@
+.count-down__content {
+  display: flex;
+  width: 100%;
+  background-color: rgb(var(--color-background));
+  border-radius: 12px;
+}
+@media (max-width: 959px) {
+  .count-down__content {
+    border-radius: 6px;
+  }
+}

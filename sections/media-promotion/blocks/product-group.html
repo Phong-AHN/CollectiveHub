@@ -1,0 +1,177 @@
+{{#component "stylesheet" src="./product-group.css" | asset_url() /}}
+
+{{#var block_index = props.block_index /}}
+{{#var total_pages = props.total_pages /}}
+{{#var is_media_full_screen = block.settings.is_media_full_screen /}}
+
+{{#var product_container_settings /}}
+{{#blocks}}
+  {{#if forblock.type == "$product-container" }}
+    {{#set product_container_settings = forblock.settings /}}
+  {{/if}}
+{{/blocks}}
+
+<div
+  class="
+    product-group {{ block.settings | class_list() }}{{#if is_media_full_screen }}product-group--full-screen{{/if}}
+  "
+  style="--container-gap: {{ block.settings.gap }}px;"
+  {{{ block.shopline_attributes }}}
+>
+  {{#blocks}}
+    {{#if forblock.type == "$media-container" }}
+      {{#block
+        block_index=block_index
+        total_pages=total_pages
+        product_container_width=product_container_settings.product_container_width
+      /}}
+    {{#else if forblock.type == "$product-container" /}}
+      {{#block/}}
+    {{/if}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.media_promotion.blocks.product_group.name",
+  "icon": "slideshow",
+  "tag": "",
+  "settings": [
+    {
+      "type": "switch",
+      "id": "is_media_full_screen",
+      "label": "t:sections.media_promotion.blocks.product_group.settings.is_media_full_screen.label",
+      "default": false,
+      "info": "t:sections.media_promotion.blocks.product_group.settings.is_media_full_screen.info"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:sections.media_promotion.blocks.product_group.settings.gap.label",
+      "default": 40,
+      "min": 0,
+      "max": 160,
+      "step": 10,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$media-container",
+      "limit": 1
+    },
+    {
+      "type": "$product-container",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.media_promotion.blocks.product_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$media-container",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$video",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$group",
+                  "settings": {},
+                  "blocks": [
+                    {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Deep Cleaning",
+                        "text_align": "left",
+                        "spacing": {
+                          "padding": "0px",
+                          "@media (--mobile)": {
+                            "padding": "0px"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "description",
+                      "settings": {
+                        "content": "Rich in amino acids",
+                        "text_align": "left",
+                        "size": {
+                          "width": "auto",
+                          "height": "auto"
+                        },
+                        "spacing": {
+                          "padding": "0px",
+                          "@media (--mobile)": {
+                            "padding": "0px"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "settings": {
+                        "text": "View Detail",
+                        "style": "primary"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$product-container",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "$product-card",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "$product-info",
+                  "settings": {
+                    "spacing": {
+                      "padding-block-start": "20px",
+                      "padding-inline-end": "20px",
+                      "padding-block-end": "20px",
+                      "padding-inline-start": "20px",
+                      "@media (--mobile)": {
+                        "padding-block-start": "20px",
+                        "padding-inline-end": "20px",
+                        "padding-block-end": "20px",
+                        "padding-inline-start": "20px"
+                      }
+                    }
+                  },
+                  "blocks": [
+                    {
+                      "type": "product-title"
+                    },
+                    {
+                      "type": "product-price"
+                    },
+                    {
+                      "type": "product-card/_description",
+                      "settings": {
+                        "text_align": "left"
+                      }
+                    },
+                    {
+                      "type": "product-buy-button"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,36 @@
+.pagination-simple-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-simple {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-simple__offset,
+.pagination-simple__pager {
+  color: rgb(var(--color-text));
+}
+
+.pagination-simple__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: rgb(var(--color-button-text)) !important;
+}
+
+.pagination-simple__button.disabled {
+  opacity: 0.5;
+}
+
+.pagination-simple__button--previous {
+  transform: rotate(180deg);
+}

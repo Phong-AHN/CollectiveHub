@@ -1,0 +1,111 @@
+<div
+  class="text-with-image__context-group {{ block.settings | class_list() }}"
+  {{{ block.shopline_attributes }}}
+  style="--top-pos:{{ block.settings.top_pos }}"
+>
+  {{#blocks}}
+    {{#block/}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.text_with_image.blocks.context_group.name",
+  "icon": "general",
+  "tag": "",
+  "settings": [
+    {
+      "type": "range",
+      "id": "top_pos",
+      "label": "t:sections.text_with_image.blocks.context_group.settings.top_pos.label",
+      "min": -1000,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.text_with_image.blocks.context_group.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "0px",
+        "column-gap": "100px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "align-items": "flex-start",
+          "row-gap": "20px",
+          "column-gap": "0px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.text_with_image.blocks.context_group.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.text_with_image.blocks.context_group.settings.spacing.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$text-group",
+      "limit": 1
+    },
+    {
+      "type": "$image-with-product",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.text_with_image.blocks.context_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$text-group",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "text_align": "left"
+              },
+              "limit": 1
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text_align": "left",
+                "text": "A short description."
+              },
+              "limit": 1
+            },
+            {
+              "type": "button",
+              "settings": {
+                "style": "secondary",
+                "text": "Shop now",
+                "typography": "body2"
+              },
+              "limit": 1
+            }
+          ]
+        },
+        {
+          "type": "$image-with-product"
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

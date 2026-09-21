@@ -1,0 +1,88 @@
+{{#var text_group_class = "" /}}
+{{#blocks}}
+  {{#if forblock.type == "$product-card-group" && forblock.settings.position == "above-video" }}
+    {{#set text_group_class = "shopping-video__product-video-group-video--padding-block-end" /}}
+  {{/if}}
+{{/blocks}}
+
+<div class="shopping-video__product-video-group {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+  {{#blocks}}
+    {{#if forblock.type == "$video" }}
+      {{#block text_group_class=text_group_class /}}
+    {{#else/}}
+      <div
+        class="
+          shopping-video__product-video-group-card-group-wrapper
+          shopping-video__product-video-group-card-group-wrapper--{{ forblock.settings.position }}
+        "
+      >
+        {{#block/}}
+      </div>
+    {{/if}}
+  {{/blocks}}
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.shopping_video.blocks.video_group.name",
+  "icon": "video",
+  "settings": [
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.shopping_video.blocks.video_group.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "row-gap": "20px"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$video",
+      "limit": 1
+    },
+    {
+      "type": "$product-card-group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shopping_video.blocks.video_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$video",
+          "blocks": [
+            {
+              "type": "$product-text-group",
+              "blocks": [
+                {
+                  "type": "$heading"
+                },
+                {
+                  "type": "$description",
+                  "settings": {
+                    "text_align": "left"
+                  }
+                },
+                {
+                  "type": "$button"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$product-card-group",
+          "blocks": [
+            {
+              "type": "$product-card"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

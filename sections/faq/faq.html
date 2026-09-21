@@ -1,0 +1,149 @@
+{{#component "stylesheet" src="./faq.css" | asset_url() /}}
+
+<div
+  class="faq-section color-{{ section.settings.color_scheme.id }}"
+  {{#if section.settings.layout_style != "none" }}layout="{{ section.settings.layout_style }}"{{/if}}
+  style="
+    {{#if section.settings.container_background_color }}
+      --container-background-color: {{ section.settings.container_background_color.rgb }};
+    {{/if}}
+  "
+  data-section-id="{{ section.id }}"
+>
+  <section class="page-width {{ section.settings | class_list() }}">
+    {{#content "blocks" /}}
+  </section>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.faq.name",
+  "icon": "frequentlyAskedQuestions",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.faq.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "t:sections.faq.settings.layout_style.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.faq.settings.layout_style.options_0.label"
+        },
+        {
+          "value": "column",
+          "label": "t:sections.faq.settings.layout_style.options_1.label"
+        },
+        {
+          "value": "block",
+          "label": "t:sections.faq.settings.layout_style.options_2.label"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "container_background_color",
+      "label": "t:sections.faq.settings.container_background_color.label",
+      "default": "#eee"
+    },
+    {
+      "type": "switch",
+      "id": "expand_first_label",
+      "label": "t:sections.faq.settings.expand_first_label.label",
+      "default": false
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.faq.settings.layout.label",
+      "default": {
+        "flex-direction": "column",
+        "flex-wrap": "nowrap",
+        "align-items": "center",
+        "justify-content": "center",
+        "row-gap": "40px",
+        "column-gap": "40px",
+        "@media (--mobile)": {
+          "row-gap": "20px",
+          "column-gap": "30px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.faq.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-inline-end": "30px",
+        "padding-block-end": "60px",
+        "padding-inline-start": "30px",
+        "@media (--mobile)": {
+          "padding-block-start": "24px",
+          "padding-inline-end": "20px",
+          "padding-block-end": "24px",
+          "padding-inline-start": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.faq.settings.size.label",
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
+    }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "heading",
+      "limit": 1
+    },
+    {
+      "type": "$group",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "category": "t:sections.faq.presets.presets_0.category",
+      "name": "t:sections.faq.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "FAQs",
+            "text_align": "left",
+            "spacing": {
+              "padding-block-start": "0",
+              "padding-block-end": "0"
+            }
+          }
+        },
+        {
+          "type": "$group",
+          "blocks": [
+            {
+              "type": "$collapsible-group",
+              "blocks": [
+                {
+                  "type": "$collapsible-panel"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

@@ -1,0 +1,155 @@
+{{#if section.settings.google_api_secret_key }}
+  {{#var link_url /}}
+  {{#if section.settings.latitude_longitude }}
+    {{#set link_url = "https://www.google.com/maps?q=" | append(section.settings.latitude_longitude) /}}
+  {{#else/}}
+    {{#set link_url = "" /}}
+  {{/if}}
+
+  <div class="map-block-map-style {{ block.settings | class_list() }}" {{{ block.shopline_attributes }}}>
+    {{#var iframe_url /}}
+    {{#if section.settings.latitude_longitude }}
+      {{#if block.settings.is_show_map_pushpin }}
+        {{#set
+          iframe_url = "https://www.google.com/maps/embed/v1/place?key=" |
+            append(section.settings.google_api_secret_key) |
+            append("&center=") |
+            append(section.settings.latitude_longitude) |
+            append("&zoom=12&q=") |
+            append(section.settings.latitude_longitude)
+        /}}
+      {{#else/}}
+        {{#set
+          iframe_url = "https://www.google.com/maps/embed/v1/view?key=" |
+            append(section.settings.google_api_secret_key) |
+            append("&center=") |
+            append(section.settings.latitude_longitude) |
+            append("&zoom=12")
+        /}}
+      {{/if}}
+    {{#else/}}
+      {{#if block.settings.is_show_map_pushpin }}
+        {{#set
+          iframe_url = "https://www.google.com/maps/embed/v1/place?key=" |
+            append(section.settings.google_api_secret_key) |
+            append("&q=address&zoom=12")
+        /}}
+      {{#else/}}
+        {{#set
+          iframe_url = "https://www.google.com/maps/embed/v1/place?key=" |
+            append(section.settings.google_api_secret_key) |
+            append("&q=address")
+        /}}
+      {{/if}}
+    {{/if}}
+    <iframe id="map_{{ block.id }}" style="height: 100%;width: 100%;" frameborder="0" src="{{ iframe_url }}"></iframe>
+
+    {{#if section.settings.is_map_jump && link_url }}
+      <a class="map-block-map-style-jump hidden-mobile" target="_blank" href="{{ link_url }}"></a>
+    {{#else/}}
+      <div class="map-block-map-style-mask hidden-desktop"></div>
+    {{/if}}
+  </div>
+{{#else/}}
+  <div
+    class="map-block__image hover-scale overflow-hidden hidden-desktop {{ block.settings | class_list() }}"
+    {{{ block.shopline_attributes }}}
+  >
+    {{#var img = block.settings.mobile_image /}}
+
+    {{#if img }}
+      {{#component "image" data=img class="hover-scale__image" /}}
+    {{#else/}}
+      {{#placeholder_svg "image" class="empty-image-class" /}}
+    {{/if}}
+  </div>
+
+  <div
+    class="
+      map-block__image map-block__image-pc hover-scale overflow-hidden hidden-mobile
+      {{ block.settings | class_list() }}
+    "
+    {{{ block.shopline_attributes }}}
+  >
+    {{#if block.settings.pc_image }}
+      {{#component "image" data=block.settings.pc_image class="hover-scale__image" /}}
+    {{#else/}}
+      {{#placeholder_svg "image" class="empty-image-class" /}}
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:sections.map.blocks.map_style.name",
+  "tag": "",
+  "settings": [
+    {
+      "id": "pc_image",
+      "label": "t:sections.map.blocks.map_style.settings.pc_image.label",
+      "info": "t:sections.map.blocks.map_style.settings.pc_image.info",
+      "type": "image"
+    },
+    {
+      "id": "mobile_image",
+      "info": "t:sections.map.blocks.map_style.settings.mobile_image.info",
+      "label": "t:sections.map.blocks.map_style.settings.mobile_image.label",
+      "type": "image"
+    },
+    {
+      "type": "switch",
+      "id": "is_show_map_pushpin",
+      "label": "t:sections.map.blocks.map_style.settings.is_show_map_pushpin.label",
+      "default": true
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.map.blocks.map_style.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "justify-content": "center",
+        "row-gap": "20px",
+        "column-gap": "20px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "row-gap": "10px",
+          "column-gap": "10px",
+          "align-items": "center"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.map.blocks.map_style.settings.spacing.label",
+      "default": {
+        "padding-top": 0,
+        "padding-right": 0,
+        "padding-bottom": 0,
+        "padding-left": 0
+      }
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:sections.map.blocks.map_style.settings.size.label",
+      "default": {
+        "width": "50%",
+        "height": "528px",
+        "@media (--mobile)": {
+          "width": "100%",
+          "height": "100%"
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.map.blocks.map_style.presets.presets_0.name",
+      "settings": {}
+    }
+  ]
+}
+{{/schema}}

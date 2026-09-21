@@ -1,0 +1,171 @@
+{{#var class = props.class /}}
+
+<ul class="{{ class }}">
+  {{~#if settings.social_media_facebook_link }}
+    <li>
+      <a href="{{ settings.social_media_facebook_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/facebook-tiny" /}}
+        {{#else/}}
+          {{#component "icons/facebook" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_twitter_link }}
+    <li>
+      <a href="{{ settings.social_media_twitter_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/twitter-tiny" /}}
+        {{#else/}}
+          {{#component "icons/twitter" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_pinterest_link }}
+    <li>
+      <a href="{{ settings.social_media_pinterest_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/pinterest-tiny" /}}
+        {{#else/}}
+          {{#component "icons/pinterest" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_instagram_link }}
+    <li>
+      <a href="{{ settings.social_media_instagram_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/instagram-tiny" /}}
+        {{#else/}}
+          {{#component "icons/instagram" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_snapchat_link }}
+    <li>
+      <a href="{{ settings.social_media_snapchat_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/snapchat-tiny" /}}
+        {{#else/}}
+          {{#component "icons/snapchat" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_tiktok_link }}
+    <li>
+      <a href="{{ settings.social_media_tiktok_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/tiktok-tiny" /}}
+        {{#else/}}
+          {{#component "icons/tiktok" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_youtube_link }}
+    <li>
+      <a href="{{ settings.social_media_youtube_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/youtube-tiny" /}}
+        {{#else/}}
+          {{#component "icons/youtube" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_vimeo_link }}
+    <li>
+      <a href="{{ settings.social_media_vimeo_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/vimeo-tiny" /}}
+        {{#else/}}
+          {{#component "icons/vimeo" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_whatsapp_link }}
+    <li>
+      <a href="{{ settings.social_whatsapp_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/whatsapp-tiny" /}}
+        {{#else/}}
+          {{#component "icons/whatsapp" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_tumblr_link }}
+    <li>
+      <a href="{{ settings.social_media_tumblr_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/tumblr-tiny" /}}
+        {{#else/}}
+          {{#component "icons/tumblr" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_line_link }}
+    <li>
+      <a href="{{ settings.social_media_line_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/line-tiny" /}}
+        {{#else/}}
+          {{#component "icons/line" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_linkedin_link }}
+    <li>
+      <a href="{{ settings.social_media_linkedin_link }}" target="_blank">
+        {{#if props.tiny }}
+          {{#component "icons/linkedin-tiny" /}}
+        {{#else/}}
+          {{#component "icons/linkedin" /}}
+        {{/if}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_custom1_link && settings.social_media_custom1_image }}
+    <li>
+      <a href="{{ settings.social_media_custom1_link }}" target="_blank">
+        {{#image_tag settings.social_media_custom1_image | image_url() /}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_custom2_link && settings.social_media_custom2_image }}
+    <li>
+      <a href="{{ settings.social_media_custom2_link }}" target="_blank">
+        {{#image_tag settings.social_media_custom2_image | image_url() /}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_custom3_link && settings.social_media_custom3_image }}
+    <li>
+      <a href="{{ settings.social_media_custom3_link }}" target="_blank">
+        {{#image_tag settings.social_media_custom3_image | image_url() /}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_custom4_link && settings.social_media_custom4_image }}
+    <li>
+      <a href="{{ settings.social_media_custom4_link }}" target="_blank">
+        {{#image_tag settings.social_media_custom4_image | image_url() /}}
+      </a>
+    </li>
+  {{/if~}}
+  {{~#if settings.social_media_custom5_link && settings.social_media_custom5_image }}
+    <li>
+      <a href="{{ settings.social_media_custom5_link }}" target="_blank">
+        {{#image_tag settings.social_media_custom5_image | image_url() /}}
+      </a>
+    </li>
+  {{/if~}}
+</ul>

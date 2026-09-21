@@ -1,0 +1,110 @@
+{{#var dot_color = "#ffffff" /}}
+
+{{#if block.settings.handle_style == "#ffffff" }}
+  {{#set dot_color = "#000000" /}}
+{{/if}}
+
+{{#var aspect_ratio = props.aspect_ratio /}}
+{{#blocks}}
+  {{#if aspect_ratio == "unset" && forblock.index0 == 0 }}
+    {{#set aspect_ratio = forblock.settings.image.aspect_ratio | default("3/2") | append("") /}}
+  {{/if}}
+{{/blocks}}
+
+<div
+  class="before-after__compare-image-group"
+  style="
+    --aspect-ratio: {{ aspect_ratio }};
+    --border-radius: {{ block.settings.border_radius }}px;
+    --slider-icon-bg-color: {{ block.settings.handle_style }};
+    --slider-icon-dot-color: {{ dot_color }}
+  "
+  {{{ block.shopline_attributes }}}
+>
+  {{#content "blocks" /}}
+  <div class="before-after__cursor">
+    <div class="before-after__cursor--default">
+      <div class="before-after__cursor--dot"></div>
+      <div class="before-after__cursor--dot"></div>
+    </div>
+  </div>
+</div>
+
+{{#schema}}
+{
+  "name": "t:sections.before_after.blocks.image_group.name",
+  "icon": "general",
+  "limit": 1,
+  "tag": "",
+  "settings": [
+    {
+      "type": "select",
+      "label": "t:sections.before_after.blocks.image_group.settings.handle_style.label",
+      "id": "handle_style",
+      "options": [
+        {
+          "value": "#000000",
+          "label": "t:sections.before_after.blocks.image_group.settings.handle_style.options_0.label"
+        },
+        {
+          "value": "#ffffff",
+          "label": "t:sections.before_after.blocks.image_group.settings.handle_style.options_1.label"
+        }
+      ],
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:sections.before_after.blocks.image_group.settings.border_radius.label",
+      "min": 0,
+      "max": 40,
+      "unit": "px",
+      "step": 2,
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$compare-image",
+      "limit": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.blocks.image_group.presets.presets_0.name",
+      "blocks": [
+        {
+          "type": "$compare-image",
+          "blocks": [
+            {
+              "type": "$group",
+              "blocks": [
+                {
+                  "type": "$group-title"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "$compare-image",
+          "blocks": [
+            {
+              "type": "$group",
+              "blocks": [
+                {
+                  "type": "$group-title",
+                  "settings": {
+                    "content": "After"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{{/schema}}

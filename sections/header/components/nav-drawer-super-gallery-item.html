@@ -1,0 +1,15 @@
+{{#var image = props.image /}}
+{{#var title = props.title /}}
+{{#var link = props.link /}}
+
+{{#if image }}
+  <a class="nav-drawer-super-gallery__item" href="{{#if link }}{{ link }}{{#else/}}javascript:;{{/if}}">
+    {{#component "image" data=image lazy=true /}}
+
+    <div class="header-super-nav-dropdown-panel__item-inner">
+      {{#if title }}
+        <h6 class="header-super-nav-dropdown-panel__title">{{ title }}</h6>
+      {{/if}}
+    </div>
+  </a>
+{{/if}}
