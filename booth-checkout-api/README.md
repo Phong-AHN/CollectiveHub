@@ -51,7 +51,7 @@ PayPal retries.
 | `GET /api/checkout/return` | PayPal's return/cancel target: captures, fulfils, redirects back to the page |
 | `POST /api/webhooks/paypal` | `PAYMENT.CAPTURE.COMPLETED` fulfils; denials release the hold |
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
-| `GET /api/cron/release-holds` | Every 10 minutes: puts abandoned booths back on sale |
+| `GET/POST /api/cron/release-holds` | Puts abandoned booths back on sale (see "Releasing holds") |
 
 ## Before it can run
 
@@ -84,6 +84,35 @@ sale continue (see the race-condition note below).
    with a secret, and put that secret in `EXPOFP_WEBHOOK_SECRET`.
 6. In the theme editor, set the Booth Checkout section's **API base URL** to
    `https://<deployment>/api`.
+
+## Releasing holds
+
+A booth held for a visitor who walks away has to be put back on sale, and
+nothing on ExpoFP's side does that for us. Three triggers share the job:
+
+1. **Every checkout.** `POST /api/checkout/start` sweeps up to 5 expired holds
+   before it takes its own. While people are buying, abandoned booths come back
+   within one checkout of expiring. The sweep runs *before* the new hold, never
+   after, so it cannot release the booth it is about to hold.
+2. **Vercel Cron, daily** (`0 10 * * *`, about 3 AM Pacific). This is the most
+   the **Hobby plan** allows — a more frequent schedule is rejected at deploy
+   with "Hobby accounts are limited to daily cron jobs". It is the backstop for
+   quiet days.
+3. **Optional: an external scheduler** for a tighter cadence without Pro. Point
+   any of these at `https://<deployment>/api/cron/release-holds` every 5-10
+   minutes, sending `Authorization: Bearer <CRON_SECRET>`:
+   - [cron-job.org](https://cron-job.org) — free, set the header in "Advanced";
+   - Upstash QStash schedules — same account as the KV store.
+
+   On the Pro plan, change `vercel.json` to `*/10 * * * *` instead.
+
+All three may overlap. `releaseHold()` only acts for the caller that removes the
+hold from the schedule, and that removal is a single atomic `ZREM`, so a booth
+is released on ExpoFP at most once.
+
+Without (3), on a quiet day an abandoned booth can read On Hold on the floor
+plan for up to a day. With `HOLD_MINUTES=30` and a 10-minute scheduler, it is
+back on sale within 40 minutes.
 
 ## Payment keys
 

@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { HttpError, corsHeaders, json, preflight, safeReturnUrl } from '../../lib/http.js';
 import { HOLD_MINUTES } from '../../lib/config.js';
 import { setBoothOnHold } from '../../lib/expofp.js';
+import { sweepExpiredHolds } from '../../lib/fulfil.js';
 import { createOrder } from '../../lib/paypal.js';
 import { putCheckout, trackHold } from '../../lib/store.js';
 
@@ -63,6 +64,14 @@ export default async function handler(request) {
       returnPage,
       createdAt: Date.now(),
     };
+
+    // Put abandoned booths back on sale before taking a new hold. On the
+    // Hobby plan the cron only runs daily, so this is what keeps holds short.
+    // It runs first, never after, so it cannot release the hold made below.
+    // Capped and never fatal: cleanup must not cost us this sale.
+    await sweepExpiredHolds(5).catch((error) => {
+      console.error('[checkout/start] sweep failed', error.message);
+    });
 
     // Hold the booth first: ExpoFP leaves it Available during checkout, so
     // without this two people can pay for the same booth.

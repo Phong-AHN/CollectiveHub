@@ -72,10 +72,15 @@ export async function trackHold(id, expiresAtMs) {
   else m.holds.set(id, expiresAtMs);
 }
 
+/**
+ * Removes a hold from the schedule. Returns true only for the caller that
+ * actually removed it - ZREM is atomic, so this doubles as the claim that
+ * stops two releasers from both talking to ExpoFP.
+ */
 export async function untrackHold(id) {
   const { kv: k, memory: m } = await client();
-  if (k) await k.zrem(HOLDS, id);
-  else m.holds.delete(id);
+  if (k) return Number(await k.zrem(HOLDS, id)) > 0;
+  return m.holds.delete(id);
 }
 
 export async function dueHolds(nowMs, limit = 100) {
