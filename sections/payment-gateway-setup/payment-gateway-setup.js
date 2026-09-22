@@ -27,6 +27,8 @@ defineModule('theme-payment-gateway-setup', () => {
     handleSubmit;
     handleGatewayChange;
     hideTimer;
+    // Only asked for when the service is set up to require one.
+    passcodeNeeded = false;
 
     get root() {
       return this.closest('.payment-gateway-setup');
@@ -42,6 +44,10 @@ defineModule('theme-payment-gateway-setup', () => {
 
     get submitEl() {
       return this.querySelector('[data-role="submit"]');
+    }
+
+    get passcodeFieldsEl() {
+      return this.querySelector('[data-role="fields-passcode"]');
     }
 
     get gatewayEls() {
@@ -66,13 +72,14 @@ defineModule('theme-payment-gateway-setup', () => {
       this.#syncGateway();
 
       // In the theme editor the merchant needs to see and style the section,
-      // so never auto-hide it there.
+      // so never auto-hide it there - and every field is worth showing.
       if (this.dataset.designMode === 'true') {
+        this.#showPasscode(true);
         this.dataset.state = 'form';
         return;
       }
 
-      this.#checkConfigured();
+      this.#loadStatus();
     }
 
     unmounted() {
@@ -94,8 +101,7 @@ defineModule('theme-payment-gateway-setup', () => {
       const gateway = this.gateway;
       const field = (name) => this.querySelector(`[name="${name}"]`)?.value.trim() || '';
 
-      const passcode = field('passcode');
-      const payload = { gateway, passcode };
+      const payload = { gateway };
 
       for (const name of REQUIRED_FIELDS[gateway] || []) {
         const value = field(name);
@@ -105,10 +111,15 @@ defineModule('theme-payment-gateway-setup', () => {
         }
         payload[name] = value;
       }
-      if (!passcode) {
-        this.#message(this.dataset.requiredText, 'error');
-        this.querySelector('[name="passcode"]')?.focus();
-        return;
+
+      if (this.passcodeNeeded) {
+        const passcode = field('passcode');
+        if (!passcode) {
+          this.#message(this.dataset.requiredText, 'error');
+          this.querySelector('[name="passcode"]')?.focus();
+          return;
+        }
+        payload.passcode = passcode;
       }
 
       // Stripe checkout is created on the server, which needs the secret key.
@@ -149,6 +160,8 @@ defineModule('theme-payment-gateway-setup', () => {
         console.error('[theme-payment-gateway-setup]', error.code || '', error);
         this.dataset.state = 'form';
         if (error.code === 'passcode_wrong' || error.code === 'too_many_attempts') {
+          // A code was turned on after this page loaded: ask for it now.
+          this.#showPasscode(true);
           this.#message(this.dataset.passcodeErrorText, 'error');
           this.querySelector('[name="passcode"]')?.focus();
         } else if (error.code === 'stripe_publishable_key' || error.code === 'stripe_key_invalid') {
@@ -166,13 +179,12 @@ defineModule('theme-payment-gateway-setup', () => {
       return `${base}/gateway/keys`;
     }
 
-    async #checkConfigured() {
-      if (this.dataset.hideWhenConfigured !== 'true') {
-        this.dataset.state = 'form';
-        return;
-      }
-
-      if (readFlag()) {
+    /**
+     * Asks the service what it needs before showing the form: whether keys are
+     * already saved, and whether saving takes a setup code.
+     */
+    async #loadStatus() {
+      if (this.dataset.hideWhenConfigured === 'true' && readFlag()) {
         this.#hide();
         return;
       }
@@ -184,19 +196,31 @@ defineModule('theme-payment-gateway-setup', () => {
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 
         const status = await response.json();
-        if (status && status.configured) {
+        if (status && status.configured && this.dataset.hideWhenConfigured === 'true') {
           writeFlag();
           this.#hide();
           return;
         }
 
+        this.#showPasscode(Boolean(status && status.passcodeRequired));
         this.dataset.state = 'form';
       } catch (error) {
         if (error.name === 'AbortError') return;
         // Fail open: if the endpoint is unreachable the client can still set up.
+        // A code, if one is needed, is asked for after the first refusal.
         console.error('[theme-payment-gateway-setup]', error);
         this.dataset.state = 'form';
       }
+    }
+
+    /** Hidden fields stay out of validation, autofill and the payload. */
+    #showPasscode(needed) {
+      this.passcodeNeeded = needed;
+      const fields = this.passcodeFieldsEl;
+      if (!fields) return;
+      fields.hidden = !needed;
+      const input = fields.querySelector('input');
+      if (input) input.disabled = !needed;
     }
 
     #syncGateway() {

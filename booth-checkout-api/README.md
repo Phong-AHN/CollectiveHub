@@ -74,7 +74,7 @@ payment"). The cause is in the API response and the browser console — DevTools
 | `409 booth_unavailable` | On hold, sold, or someone else is checking out | Working as intended |
 | `500 gateway_*` / `stripe_*` | Payment keys missing or of the wrong kind | See `/api/health` → `gateway.problem` |
 | `500 gateway_keys_unreadable` | `SECRETS_KEY` is not the value the saved keys were encrypted with | Restore that value, or have the client save the keys again in the setup section |
-| `401 passcode_wrong` from the setup form | Wrong setup code | It is `SETUP_PASSCODE` on this deployment; `/api/health` → `gateway.setupPasscode` says whether one is set |
+| `401 passcode_wrong` from the setup form | Wrong setup code | It is `SETUP_PASSCODE` on this deployment; `/api/health` → `gateway.setupPasscode` says whether one is set. The form reveals the code field after the first refusal, so a code switched on later needs no theme change |
 | `429 too_many_attempts` | Ten wrong codes from that address within an hour | Wait an hour, or save from another connection |
 
 To prove the ExpoFP token and expo from the deployment itself:
@@ -143,9 +143,9 @@ than fall back to the editable price.
    `503 storage_not_configured` rather than take money it cannot follow up.
    `/api/health` shows `"storage": "redis"` once it is connected.
 3. Copy `.env.example` into the project's environment variables and fill it in.
-   `SECRETS_KEY` (`openssl rand -base64 32`) and `SETUP_PASSCODE` are what let
-   the client save their own payment keys from the storefront — see
-   "Payment keys".
+   `SECRETS_KEY` (`openssl rand -base64 32`) is what lets the client save their
+   own payment keys from the storefront; `SETUP_PASSCODE` is optional and
+   decides whether saving takes a code — see "Payment keys".
 4. Register the PayPal webhook at `https://<deployment>/api/webhooks/paypal`
    for `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.DENIED` and
    `CHECKOUT.ORDER.VOIDED`, then put its id in `PAYPAL_WEBHOOK_ID`.
@@ -157,10 +157,10 @@ than fall back to the editable price.
    the function runs.
 6. In the theme editor, set the Booth Checkout section's **API base URL** to
    `https://<deployment>/api`.
-7. Set the same address on the **Payment Gateway Setup** section, and give the
-   client the setup code (`SETUP_PASSCODE`) privately — in the form it is the
-   last field. Their key is encrypted the moment it arrives and cannot be read
-   back, by them or by us; `/api/health` only ever shows a hint.
+7. Set the same address on the **Payment Gateway Setup** section. Their key is
+   encrypted the moment it arrives and cannot be read back, by them or by us;
+   `/api/health` only ever shows a hint. If `SETUP_PASSCODE` is set, give the
+   client that code privately — the form asks for it in the last field.
 
 ## Releasing holds
 
@@ -289,10 +289,14 @@ section posts to `/api/gateway/keys` here — it is the only way in:
   `{ configured, gateway, hint, savedAt }`, where the hint is
   `sk_live_****4242` — enough for the form to know a key is there, never enough
   to use. `/api/health` shows the same hint. Nothing logs a key.
-- **The passcode.** `POST` needs `SETUP_PASSCODE` (compared in constant time),
-  so a stranger who finds the endpoint cannot redirect the client's payments to
-  their own Stripe account. Ten wrong tries an hour from one address and that
-  address is refused; give the code to the client privately, not in the theme.
+- **The passcode, if you want one.** With `SETUP_PASSCODE` set, `POST` needs it
+  (compared in constant time) and the form asks the client for it — that is what
+  stops a stranger who finds the endpoint from redirecting the client's payments
+  to their own Stripe account. Ten wrong tries an hour from one address and that
+  address is refused. Leave it unset and the form saves with no code: `GET`
+  answers `passcodeRequired: false`, the field hides itself, and the endpoint is
+  open to whoever reads the storefront's page source. Turning it on or off is one
+  environment variable — the theme needs no change either way.
 - **No keys without Redis.** On Vercel, a `POST` without a Redis store is
   refused (`storage_not_configured`) rather than accepting a key it would lose.
 

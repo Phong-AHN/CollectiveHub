@@ -59,7 +59,8 @@ async function handler(request) {
       stripeKeyInEnv: stripeKey ? (stripeKey.startsWith('pk_') ? 'WRONG KIND (pk_ publishable key)' : stripeKey.includes('_live_') ? 'live' : 'test') : 'no',
       stripeWebhookSecret: has('STRIPE_WEBHOOK_SECRET') ? 'set' : 'not set',
       paypalInEnv: has('PAYPAL_CLIENT_ID') && has('PAYPAL_CLIENT_SECRET') ? (envValue('PAYPAL_ENV') || 'sandbox') : 'no',
-      setupPasscode: has('SETUP_PASSCODE') ? 'set' : 'MISSING - nobody can save keys through the form',
+      setupPasscode: has('SETUP_PASSCODE') ? 'set'
+        : 'not set - the setup form saves keys without a code, so anyone who finds the endpoint can replace them',
       secretsKey: has('SECRETS_KEY') ? 'set' : 'MISSING - saved keys cannot be encrypted',
       ...(has('GATEWAY_KEYS_URL')
         ? { legacyKeyStore: 'GATEWAY_KEYS_URL is still set and no longer used - unset it' }

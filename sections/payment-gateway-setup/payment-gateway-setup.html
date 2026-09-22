@@ -134,12 +134,13 @@
             </label>
           </div>
 
-          <div class="payment-gateway-setup__fields">
+          <div class="payment-gateway-setup__fields" data-role="fields-passcode" hidden>
             <label class="field">
               <input
                 class="field__input"
                 type="password"
                 name="passcode"
+                disabled
                 autocomplete="off"
                 spellcheck="false"
                 placeholder="{{ section.settings.passcode_label }}"

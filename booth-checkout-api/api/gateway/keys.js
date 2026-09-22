@@ -13,8 +13,12 @@ const ATTEMPT_WINDOW_S = 60 * 60;
  * The payment keys behind the storefront's "Payment Gateway Setup" section.
  *
  * GET  - whether keys are saved, and a hint like sk_live_****4242. Never a key.
- * POST - saves keys, encrypted. Needs the setup passcode, so a stranger who
- *        finds this URL cannot point the checkout at their own Stripe account.
+ * POST - saves keys, encrypted.
+ *
+ * SETUP_PASSCODE, when set, is required to save: this URL is visible in the
+ * storefront's page source, and without a code anyone who reads it could point
+ * the checkout at their own Stripe account. Leaving it unset opens the form to
+ * whoever finds the endpoint.
  *
  * The keys only ever travel one way: in. Nothing here can read one back out.
  */
@@ -25,7 +29,12 @@ async function handler(request) {
   const cors = corsHeaders(request);
 
   try {
-    if (request.method === 'GET') return json(await gatewayStatus(), 200, { ...cors, 'Cache-Control': 'no-store' });
+    if (request.method === 'GET') {
+      // passcodeRequired tells the storefront form whether to ask for a code,
+      // so turning the code on or off needs no change to the theme.
+      const status = { ...(await gatewayStatus()), passcodeRequired: Boolean(envValue('SETUP_PASSCODE')) };
+      return json(status, 200, { ...cors, 'Cache-Control': 'no-store' });
+    }
     if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, cors);
 
     if (process.env.VERCEL && !persistentStorageConfigured()) {
@@ -34,20 +43,21 @@ async function handler(request) {
     }
 
     const passcode = envValue('SETUP_PASSCODE');
-    if (!passcode) {
-      throw new HttpError(503, 'setup_passcode_missing',
-        'Set SETUP_PASSCODE before anyone can save payment keys.');
-    }
-
     const body = await request.json();
 
-    // Count first: a wrong guess costs an attempt whether or not it was close.
+    // Count first: an attempt costs the same whether or not the code was close.
     const attempts = await countAttempt(`setup:${clientKey(request)}`, ATTEMPT_WINDOW_S);
     if (attempts > MAX_ATTEMPTS) {
       throw new HttpError(429, 'too_many_attempts', 'Too many attempts. Try again in an hour.');
     }
-    if (!sameSecret(body.passcode, passcode)) {
-      throw new HttpError(401, 'passcode_wrong', 'That setup code is not right.');
+
+    if (passcode) {
+      if (!sameSecret(body.passcode, passcode)) {
+        throw new HttpError(401, 'passcode_wrong', 'That setup code is not right.');
+      }
+    } else {
+      console.warn('[gateway/keys] SETUP_PASSCODE is not set - anyone who finds this endpoint can ' +
+        'replace the payment keys. Set it to close the form.');
     }
 
     const gateway = String(body.gateway || '').trim().toLowerCase();
