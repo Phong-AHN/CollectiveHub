@@ -14483,7 +14483,7 @@
         },
         "group_header_0": {
           "label": "Floor plan",
-          "info": "Paste the ExpoFP floor plan address, e.g. https://collectivehub9-20.expofp.com"
+          "info": "Paste the ExpoFP floor plan address, e.g. https://eventcollectivehub9-25.expofp.com"
         },
         "floorplan_url": {
           "label": "Floor plan URL",

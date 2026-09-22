@@ -89,6 +89,34 @@ export async function firstDelivery(deliveryId, ttlSeconds = 60 * 60 * 24 * 7) {
   return true;
 }
 
+/**
+ * ExpoFP follows every booth_assigned with a booth_reserved carrying the same
+ * values. Remember the assignment briefly so that follow-up can be recognised -
+ * and only that follow-up, never a reservation that stands on its own.
+ */
+export async function rememberAssigned(pairKey, ttlSeconds = 120) {
+  const { kv: k, memory: m } = await client();
+  const name = `expofp:assigned:${pairKey}`;
+  if (k) {
+    await k.set(name, '1', { ex: ttlSeconds });
+    return;
+  }
+  m.records.set(name, Date.now() + ttlSeconds * 1000);
+}
+
+/**
+ * True, once, when a matching booth_assigned was seen recently. DEL is atomic,
+ * so two instances cannot both claim the same follow-up.
+ */
+export async function consumeAssigned(pairKey) {
+  const { kv: k, memory: m } = await client();
+  const name = `expofp:assigned:${pairKey}`;
+  if (k) return Number(await k.del(name)) > 0;
+  const until = m.records.get(name);
+  m.records.delete(name);
+  return typeof until === 'number' && until > Date.now();
+}
+
 export async function trackHold(id, expiresAtMs) {
   const { kv: k, memory: m } = await client();
   if (k) await k.zadd(HOLDS, { score: expiresAtMs, member: id });

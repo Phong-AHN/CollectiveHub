@@ -1,7 +1,7 @@
 {{#component "stylesheet" src="./booth-booking.css" | asset_url() /}}
 {{#component "script" src="./booth-booking.js" | asset_url() /}}
 
-{{#var floorplan_url = section.settings.floorplan_url | default("https://collectivehub9-20.expofp.com") /}}
+{{#var floorplan_url = section.settings.floorplan_url | default("https://eventcollectivehub9-25.expofp.com") /}}
 {{#var embed_title = section.settings.heading | default("Floor plan") /}}
 
 <div class="booth-booking color-{{ section.settings.color_scheme.id }}">
@@ -165,7 +165,7 @@
       "id": "floorplan_url",
       "label": "t:sections.booth_booking.settings.floorplan_url.label",
       "info": "t:sections.booth_booking.settings.floorplan_url.info",
-      "default": "https://collectivehub9-20.expofp.com"
+      "default": "https://eventcollectivehub9-25.expofp.com"
     },
     {
       "type": "select",

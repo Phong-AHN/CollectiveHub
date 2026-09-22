@@ -152,6 +152,13 @@ implementation is checked against ExpoFP's published offline test vector.
 use PascalCase (`Type`, `BoothId`), exhibitor events camelCase (`type`,
 `exhibitorId`). Both are handled in `lib/expofp.js` and `api/webhooks/expofp.js`.
 
-The de-duplication window is per-instance memory, which is enough for a pair
-that arrives milliseconds apart but is not a distributed lock. If you start
-acting on these events rather than logging them, move the de-duplication into KV.
+Only the follow-up is dropped: a `booth_assigned` is remembered in KV for two
+minutes, and a `booth_reserved` with the same expo/booth/exhibitor values
+consumes that record (an atomic `DEL`) and is skipped. A `booth_reserved` with
+no matching assignment — a reservation made inside ExpoFP, or the Test webhook
+button — is always handled, however many times it arrives. `booth_assigned`
+itself is never skipped.
+
+Webhooks are configured per ExpoFP **account**, so deliveries cover every expo
+in it, not only `EXPOFP_EXPO_ID`. The handler only logs today; filter on
+`expoId` before acting on events.

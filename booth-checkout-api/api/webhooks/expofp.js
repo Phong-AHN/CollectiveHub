@@ -1,35 +1,24 @@
 import { json } from '../../lib/http.js';
 import { normalizeEvent, verifyWebhook } from '../../lib/expofp.js';
-import { firstDelivery } from '../../lib/store.js';
+import { consumeAssigned, firstDelivery, rememberAssigned } from '../../lib/store.js';
 
 export const config = { runtime: 'nodejs' };
 
 /**
  * Inbound sync from ExpoFP.
  *
- * Two things the docs warn about and this handler accounts for:
- *  - one booth assignment produces TWO deliveries, booth_assigned followed by
- *    booth_reserved carrying the same values, so acting on both double-counts;
+ * Things the docs warn about and this handler accounts for:
+ *  - one booth assignment produces TWO deliveries: booth_assigned, then a
+ *    booth_reserved carrying the same values. Only that follow-up is dropped;
+ *    a booth_reserved that stands on its own (a reservation made in ExpoFP,
+ *    or the Test webhook button) is always handled;
  *  - booth events use PascalCase ("Type", "BoothId") while exhibitor events use
- *    camelCase ("type", "exhibitorId").
- *
- * Test deliveries arrive as a JSON array, production events as a single object.
+ *    camelCase ("type", "exhibitorId");
+ *  - the Test webhook button sends a JSON array, real events a single object.
  */
-const seen = new Map();
-const DEDUPE_MS = 60_000;
+const BOM = 0xfeff;
 
-function isDuplicate(event) {
-  const key = [event.type, event.expoId, event.boothId, event.boothKey, event.exhibitorId].join('|');
-  const now = Date.now();
-
-  for (const [existing, at] of seen) {
-    if (now - at > DEDUPE_MS) seen.delete(existing);
-  }
-
-  if (seen.has(key)) return true;
-  seen.set(key, now);
-  return false;
-}
+const pairKey = (event) => [event.expoId, event.boothId, event.boothKey, event.exhibitorId].join('|');
 
 async function handler(request) {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -48,9 +37,12 @@ async function handler(request) {
   }
 
   // 5. Parse only now. A leading BOM is legal on the wire but not in JSON.
+  let text = raw.toString('utf8');
+  if (text.charCodeAt(0) === BOM) text = text.slice(1);
+
   let payload;
   try {
-    payload = JSON.parse(raw.toString('utf8').replace(/^﻿/, ''));
+    payload = JSON.parse(text);
   } catch (error) {
     return json({ error: 'invalid_json' }, 400);
   }
@@ -68,14 +60,11 @@ async function handler(request) {
 
   const handled = [];
   for (const event of events) {
-    // booth_assigned is always followed by booth_reserved with the same values;
-    // treat the pair as one change.
-    if (event.type === 'booth_assigned' && isDuplicate({ ...event, type: 'booth_pair' })) {
-      handled.push({ type: event.type, skipped: 'duplicate_of_pair' });
-      continue;
-    }
-    if (event.type === 'booth_reserved' && isDuplicate({ ...event, type: 'booth_pair' })) {
-      handled.push({ type: event.type, skipped: 'duplicate_of_pair' });
+    if (event.type === 'booth_assigned') {
+      // Always handled - it is the first of the pair.
+      await rememberAssigned(pairKey(event));
+    } else if (event.type === 'booth_reserved' && await consumeAssigned(pairKey(event))) {
+      handled.push({ type: event.type, skipped: 'follows_booth_assigned' });
       continue;
     }
 
@@ -86,7 +75,7 @@ async function handler(request) {
       boothKey: event.boothKey,
       exhibitorId: event.exhibitorId,
       isOnHold: event.isOnHold,
-      deliveryId: request.headers.get('x-expofp-delivery'),
+      deliveryId,
     }));
 
     handled.push({ type: event.type, ok: true });
