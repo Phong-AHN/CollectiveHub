@@ -129,7 +129,7 @@
         "btn_shadow_offset_y": 4,
         "btn_shadow_opacity": 0,
         "btn_style": "primary",
-        "button_text1": "Subscribe \u0026 Save",
+        "button_text1": "Subscribe & Save",
         "button_text2": "",
         "container_bg_color": "#fdf7ef",
         "container_config": {
@@ -176,14 +176,14 @@
         "product_sales_point_4": "Early access to new set releases",
         "product_sales_point_4_icon": "checkmark",
         "show_divider": false,
-        "sub_title": "Subscribe \u0026 Save",
+        "sub_title": "Subscribe & Save",
         "sub_title_font_color": "#000000",
         "sub_title_font_family": "Poppins:400",
         "sub_title_letter_spacing": 100,
         "sub_title_line_height": 1.6,
         "sub_title_m_font_size": 14,
         "sub_title_pc_font_size": 16,
-        "text": "Subscribe \u0026amp; S15% OFF every time you subscribe to our monthly Mystery Boxes.\u0026nbsp;\u003cbr\u003eGet premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
+        "text": "Subscribe &amp; S15% OFF every time you subscribe to our monthly Mystery Boxes.&nbsp;<br>Get premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
         "text_position": "right",
         "title": "Never Run Out of Chases.",
         "title_font_color": "#000000",
@@ -442,7 +442,7 @@
         "sub_title_m_font_size": 16,
         "sub_title_pc_font_size": 18,
         "text_align": "left",
-        "title": "BLOG \u0026 RECIPE",
+        "title": "BLOG & RECIPE",
         "title_font_color": "#000000",
         "title_font_family": "Anton",
         "title_letter_spacing": 0,
@@ -831,7 +831,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🎟️ FREE admission for all Attendees!\u2028\u003cbr\u003e🎉 First 100 attendees get a FREE mystery pack!\u2028\u003cbr\u003e🗓️ September 20, 2026\u003cbr\u003e⏰ 11AM–6PM",
+                    "text": "🎟️ FREE admission for all Attendees! <br>🎉 First 100 attendees get a FREE mystery pack! <br>🗓️ September 20, 2026<br>⏰ 11AM–6PM",
                     "text_align": "center",
                     "typography": "typography-default"
                   },
@@ -1064,12 +1064,12 @@
             "card_border_opacity": 10,
             "card_border_radius": 0,
             "card_border_width": 0,
-            "description1": "\u003cstrong\u003eNatural Ingredients\u003c/strong\u003e",
+            "description1": "<strong>Natural Ingredients</strong>",
             "description10": "",
-            "description2": "\u003cstrong\u003eClean Ingredients\u003c/strong\u003e",
-            "description3": "\u003cstrong\u003eGluten\u003c/strong\u003e",
-            "description4": "\u003cstrong\u003eCaffeine Source\u003c/strong\u003e",
-            "description5": "\u003cstrong\u003eSugar\u003c/strong\u003e",
+            "description2": "<strong>Clean Ingredients</strong>",
+            "description3": "<strong>Gluten</strong>",
+            "description4": "<strong>Caffeine Source</strong>",
+            "description5": "<strong>Sugar</strong>",
             "description6": "",
             "description7": "",
             "description8": "",
@@ -1144,7 +1144,7 @@
             "previous-events-text": {
               "type": "text",
               "settings": {
-                "text": "\u003cp\u003eFollow \u0026amp; tag us to show us your photos from our events!\u003c/p\u003e",
+                "text": "<p>Follow &amp; tag us to show us your photos from our events!</p>",
                 "text_align": "center",
                 "typography": "body3"
               },
@@ -1619,7 +1619,7 @@
                   "padding-block-end": "0",
                   "padding-block-start": "0"
                 },
-                "text": "Rare Finds.\u003cbr\u003eEpic Collections.",
+                "text": "Rare Finds.<br>Epic Collections.",
                 "text_align": "left",
                 "text_align_mobile": "left",
                 "text_tag": "h1",
@@ -1844,7 +1844,7 @@
             "1785492865144b40cc02": {
               "type": "rich-text",
               "settings": {
-                "content": "Subscribe \u0026amp; get 15% OFF every time you subscribe to our monthly Mystery Boxes. \u003cbr\u003eGet premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
+                "content": "Subscribe &amp; get 15% OFF every time you subscribe to our monthly Mystery Boxes. <br>Get premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
                 "spacing": {
                   "@media (--mobile)": {
                     "padding-block-end": "0px",
@@ -1888,7 +1888,7 @@
                   "padding-right": "0px",
                   "padding-top": "0px"
                 },
-                "text": "\u003cstrong\u003eSubscribe \u0026amp; Save\u003c/strong\u003e",
+                "text": "<strong>Subscribe &amp; Save</strong>",
                 "text_align": "left",
                 "text_align_mobile": "left",
                 "typography": "body3",
@@ -1988,7 +1988,7 @@
                           "padding-right": "0px",
                           "padding-top": "0px"
                         },
-                        "text": "Change your TCG preferences whenever\u0026nbsp;",
+                        "text": "Change your TCG preferences whenever&nbsp;",
                         "text_align": "left",
                         "text_align_mobile": "left",
                         "typography": "body3",
@@ -2573,7 +2573,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
+                    "text": "<strong>@collectivehubcenter</strong>",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2598,7 +2598,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2666,7 +2666,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
+                    "text": "<strong>@collectivehubcenter</strong>",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2691,7 +2691,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2776,7 +2776,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
+                    "text": "<strong>@collectivehubcenter</strong>",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2818,7 +2818,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -3264,7 +3264,7 @@
         "button_text": "Book Your Booth",
         "color_scheme": "scheme-7",
         "consent": "denied",
-        "description": "\u003cp\u003eExplore the live floor plan of the Collective Hub Show, see which tables are still open, then lock in the spot you want.\u003c/p\u003e",
+        "description": "<p>Explore the live floor plan of the Collective Hub Show, see which tables are still open, then lock in the spot you want.</p>",
         "description_typography": "body3",
         "embed_mode": "iframe",
         "error_text": "The floor plan could not be loaded.",
@@ -3506,11 +3506,11 @@
       "type": "payment-gateway-setup",
       "settings": {
         "api_url": "https://6aa7e0369b08676cd32b9a36.mockapi.io/key",
-        "button_text": "Save \u0026 Connect",
+        "button_text": "Save & Connect",
         "choice_label": "Which gateway are you connecting?",
         "color_scheme": "scheme-2",
         "default_gateway": "paypal",
-        "description": "\u003cp\u003eFollow the guide for your provider, then connect it below. This step only needs to be done once.\u003c/p\u003e",
+        "description": "<p>Follow the guide for your provider, then connect it below. This step only needs to be done once.</p>",
         "design_mode_text": "Saving is disabled inside the theme editor preview.",
         "doc_link_text": "Read the instructions",
         "error_text": "We could not save your details. Please try again.",
@@ -3552,11 +3552,12 @@
           "padding-inline-end": "70px",
           "padding-inline-start": "70px"
         },
-        "stripe_api_key_label": "Stripe API Key",
+        "stripe_api_key_label": "Stripe Secret Key (sk_test_... / sk_live_...)",
         "stripe_doc_text": "How to connect Stripe and find your API key.",
         "stripe_doc_title": "Stripe",
         "stripe_doc_url": "https://expofp.com/pages/stripe",
-        "success_text": "Saved. Your payment gateway is connected."
+        "success_text": "Saved. Your payment gateway is connected.",
+        "stripe_key_text": "Use your Stripe secret key - it starts with sk_test_ or sk_live_. The publishable key (pk_) will not work."
       },
       "disabled": true,
       "blocks": {},

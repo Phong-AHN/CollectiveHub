@@ -10,11 +10,14 @@ export function paypalBase() {
 
 let token = null;
 let tokenExpiresAt = 0;
+let tokenClientId = null;
 
 async function accessToken() {
-  if (token && Date.now() < tokenExpiresAt - 60_000) return token;
-
   const { clientId, clientSecret } = await paypalCredentials();
+  // A token belongs to one client id; if the credentials change (sandbox to
+  // live, or the client submits new keys) the cached one must not be reused.
+  if (token && tokenClientId === clientId && Date.now() < tokenExpiresAt - 60_000) return token;
+
   const basic = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   const response = await fetch(`${paypalBase()}/v1/oauth2/token`, {
@@ -32,6 +35,7 @@ async function accessToken() {
 
   const payload = await response.json();
   token = payload.access_token;
+  tokenClientId = clientId;
   tokenExpiresAt = Date.now() + Number(payload.expires_in || 3000) * 1000;
   return token;
 }

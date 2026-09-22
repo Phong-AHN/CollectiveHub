@@ -7,7 +7,7 @@
         "button_text": "Book Your Booth",
         "color_scheme": "scheme-7",
         "consent": "denied",
-        "description": "\u003cp\u003eBrowse the live floor plan, check which tables are still open, then lock in your spot.\u003c/p\u003e",
+        "description": "<p>Browse the live floor plan, check which tables are still open, then lock in your spot.</p>",
         "description_typography": "body3",
         "embed_mode": "iframe",
         "error_text": "The floor plan could not be loaded.",
@@ -60,11 +60,11 @@
       "type": "payment-gateway-setup",
       "settings": {
         "api_url": "https://6aa7e0369b08676cd32b9a36.mockapi.io/key",
-        "button_text": "Save \u0026 Connect",
+        "button_text": "Save & Connect",
         "choice_label": "Which gateway are you connecting?",
         "color_scheme": "scheme-2",
         "default_gateway": "paypal",
-        "description": "\u003cp\u003eFollow the guide for your provider, then connect it below. This step only needs to be done once.\u003c/p\u003e",
+        "description": "<p>Follow the guide for your provider, then connect it below. This step only needs to be done once.</p>",
         "design_mode_text": "Saving is disabled inside the theme editor preview.",
         "doc_link_text": "Read the instructions",
         "error_text": "We could not save your details. Please try again.",
@@ -106,11 +106,12 @@
           "padding-inline-end": "70px",
           "padding-inline-start": "70px"
         },
-        "stripe_api_key_label": "Stripe API Key",
+        "stripe_api_key_label": "Stripe Secret Key (sk_test_... / sk_live_...)",
         "stripe_doc_text": "How to connect Stripe and find your API key.",
         "stripe_doc_title": "Stripe",
         "stripe_doc_url": "https://expofp.com/pages/stripe",
-        "success_text": "Saved. Your payment gateway is connected."
+        "success_text": "Saved. Your payment gateway is connected.",
+        "stripe_key_text": "Use your Stripe secret key - it starts with sk_test_ or sk_live_. The publishable key (pk_) will not work."
       },
       "disabled": true,
       "blocks": {},

@@ -112,6 +112,15 @@ defineModule('theme-payment-gateway-setup', () => {
         record[name] = value;
       }
 
+      // Stripe checkout is created on the server, which needs the secret key.
+      // A publishable key (pk_) is the easy mistake, and this section hides
+      // itself after the first save - so catch it before anything is stored.
+      if (gateway === 'stripe' && !/^(sk|rk)_(test|live)_/.test(record.stripeapikey)) {
+        this.#message(this.dataset.stripeKeyText, 'error');
+        this.querySelector('[name="stripeapikey"]')?.focus();
+        return;
+      }
+
       this.dataset.state = 'saving';
       this.#message('', null);
 

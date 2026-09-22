@@ -1,5 +1,24 @@
 {
   "sections": {
+    "booth-checkout": {
+      "type": "booth-checkout",
+      "settings": {
+        "api_base_url": "https://collective-hub-umber.vercel.app/api",
+        "color_scheme": "scheme-2",
+        "currency": "USD",
+        "floorplan_url": "https://eventcollectivehub9-25.expofp.com",
+        "param_booth": "booth",
+        "param_currency": "currency",
+        "param_price": "price",
+        "param_size": "size",
+        "param_type": "type",
+        "show_debug": true
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": [],
+      "name": "t:sections.booth_checkout.presets.presets_0.name"
+    },
     "main-page": {
       "type": "main-page",
       "settings": {
@@ -17,27 +36,7 @@
         }
       },
       "disabled": false,
-      "blocks": {},
-      "custom_css": []
-    },
-    "booth-checkout": {
-      "type": "booth-checkout",
-      "settings": {
-        "api_base_url": "",
-        "color_scheme": "scheme-2",
-        "currency": "USD",
-        "floorplan_url": "https://eventcollectivehub9-25.expofp.com",
-        "show_debug": true,
-        "param_booth": "booth",
-        "param_type": "type",
-        "param_size": "size",
-        "param_price": "price",
-        "param_currency": "currency"
-      },
-      "disabled": false,
-      "blocks": {},
-      "custom_css": [],
-      "name": "t:sections.booth_checkout.presets.presets_0.name"
+      "blocks": {}
     }
   },
   "order": [

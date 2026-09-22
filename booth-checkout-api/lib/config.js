@@ -1,61 +1,133 @@
 import { HttpError } from './http.js';
 
 /**
- * PayPal credentials.
+ * Payment gateway selection and credentials.
  *
- * The storefront has a "Payment Gateway Setup" section where the client enters
- * the keys they want to use; it stores them at GATEWAY_KEYS_URL. Environment
- * variables win when they are set, so production can be switched over to real
- * secret storage without touching this code or the storefront section.
+ * The storefront's "Payment Gateway Setup" section lets the client pick PayPal
+ * or Stripe and stores their keys at GATEWAY_KEYS_URL. Environment variables
+ * always win over that store, so production can move to real secret storage
+ * without touching this code or the storefront section.
  */
-let cached = null;
-let cachedAt = 0;
+export const GATEWAYS = ['paypal', 'stripe'];
+
+const USABLE = {
+  paypal: (record) => Boolean(record.clientId && record.clientscrect),
+  stripe: (record) => Boolean(record.stripeapikey),
+};
+
+const norm = (value) => String(value || '').trim().toLowerCase();
+
+let records = null;
+let recordsAt = 0;
 const TTL_MS = 60_000;
 
-export async function paypalCredentials() {
-  if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) {
-    return {
-      clientId: process.env.PAYPAL_CLIENT_ID,
-      clientSecret: process.env.PAYPAL_CLIENT_SECRET,
-      source: 'env',
-    };
-  }
-
-  if (cached && Date.now() - cachedAt < TTL_MS) return cached;
+/** Records submitted through the storefront section, newest first. */
+async function gatewayRecords() {
+  if (records && Date.now() - recordsAt < TTL_MS) return records;
 
   const url = process.env.GATEWAY_KEYS_URL;
-  if (!url) {
-    throw new HttpError(500, 'gateway_not_configured',
-      'Set PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET, or GATEWAY_KEYS_URL pointing at the keys the client submitted.');
-  }
+  if (!url) return [];
 
   const response = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!response.ok) {
     throw new HttpError(502, 'gateway_keys_unreachable', `Keys endpoint returned ${response.status}`);
   }
 
-  const records = await response.json();
-  const list = Array.isArray(records) ? records : [records];
+  const payload = await response.json();
+  records = (Array.isArray(payload) ? payload : [payload])
+    .filter((record) => record && typeof record === 'object')
+    .sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+  recordsAt = Date.now();
+  return records;
+}
 
-  // The client can submit more than once; the newest PayPal record wins.
-  const paypal = list
-    .filter((record) => record && String(record.paymentgateway).toLowerCase() === 'paypal')
-    .filter((record) => record.clientId && record.clientscrect)
-    .sort((a, b) => Number(b.id || 0) - Number(a.id || 0))[0];
+async function latestRecord(gateway) {
+  return (await gatewayRecords()).find(
+    (record) => norm(record.paymentgateway) === gateway && USABLE[gateway](record),
+  ) || null;
+}
 
-  if (!paypal) {
-    throw new HttpError(500, 'gateway_keys_missing',
-      'No PayPal record with clientId and clientscrect found at GATEWAY_KEYS_URL.');
+/**
+ * Which gateway a new checkout should use:
+ *   1. PAYMENT_GATEWAY, when set - an explicit override;
+ *   2. otherwise whatever the client most recently chose in the storefront
+ *      section (the newest usable record at GATEWAY_KEYS_URL);
+ *   3. otherwise whichever gateway has credentials in the environment,
+ *      PayPal first.
+ */
+export async function activeGateway() {
+  const forced = norm(process.env.PAYMENT_GATEWAY);
+  if (forced) {
+    if (!GATEWAYS.includes(forced)) {
+      throw new HttpError(500, 'gateway_invalid', `PAYMENT_GATEWAY must be one of ${GATEWAYS.join(', ')}.`);
+    }
+    return forced;
   }
 
-  cached = {
-    clientId: String(paypal.clientId).trim(),
+  try {
+    const newest = (await gatewayRecords()).find((record) => {
+      const gateway = norm(record.paymentgateway);
+      return GATEWAYS.includes(gateway) && USABLE[gateway](record);
+    });
+    if (newest) return norm(newest.paymentgateway);
+  } catch (error) {
+    // The key store being down should not block a gateway configured in env.
+    console.error('[config] gateway records unavailable:', error.message);
+  }
+
+  if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) return 'paypal';
+  if (process.env.STRIPE_SECRET_KEY) return 'stripe';
+
+  throw new HttpError(500, 'gateway_not_configured',
+    'No payment gateway configured: submit keys through the Payment Gateway Setup section, ' +
+    'or set PayPal / Stripe credentials in the environment.');
+}
+
+export async function paypalCredentials() {
+  if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) {
+    return {
+      clientId: process.env.PAYPAL_CLIENT_ID.trim(),
+      clientSecret: process.env.PAYPAL_CLIENT_SECRET.trim(),
+      source: 'env',
+    };
+  }
+
+  const record = await latestRecord('paypal');
+  if (!record) {
+    throw new HttpError(500, 'gateway_keys_missing',
+      'No PayPal credentials: set PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET, or submit them through the Payment Gateway Setup section.');
+  }
+
+  return {
+    clientId: String(record.clientId).trim(),
     // Field name follows the storefront/API spelling, which is "clientscrect".
-    clientSecret: String(paypal.clientscrect).trim(),
+    clientSecret: String(record.clientscrect).trim(),
     source: 'gateway_keys_url',
   };
-  cachedAt = Date.now();
-  return cached;
+}
+
+/**
+ * Stripe secret key. Checkout Sessions are created server-side, which needs a
+ * secret (sk_) or restricted (rk_) key - a publishable key (pk_) cannot do it,
+ * and is the easiest one to paste by mistake.
+ */
+export async function stripeSecretKey() {
+  const raw = process.env.STRIPE_SECRET_KEY || (await latestRecord('stripe'))?.stripeapikey;
+  if (!raw) {
+    throw new HttpError(500, 'gateway_keys_missing',
+      'No Stripe key: set STRIPE_SECRET_KEY, or submit one through the Payment Gateway Setup section.');
+  }
+
+  const key = String(raw).trim();
+  if (key.startsWith('pk_')) {
+    throw new HttpError(500, 'stripe_publishable_key',
+      'That is a Stripe publishable key (pk_...). Checkout needs the secret key (sk_test_... / sk_live_...) or a restricted key (rk_...).');
+  }
+  if (!/^(sk|rk)_(test|live)_/.test(key)) {
+    throw new HttpError(500, 'stripe_key_invalid',
+      'The Stripe key should start with sk_test_, sk_live_, rk_test_ or rk_live_.');
+  }
+  return key;
 }
 
 export function requiredEnv(name) {

@@ -17,6 +17,7 @@
       data-missing-text="{{ section.settings.missing_text }}"
       data-required-text="{{ section.settings.required_text }}"
       data-error-text="{{ section.settings.error_text }}"
+      data-unavailable-text="{{ section.settings.unavailable_text }}"
       data-cancel-text="{{ section.settings.cancel_text }}"
       data-pending-text="{{ section.settings.pending_text }}"
       data-success-text="{{ section.settings.success_text }}"
@@ -310,6 +311,13 @@
       "id": "required_text",
       "label": "t:sections.booth_checkout.settings.required_text.label",
       "default": "Please fill in every required field."
+    },
+    {
+      "type": "text",
+      "id": "unavailable_text",
+      "label": "t:sections.booth_checkout.settings.unavailable_text.label",
+      "info": "t:sections.booth_checkout.settings.unavailable_text.info",
+      "default": "Sorry - this booth was just reserved by someone else. Please pick another booth on the floor plan."
     },
     {
       "type": "text",

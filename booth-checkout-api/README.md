@@ -47,27 +47,59 @@ PayPal retries.
 
 | Route | Purpose |
 | --- | --- |
-| `POST /api/checkout/start` | Validate, hold the booth, open a PayPal order, return `{ checkoutId, url }` |
-| `GET /api/checkout/return` | PayPal's return/cancel target: captures, fulfils, redirects back to the page |
-| `POST /api/webhooks/paypal` | `PAYMENT.CAPTURE.COMPLETED` fulfils; denials release the hold |
+| `POST /api/checkout/start` | Validate, hold the booth, open a PayPal order or Stripe Checkout Session, return `{ checkoutId, gateway, url }` |
+| `GET /api/checkout/return` | Return/cancel target for both gateways: settles, fulfils, redirects back to the page |
+| `POST /api/webhooks/paypal` | `PAYMENT.CAPTURE.COMPLETED` fulfils; denials release the hold — both only after PayPal's API confirms |
+| `POST /api/webhooks/stripe` | `checkout.session.completed` / `async_payment_succeeded` fulfil; `expired` / `async_payment_failed` release — both only after Stripe's API confirms |
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
 | `GET/POST /api/cron/release-holds` | Puts abandoned booths back on sale (see "Releasing holds") |
 
 ## Before it can run
 
-**`lib/expofp-endpoints.js` is unfinished on purpose.** The ExpoFP JSON API
-reference is behind an account login, so the routes and field names were not
-verifiable when this was written. Fetch your copy:
+**Every ExpoFP call is built in, with its documented body.** Taken from the
+ExpoFP JSON API reference (`app.expofp.com/api-docs/json-api-v1`, behind a
+login), every call is a POST with `token` in the JSON body (also sent as the
+`X-API-Token` header, as the reference's own examples do). Nothing needs
+configuring beyond `EXPOFP_API_TOKEN` and `EXPOFP_EXPO_ID`:
 
-```bash
-curl -H "X-API-Token: <your token>" \
-  https://app.expofp.com/api-docs/json-api-v1.yaml -o expofp-api.yaml
-```
+| Operation | Route (default) | Body |
+| --- | --- | --- |
+| get booth | `/api/v1/get-booth` | `{ token, eventId, name }` — confirmed |
+| hold / release | `/api/v1/update-booth` | `{ token, eventId, name, isOnHold }` — confirmed |
+| list booths | `/api/v1/list-booths` | `{ token, expoId }` — confirmed (note `expoId`, not `eventId`) |
+| add exhibitor | `/api/v1/add-exhibitor` | `{ token, eventId, name, externalId, contactName, contactPhone, privateEmail, website, adminNotes }` → `{ id }` — confirmed |
+| find exhibitor | `/api/v1/get-exhibitor-id` | `{ token, eventId, externalId }` → `{ id }` — confirmed |
+| assign booth | `/api/v1/add-exhibitor-booth` | `{ token, eventId, boothName, exhibitorId }` — confirmed; `exhibitorId` **as a string**; 200 empty or 200 `Already added` |
+| add extra | `/api/v1/add-exhibitor-extra` | not yet seen; not used by the checkout |
 
-Then fill in `EXPOFP_PATH_*`, `EXPOFP_FIELD_*` and `EXPOFP_RESPONSE_EXHIBITOR_ID`.
-Any operation whose path is still blank throws a descriptive error rather than
-calling a guessed URL — except the booth hold, which logs a warning and lets the
-sale continue (see the race-condition note below).
+`name` on the booth calls is the booth key as drawn on the floor plan. The new
+exhibitor gets `externalId` = the checkout id (so one exhibitor per purchase),
+the contact's email in `privateEmail` (never shown to visitors), and an
+`adminNotes` line with booth, amount, gateway, payment reference and contact.
+A duplicate `externalId` means an earlier attempt already created it; that
+exhibitor is found with `get-exhibitor-id` and reused.
+
+Assigning is idempotent on ExpoFP's side (`Already added` is a 200), and if an
+assignment fails anyway — ExpoFP down, a 404 — the checkout is
+`fulfilment_failed`, ExpoFP's error body is saved on the record and logged, and
+the retry queue picks it up. See "Retrying".
+
+`eventId` / `expoId` are sent as JSON numbers (int32 in the reference); booth
+keys go exactly as given; `exhibitorId` on add-exhibitor-booth goes as a
+string, which the reference asks for.
+
+If ExpoFP ever changes its API, `node scripts/inspect-expofp-api.mjs` downloads
+the current OpenAPI document with your token (header only, never printed) and
+lists the operations and body fields to compare against. Routes can be
+overridden with `EXPOFP_PATH_*` without a code change.
+
+**The price is ExpoFP's, never the link's.** The hand-over link carries the
+price on the query string, where anyone can edit it. `checkout/start` reads the
+booth with `get-booth` and charges that price; a different price on the link is
+only logged. The same call refuses booths that are on hold, already have an
+exhibitor, or are a special section (409 `booth_unavailable`), and unknown
+booths (400 `booth_unknown`). If ExpoFP cannot be reached it answers 503 rather
+than fall back to the editable price.
 
 ## Deploying
 
@@ -118,6 +150,62 @@ Without (3), on a quiet day an abandoned booth can read On Hold on the floor
 plan for up to a day. With `HOLD_MINUTES=30` and a 10-minute scheduler, it is
 back on sale within 40 minutes.
 
+## Choosing the gateway
+
+PayPal and Stripe are both supported. `activeGateway()` in `lib/config.js`
+picks one for each new checkout, and the choice is stored on the checkout
+record, so the return page and webhooks always talk to the right provider:
+
+1. `PAYMENT_GATEWAY=stripe|paypal`, when set;
+2. otherwise what the client last chose in the storefront's Payment Gateway
+   Setup section (newest usable record at `GATEWAY_KEYS_URL`);
+3. otherwise whichever has credentials in the environment, PayPal first.
+
+### Stripe specifics
+
+- Needs the **secret** key (`sk_test_…` / `sk_live_…`) or a restricted key
+  (`rk_…`). A publishable key (`pk_…`) is rejected with a clear error before
+  the booth is held; the storefront section also refuses it before saving.
+- The Checkout Session expires 30 minutes out (Stripe's minimum;
+  `HOLD_MINUTES` if longer). The booth hold ends 2 minutes *after* that, so no
+  payment can land on a booth that was already released.
+- Cancelling expires the session before releasing the booth, so the buyer
+  cannot press Back and pay for a booth someone else is now holding.
+- Webhook: Stripe Dashboard → Developers → Webhooks → endpoint
+  `https://<production-domain>/api/webhooks/stripe` with the four
+  `checkout.session.*` events above; put its signing secret in
+  `STRIPE_WEBHOOK_SECRET`. Signature checking is verified against the official
+  `stripe` library in both directions, and rejects deliveries older than
+  5 minutes (Stripe's timestamp is signed, so this is real replay protection).
+
+Every path that fulfils or releases re-reads the session / order from the
+gateway's API first. A webhook payload — signed or not — is never enough on
+its own to hand out or free a booth.
+
+## Retrying
+
+A paid checkout whose ExpoFP write fails is not lost:
+
+- The moment payment is confirmed the booth leaves the release schedule, and
+  its ExpoFP hold stays on. A paid booth never goes back on sale while its
+  assignment is pending.
+- The failure is queued in KV and retried after 1, 5 and 15 minutes, then 1, 3,
+  6 and 12 hours, then daily — 12 attempts in all. After that it is logged
+  as `GIVING UP ... assign it by hand in ExpoFP`.
+- Retries run from `/api/cron/release-holds` (daily Vercel cron, plus any
+  external scheduler). After fixing whatever made them fail, call
+  `/api/cron/release-holds?retry=all` with the `CRON_SECRET` bearer to retry
+  every queued checkout at once instead of waiting out the backoff.
+- The exhibitor id is saved as soon as it exists, so a retry only redoes the
+  step that failed.
+
+**Late PayPal approvals.** The booth hold lasts `HOLD_MINUTES`, but PayPal keeps
+an order approvable for hours. Nothing is charged until this service captures,
+so a buyer who approves after the hold ran out gets the booth re-checked first:
+still free, it is held again and captured; taken, the order is not captured
+and the page shows `status=unavailable`. (Stripe cannot hit this: its session
+expires before the hold does.)
+
 ## Payment keys
 
 `lib/config.js` resolves PayPal credentials in this order:
@@ -135,10 +223,12 @@ setup section can stay in place for collecting the keys the first time.
 ## Two things that will bite
 
 **The race.** ExpoFP creates no reservation, so between the click and the
-payment the booth is on sale to everyone. `checkout/start` calls
-`setBoothOnHold(...)` first for that reason. If `EXPOFP_PATH_SET_BOOTH_STATUS`
-is blank the sale still goes through, but two people can buy the same booth —
-fill that path in before taking real money.
+payment the booth is on sale to everyone. `checkout/start` therefore checks
+the booth, takes a per-booth claim in KV (`SET NX`, so two buyers pressing Pay
+together cannot both pass), and holds it on ExpoFP with `update-booth
+isOnHold: true`. The claim and the hold are released on cancel, expiry or
+payment failure. Purchases that bypass this service — say, made inside ExpoFP
+itself — are only caught by the `get-booth` check, not by the claim.
 
 **Webhook signatures.** `api/webhooks/expofp.js` follows ExpoFP's
 receiving-webhooks order: read raw bytes, verify HMAC-SHA256 over those bytes
@@ -159,6 +249,7 @@ no matching assignment — a reservation made inside ExpoFP, or the Test webhook
 button — is always handled, however many times it arrives. `booth_assigned`
 itself is never skipped.
 
-Webhooks are configured per ExpoFP **account**, so deliveries cover every expo
-in it, not only `EXPOFP_EXPO_ID`. The handler only logs today; filter on
-`expoId` before acting on events.
+Webhook URLs are set **per expo** (the JSON API reference says so, and has a
+`set-webhook-url` call), while the signing secret belongs to the account. Make
+sure the URL is set on the expo in `EXPOFP_EXPO_ID`. The handler only logs
+today; filter on `expoId` before acting on events all the same.

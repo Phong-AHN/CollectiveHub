@@ -14678,6 +14678,10 @@
         },
         "size": {
           "label": "Kích thước"
+        },
+        "stripe_key_text": {
+          "label": "Thông báo sai loại key Stripe",
+          "info": "Hiện khi key Stripe không phải secret key (sk_...), trước khi lưu bất cứ thứ gì."
         }
       },
       "presets": {
@@ -14812,6 +14816,10 @@
         "pending_text": {
           "label": "Đã thanh toán, đang xác nhận booth",
           "info": "Hiện khi đã thanh toán xong nhưng booth còn đang được ghi lên floor plan."
+        },
+        "unavailable_text": {
+          "label": "Booth đã có người giữ",
+          "info": "Hiện khi có người khác đang thanh toán hoặc đã mua booth này trong lúc đó."
         }
       },
       "presets": {

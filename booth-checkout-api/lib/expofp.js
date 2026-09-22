@@ -6,11 +6,13 @@ async function call(operation, body) {
   const path = assertConfigured(operation);
   const url = `${BASE_URL.replace(/\/+$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
 
+  const token = requiredEnv('EXPOFP_API_TOKEN');
   const response = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    // Auth is a token field in the body - never in the URL.
-    body: JSON.stringify({ [FIELDS.token]: requiredEnv('EXPOFP_API_TOKEN'), ...body }),
+    // The reference asks for the token in the JSON body; its own examples also
+    // send it as X-API-Token. Both, then - and never in the URL.
+    headers: { 'Content-Type': 'application/json', 'X-API-Token': token },
+    body: JSON.stringify({ [FIELDS.token]: token, ...body }),
   });
 
   const text = await response.text();
@@ -35,48 +37,71 @@ function dig(object, pathParts) {
   return pathParts.reduce((node, part) => (node == null ? node : node[part]), object);
 }
 
-const expoId = () => requiredEnv('EXPOFP_EXPO_ID');
+// eventId / expoId are int32 in the reference, and ExpoFP's webhooks carry ids
+// as numbers too, but env vars and query strings are text: send digit-only ids
+// as numbers. Booth keys like "A-101" or "7" go exactly as given, and so does
+// add-exhibitor-booth's exhibitorId, which the reference wants as a string.
+const asId = (value) => (/^\d+$/.test(String(value ?? '').trim()) ? Number(value) : value);
 
-export async function addExhibitor(exhibitor, externalId) {
-  const payload = await call('addExhibitor', {
-    [FIELDS.expoId]: expoId(),
-    [FIELDS.name]: exhibitor.company,
-    [FIELDS.email]: exhibitor.email,
-    [FIELDS.phone]: exhibitor.phone || '',
-    [FIELDS.website]: exhibitor.website || '',
-    [FIELDS.externalId]: externalId,
-  });
+const expoId = () => asId(requiredEnv('EXPOFP_EXPO_ID'));
 
-  const id = dig(payload, RESPONSE_PATHS.exhibitorId);
-  if (!id) {
-    throw new Error('ExpoFP addExhibitor returned no exhibitor id - check EXPOFP_RESPONSE_EXHIBITOR_ID');
+// ---- booths: documented bodies ---------------------------------------------
+
+/** get-booth { token, eventId, name }. Null when the expo has no such booth. */
+export async function getBooth(name) {
+  try {
+    return await call('getBooth', { eventId: expoId(), name: String(name) });
+  } catch (error) {
+    if (error.status === 404) return null;
+    throw error;
   }
-  return id;
 }
 
-export async function addExhibitorBooth(exhibitorId, booth) {
-  return call('addExhibitorBooth', {
-    [FIELDS.expoId]: expoId(),
-    [FIELDS.exhibitorId]: exhibitorId,
-    ...(booth.boothId ? { [FIELDS.boothId]: booth.boothId } : {}),
-    ...(booth.booth ? { [FIELDS.boothKey]: booth.booth } : {}),
-  });
-}
-
-export async function addExhibitorExtra(exhibitorId, extra) {
-  if (!isConfigured('addExhibitorExtra')) return null;
-  return call('addExhibitorExtra', {
-    [FIELDS.expoId]: expoId(),
-    [FIELDS.exhibitorId]: exhibitorId,
-    ...extra,
-  });
+/** list-booths { token, expoId } - note expoId here, eventId on the others. */
+export async function listBooths() {
+  const payload = await call('listBooths', { expoId: expoId() });
+  return Array.isArray(payload) ? payload : [];
 }
 
 /**
- * Best-effort hold. ExpoFP creates no reservation when it hands the visitor
- * over, so the booth reads Available for the whole checkout unless we hold it.
- * If the endpoint is not configured yet we carry on rather than block a sale -
- * the caller records that the booth was never held.
+ * The booth's name as drawn on the floor plan - what get-booth and
+ * update-booth look booths up by. Taken from the hand-over link when it
+ * carries one; otherwise mapped from ExpoFP's numeric booth id.
+ */
+export async function resolveBoothName(booth) {
+  if (booth.booth) return String(booth.booth);
+  if (!booth.boothId) return null;
+  const match = (await listBooths()).find((b) => String(b.id) === String(booth.boothId));
+  return match ? String(match.name) : null;
+}
+
+/**
+ * Is this booth for sale right now, and at what price?
+ *
+ * The price comes from ExpoFP, never from the visitor: the hand-over link puts
+ * the price on the query string, where anyone can edit it.
+ */
+export async function checkBoothForSale(booth) {
+  const name = await resolveBoothName(booth);
+  if (!name) return { ok: false, reason: 'booth_unknown' };
+
+  const info = await getBooth(name);
+  if (!info) return { ok: false, reason: 'booth_unknown', name };
+  if (info.isSpecialSection) return { ok: false, reason: 'booth_not_for_sale', name };
+  if (info.isOnHold) return { ok: false, reason: 'booth_on_hold', name };
+  if (Array.isArray(info.exhibitors) && info.exhibitors.length) return { ok: false, reason: 'booth_taken', name };
+
+  const price = Number(info.price);
+  if (!Number.isFinite(price) || price <= 0) return { ok: false, reason: 'booth_not_for_sale', name };
+
+  return { ok: true, name: String(info.name || name), price, title: info.title, type: info.type, size: info.size };
+}
+
+/**
+ * update-booth { token, eventId, name, isOnHold }. ExpoFP creates no
+ * reservation when it hands the visitor over, so the booth reads Available for
+ * the whole checkout unless we hold it. Best effort: a failure is recorded on
+ * the checkout rather than blocking the sale.
  */
 export async function setBoothOnHold(booth, onHold) {
   if (!isConfigured('setBoothStatus')) {
@@ -84,18 +109,108 @@ export async function setBoothOnHold(booth, onHold) {
     return { held: false, reason: 'not_configured' };
   }
 
+  const name = booth.booth ? String(booth.booth) : null;
+  if (!name) {
+    console.warn('[expofp] no booth name to hold - update-booth finds booths by name');
+    return { held: false, reason: 'no_booth_name' };
+  }
+
   try {
-    await call('setBoothStatus', {
-      [FIELDS.expoId]: expoId(),
-      ...(booth.boothId ? { [FIELDS.boothId]: booth.boothId } : {}),
-      ...(booth.booth ? { [FIELDS.boothKey]: booth.booth } : {}),
-      [FIELDS.isOnHold]: Boolean(onHold),
-    });
+    await call('setBoothStatus', { eventId: expoId(), name, isOnHold: Boolean(onHold) });
     return { held: Boolean(onHold) };
   } catch (error) {
     console.error('[expofp] hold failed', error.message, error.payload || '');
     return { held: false, reason: 'request_failed' };
   }
+}
+
+// ---- exhibitors ---------------------------------------------------------------
+
+/** A website the visitor typed as "acme.com" still becomes a valid URL. */
+function normalizeWebsite(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return undefined;
+  try {
+    const url = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : undefined;
+  } catch (error) {
+    return undefined; // an unusable URL must not cost the booth assignment
+  }
+}
+
+/** get-exhibitor-id { token, eventId, externalId } -> id, or null when unknown (404). */
+export async function getExhibitorId(externalId) {
+  try {
+    const payload = await call('getExhibitorId', { eventId: expoId(), externalId: String(externalId) });
+    return payload?.id ?? null;
+  } catch (error) {
+    if (error.status === 404) return null;
+    throw error;
+  }
+}
+
+/**
+ * add-exhibitor { token, eventId, name, externalId, ... } -> { id }.
+ *
+ * externalId must be unused within the expo, which makes it an idempotency key:
+ * if an earlier attempt created the exhibitor but died before its id was saved,
+ * the retry gets a 400, looks the exhibitor up by that key and reuses it.
+ *
+ * The contact's email goes to privateEmail, which visitors never see -
+ * publicEmail is left for the exhibitor to fill in themselves.
+ */
+export async function addExhibitor(exhibitor, externalId, { adminNotes } = {}) {
+  const body = {
+    eventId: expoId(),
+    name: String(exhibitor.company || '').trim().slice(0, 100),
+    externalId: String(externalId),
+    contactName: exhibitor.contactName || undefined,
+    contactPhone: exhibitor.phone || undefined,
+    privateEmail: exhibitor.email || undefined,
+    website: normalizeWebsite(exhibitor.website),
+    adminNotes: adminNotes || undefined,
+  };
+
+  try {
+    const payload = await call('addExhibitor', body);
+    const id = dig(payload, RESPONSE_PATHS.exhibitorId);
+    if (id) return id;
+    throw new Error('ExpoFP add-exhibitor answered without an id - check EXPOFP_RESPONSE_EXHIBITOR_ID');
+  } catch (error) {
+    if (error.status === 400) {
+      const existing = await getExhibitorId(externalId);
+      if (existing) return existing;
+    }
+    throw error;
+  }
+}
+
+/**
+ * add-exhibitor-booth { token, eventId, boothName, exhibitorId }.
+ *
+ * exhibitorId goes as a STRING: the reference says either ExpoFP's numeric id
+ * or our externalId resolves when sent as a string - so it is the one id here
+ * that must not become a JSON number. Success is 200 with no body, or 200
+ * "Already added" when the exhibitor is on the booth already; that makes a
+ * retry harmless.
+ */
+export async function addExhibitorBooth(exhibitorId, booth) {
+  if (!booth.booth) throw new Error('No booth name to assign - add-exhibitor-booth takes the booth key');
+  return call('addExhibitorBooth', {
+    eventId: expoId(),
+    boothName: String(booth.booth),
+    exhibitorId: String(exhibitorId),
+  });
+}
+
+// Body not yet confirmed (and not used by the checkout) - names come from FIELDS.
+export async function addExhibitorExtra(exhibitorId, extra) {
+  if (!isConfigured('addExhibitorExtra')) return null;
+  return call('addExhibitorExtra', {
+    [FIELDS.expoId]: expoId(),
+    [FIELDS.exhibitorId]: asId(exhibitorId),
+    ...extra,
+  });
 }
 
 /**

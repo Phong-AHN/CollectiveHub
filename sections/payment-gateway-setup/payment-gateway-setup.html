@@ -15,6 +15,7 @@
       data-success-text="{{ section.settings.success_text }}"
       data-error-text="{{ section.settings.error_text }}"
       data-required-text="{{ section.settings.required_text }}"
+      data-stripe-key-text="{{ section.settings.stripe_key_text }}"
       data-design-mode-text="{{ section.settings.design_mode_text }}"
       data-state="checking"
       {{#if request.design_mode }}data-design-mode="true"{{/if}}
@@ -267,7 +268,7 @@
       "type": "text",
       "id": "stripe_api_key_label",
       "label": "t:sections.payment_gateway_setup.settings.stripe_api_key_label.label",
-      "default": "Stripe API Key"
+      "default": "Stripe Secret Key (sk_test_... / sk_live_...)"
     },
     {
       "type": "text",
@@ -317,6 +318,13 @@
       "id": "required_text",
       "label": "t:sections.payment_gateway_setup.settings.required_text.label",
       "default": "Please fill in every field before saving."
+    },
+    {
+      "type": "text",
+      "id": "stripe_key_text",
+      "label": "t:sections.payment_gateway_setup.settings.stripe_key_text.label",
+      "info": "t:sections.payment_gateway_setup.settings.stripe_key_text.info",
+      "default": "Use your Stripe secret key - it starts with sk_test_ or sk_live_. The publishable key (pk_) will not work."
     },
     {
       "type": "text",

@@ -14678,6 +14678,10 @@
         },
         "size": {
           "label": "Size"
+        },
+        "stripe_key_text": {
+          "label": "Wrong Stripe key message",
+          "info": "Shown when the Stripe key is not a secret key (sk_...), before anything is saved."
         }
       },
       "presets": {
@@ -14812,6 +14816,10 @@
         "pending_text": {
           "label": "Payment taken, booth confirming",
           "info": "Shown when the payment succeeded but the booth is still being written to the floor plan."
+        },
+        "unavailable_text": {
+          "label": "Booth already taken",
+          "info": "Shown when someone else is paying for, or has bought, the booth in the meantime."
         }
       },
       "presets": {

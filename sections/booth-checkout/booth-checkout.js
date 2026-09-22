@@ -53,6 +53,14 @@ defineModule('theme-booth-checkout', () => {
         this.#message(this.dataset.pendingText, 'info');
         return;
       }
+      if (status === 'unavailable') {
+        // Approved too late: the booth went to someone else and nothing was
+        // charged. Send them back to the floor plan rather than to the form.
+        this.dataset.state = 'empty';
+        const el = this.querySelector('[data-role="empty-text"]');
+        if (el) el.textContent = this.dataset.unavailableText;
+        return;
+      }
 
       this.booth = this.#readBooth();
 
@@ -106,13 +114,17 @@ defineModule('theme-booth-checkout', () => {
             // did not map into a named field.
             source: Object.fromEntries(this.params.entries()),
             exhibitor,
-            returnUrl: window.location.origin + window.location.pathname,
+            returnUrl: this.#returnUrl(),
           }),
         });
 
-        if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+        const payload = await response.json().catch(() => null);
 
-        const payload = await response.json();
+        if (!response.ok) {
+          const error = new Error(`Request failed with ${response.status}`);
+          error.code = payload && payload.error;
+          throw error;
+        }
         if (!payload || !payload.url) throw new Error('No payment URL returned');
 
         // The backend has put the booth on hold and opened a payment session.
@@ -120,8 +132,24 @@ defineModule('theme-booth-checkout', () => {
       } catch (error) {
         console.error('[theme-booth-checkout]', error);
         this.dataset.state = 'ready';
-        this.#message(this.dataset.errorText, 'error');
+        // Someone else is paying for (or has bought) this booth: say so, rather
+        // than inviting a retry that cannot succeed.
+        if (error.code === 'booth_unavailable') this.#message(this.dataset.unavailableText, 'error');
+        else if (error.code === 'booth_unknown') this.#message(this.dataset.missingText, 'error');
+        else this.#message(this.dataset.errorText, 'error');
       }
+    }
+
+    /**
+     * This page, booth parameters included, so a cancelled or failed payment
+     * lands back on the same booth ready to retry - not on an empty page.
+     * Any old status is dropped; the backend adds the new one.
+     */
+    #returnUrl() {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('status');
+      url.hash = '';
+      return url.toString();
     }
 
     #readBooth() {

@@ -24,12 +24,35 @@ async function client() {
   const log = process.env.VERCEL_ENV === 'production' ? console.error : console.warn;
   log('[store] No Redis/KV credentials found - falling back to in-process memory. ' +
     'Holds and idempotency will not survive across invocations. Connect an Upstash Redis store.');
-  memory = { records: new Map(), holds: new Map() };
+  memory = { records: new Map(), holds: new Map(), retries: new Map() };
   return { kv, memory };
 }
 
 const key = (id) => `checkout:${id}`;
 const HOLDS = 'holds:due';
+const RETRIES = 'fulfil:retry';
+
+/**
+ * Paid checkouts whose ExpoFP write failed, scored by when to try again.
+ * The cron (and any external scheduler) works through them.
+ */
+export async function scheduleRetry(id, atMs) {
+  const { kv: k, memory: m } = await client();
+  if (k) await k.zadd(RETRIES, { score: atMs, member: id });
+  else m.retries.set(id, atMs);
+}
+
+export async function clearRetry(id) {
+  const { kv: k, memory: m } = await client();
+  if (k) await k.zrem(RETRIES, id);
+  else m.retries.delete(id);
+}
+
+export async function dueRetries(nowMs, limit = 20) {
+  const { kv: k, memory: m } = await client();
+  if (k) return (await k.zrange(RETRIES, 0, nowMs, { byScore: true, count: limit, offset: 0 })) || [];
+  return [...m.retries.entries()].filter(([, at]) => at <= nowMs).slice(0, limit).map(([id]) => id);
+}
 
 export async function putCheckout(id, data, ttlSeconds) {
   const { kv: k, memory: m } = await client();
@@ -115,6 +138,36 @@ export async function consumeAssigned(pairKey) {
   const until = m.records.get(name);
   m.records.delete(name);
   return typeof until === 'number' && until > Date.now();
+}
+
+/**
+ * One checkout per booth at a time. Checking the booth on ExpoFP and then
+ * holding it are two calls, so two buyers pressing Pay together could both see
+ * it free; this claim (SET NX) lets only the first one through. It expires on
+ * its own, so a crashed checkout cannot lock a booth for good.
+ */
+export async function claimBooth(boothName, checkoutId, ttlSeconds) {
+  const { kv: k, memory: m } = await client();
+  const name = `booth:${String(boothName).toLowerCase()}`;
+  if (k) {
+    const won = await k.set(name, checkoutId, { nx: true, ex: ttlSeconds });
+    return won === 'OK' || won === true;
+  }
+  const held = m.records.get(name);
+  if (held && held.until > Date.now()) return false;
+  m.records.set(name, { checkoutId, until: Date.now() + ttlSeconds * 1000 });
+  return true;
+}
+
+/** Frees the booth claim, but only if this checkout still owns it. */
+export async function releaseBoothClaim(boothName, checkoutId) {
+  const { kv: k, memory: m } = await client();
+  const name = `booth:${String(boothName).toLowerCase()}`;
+  if (k) {
+    if ((await k.get(name)) === checkoutId) await k.del(name);
+    return;
+  }
+  if (m.records.get(name)?.checkoutId === checkoutId) m.records.delete(name);
 }
 
 export async function trackHold(id, expiresAtMs) {
