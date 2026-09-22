@@ -53,6 +53,8 @@ PayPal retries.
 | `POST /api/webhooks/stripe` | `checkout.session.completed` / `async_payment_succeeded` fulfil; `expired` / `async_payment_failed` release — both only after Stripe's API confirms |
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
 | `GET/POST /api/cron/release-holds` | Releases expired holds and retries failed fulfilments (see "Releasing holds", "Retrying") |
+| `GET /api/gateway/keys` | Whether payment keys are saved, and a hint (`sk_live_****4242`) — never a key |
+| `POST /api/gateway/keys` | Saves the client's keys from the storefront setup section; needs `SETUP_PASSCODE` |
 | `GET /api/extras` | The add-on catalogue the checkout page offers (ids, names, prices) |
 | `GET /api/health` | Configuration report — what is set, never the values; `?deep=1` (cron secret) proves the ExpoFP token |
 
@@ -71,6 +73,9 @@ payment"). The cause is in the API response and the browser console — DevTools
 | `400 booth_unknown` | The booth name from the link is not in `EXPOFP_EXPO_ID`'s expo | Wrong expo id, or the booth parameter name on the checkout section is wrong (see its debug panel) |
 | `409 booth_unavailable` | On hold, sold, or someone else is checking out | Working as intended |
 | `500 gateway_*` / `stripe_*` | Payment keys missing or of the wrong kind | See `/api/health` → `gateway.problem` |
+| `500 gateway_keys_unreadable` | `SECRETS_KEY` is not the value the saved keys were encrypted with | Restore that value, or have the client save the keys again in the setup section |
+| `401 passcode_wrong` from the setup form | Wrong setup code | It is `SETUP_PASSCODE` on this deployment; `/api/health` → `gateway.setupPasscode` says whether one is set |
+| `429 too_many_attempts` | Ten wrong codes from that address within an hour | Wait an hour, or save from another connection |
 
 To prove the ExpoFP token and expo from the deployment itself:
 
@@ -138,6 +143,9 @@ than fall back to the editable price.
    `503 storage_not_configured` rather than take money it cannot follow up.
    `/api/health` shows `"storage": "redis"` once it is connected.
 3. Copy `.env.example` into the project's environment variables and fill it in.
+   `SECRETS_KEY` (`openssl rand -base64 32`) and `SETUP_PASSCODE` are what let
+   the client save their own payment keys from the storefront — see
+   "Payment keys".
 4. Register the PayPal webhook at `https://<deployment>/api/webhooks/paypal`
    for `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.DENIED` and
    `CHECKOUT.ORDER.VOIDED`, then put its id in `PAYPAL_WEBHOOK_ID`.
@@ -149,6 +157,10 @@ than fall back to the editable price.
    the function runs.
 6. In the theme editor, set the Booth Checkout section's **API base URL** to
    `https://<deployment>/api`.
+7. Set the same address on the **Payment Gateway Setup** section, and give the
+   client the setup code (`SETUP_PASSCODE`) privately — in the form it is the
+   last field. Their key is encrypted the moment it arrives and cannot be read
+   back, by them or by us; `/api/health` only ever shows a hint.
 
 ## Releasing holds
 
@@ -187,7 +199,7 @@ record, so the return page and webhooks always talk to the right provider:
 
 1. `PAYMENT_GATEWAY=stripe|paypal`, when set;
 2. otherwise what the client last chose in the storefront's Payment Gateway
-   Setup section (newest usable record at `GATEWAY_KEYS_URL`);
+   Setup section, as saved by `POST /api/gateway/keys`;
 3. otherwise whichever has credentials in the environment, PayPal first.
 
 ### Stripe specifics
@@ -263,17 +275,31 @@ expires before the hold does.)
 
 ## Payment keys
 
-`lib/config.js` resolves PayPal credentials in this order:
+Credentials come from the environment first (`STRIPE_SECRET_KEY`, or
+`PAYPAL_CLIENT_ID` + `PAYPAL_CLIENT_SECRET`), and otherwise from what the
+client saved through the storefront's Payment Gateway Setup section. That
+section posts to `/api/gateway/keys` here — it is the only way in:
 
-1. `PAYPAL_CLIENT_ID` + `PAYPAL_CLIENT_SECRET` from the environment;
-2. otherwise the newest PayPal record at `GATEWAY_KEYS_URL` — the keys the
-   client submits through the storefront's Payment Gateway Setup section.
+- **Encrypted at rest.** `lib/secrets.js` encrypts the keys with AES-256-GCM
+  under `SECRETS_KEY` before `lib/store.js` writes them to Redis. The key lives
+  on Vercel and the ciphertext lives in Redis, so neither on its own is enough;
+  a database dump reads as noise, and altered ciphertext fails to decrypt
+  rather than returning something wrong.
+- **Write-only.** No endpoint returns a key. `GET /api/gateway/keys` answers
+  `{ configured, gateway, hint, savedAt }`, where the hint is
+  `sk_live_****4242` — enough for the form to know a key is there, never enough
+  to use. `/api/health` shows the same hint. Nothing logs a key.
+- **The passcode.** `POST` needs `SETUP_PASSCODE` (compared in constant time),
+  so a stranger who finds the endpoint cannot redirect the client's payments to
+  their own Stripe account. Ten wrong tries an hour from one address and that
+  address is refused; give the code to the client privately, not in the theme.
+- **No keys without Redis.** On Vercel, a `POST` without a Redis store is
+  refused (`storage_not_configured`) rather than accepting a key it would lose.
 
-Option 2 is what keeps that section useful, but note what it means: the client's
-PayPal secret sits in a store that anyone with the URL can read, and the
-storefront posts it straight from the browser. Setting the two environment
-variables switches to real secret storage without changing any code, and the
-setup section can stay in place for collecting the keys the first time.
+Rotating `SECRETS_KEY` makes the saved keys unreadable: checkout then fails
+with `gateway_keys_unreadable`, and the client has to paste the keys again.
+Setting the environment variables instead keeps everything in Vercel's own
+secret storage, and the section can stay in place for the first collection.
 
 ## Two things that will bite
 

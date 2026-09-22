@@ -14644,11 +14644,11 @@
         },
         "group_header_2": {
           "label": "Endpoint & hành vi",
-          "info": "Thông tin được gửi thẳng từ trình duyệt của khách, nên ai mở trang này cũng đọc được endpoint và dữ liệu gửi đi. Hãy dùng endpoint riêng tư và chỉ mở section này cho người đáng tin."
+          "info": "Key được gửi tới dịch vụ checkout của bạn qua HTTPS và lưu ở dạng mã hoá. Muốn lưu phải nhập mã cài đặt, và không nơi nào đọc lại được key đã lưu - chỉ hiện gợi ý dạng sk_live_****4242."
         },
-        "api_url": {
-          "label": "Endpoint lưu dữ liệu",
-          "info": "Gửi POST tới đây kèm paymentgateway, clientId, clientscrect và stripeapikey."
+        "api_base_url": {
+          "label": "Địa chỉ API checkout",
+          "info": "Cùng địa chỉ với section booth checkout, kết thúc bằng /api. Key được mã hoá trước khi lưu và không trang nào đọc lại được."
         },
         "hide_when_configured": {
           "label": "Ẩn sau khi đã cấu hình",
@@ -14662,6 +14662,13 @@
         },
         "required_text": {
           "label": "Thông báo thiếu thông tin"
+        },
+        "passcode_label": {
+          "label": "Nhãn ô mã cài đặt",
+          "info": "Mã lấy từ SETUP_PASSCODE trên dịch vụ checkout. Không có mã thì không lưu được, nên người lạ vào trang này cũng không đổi được tài khoản nhận tiền."
+        },
+        "passcode_error_text": {
+          "label": "Thông báo sai mã cài đặt"
         },
         "design_mode_text": {
           "label": "Thông báo trong theme editor",

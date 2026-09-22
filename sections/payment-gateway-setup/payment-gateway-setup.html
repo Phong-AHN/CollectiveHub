@@ -1,7 +1,7 @@
 {{#component "stylesheet" src="./payment-gateway-setup.css" | asset_url() /}}
 {{#component "script" src="./payment-gateway-setup.js" | asset_url() /}}
 
-{{#var api_url = section.settings.api_url | default("https://6aa7e0369b08676cd32b9a36.mockapi.io/key") /}}
+{{#var api_base = section.settings.api_base_url /}}
 {{#var field_name = "payment-gateway-" | append(section.id) /}}
 
 <div class="payment-gateway-setup color-{{ section.settings.color_scheme.id }}">
@@ -9,12 +9,13 @@
     <theme-payment-gateway-setup
       class="payment-gateway-setup__inner {{ section.settings | class_list() }}"
       data-section-id="{{ section.id }}"
-      data-api-url="{{ api_url }}"
+      data-api-base="{{ api_base }}"
       data-gateway="{{ section.settings.default_gateway }}"
       data-hide-when-configured="{{ section.settings.hide_when_configured }}"
       data-success-text="{{ section.settings.success_text }}"
       data-error-text="{{ section.settings.error_text }}"
       data-required-text="{{ section.settings.required_text }}"
+      data-passcode-error-text="{{ section.settings.passcode_error_text }}"
       data-stripe-key-text="{{ section.settings.stripe_key_text }}"
       data-design-mode-text="{{ section.settings.design_mode_text }}"
       data-state="checking"
@@ -95,7 +96,7 @@
               <input
                 class="field__input"
                 type="text"
-                name="clientId"
+                name="paypalClientId"
                 data-role="input"
                 autocomplete="off"
                 spellcheck="false"
@@ -108,7 +109,7 @@
               <input
                 class="field__input"
                 type="password"
-                name="clientscrect"
+                name="paypalClientSecret"
                 data-role="input"
                 autocomplete="off"
                 spellcheck="false"
@@ -123,13 +124,27 @@
               <input
                 class="field__input"
                 type="password"
-                name="stripeapikey"
+                name="stripeSecretKey"
                 data-role="input"
                 autocomplete="off"
                 spellcheck="false"
                 placeholder="{{ section.settings.stripe_api_key_label }}"
               />
               <span class="field__label">{{ section.settings.stripe_api_key_label }}</span>
+            </label>
+          </div>
+
+          <div class="payment-gateway-setup__fields">
+            <label class="field">
+              <input
+                class="field__input"
+                type="password"
+                name="passcode"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="{{ section.settings.passcode_label }}"
+              />
+              <span class="field__label">{{ section.settings.passcode_label }}</span>
             </label>
           </div>
 
@@ -165,13 +180,34 @@
       "label": "t:sections.payment_gateway_setup.settings.heading_typography.label",
       "default": "title2",
       "options": [
-        { "value": "title0", "label": "Title 0" },
-        { "value": "title1", "label": "Title 1" },
-        { "value": "title2", "label": "Title 2" },
-        { "value": "title3", "label": "Title 3" },
-        { "value": "title4", "label": "Title 4" },
-        { "value": "title5", "label": "Title 5" },
-        { "value": "title6", "label": "Title 6" }
+        {
+          "value": "title0",
+          "label": "Title 0"
+        },
+        {
+          "value": "title1",
+          "label": "Title 1"
+        },
+        {
+          "value": "title2",
+          "label": "Title 2"
+        },
+        {
+          "value": "title3",
+          "label": "Title 3"
+        },
+        {
+          "value": "title4",
+          "label": "Title 4"
+        },
+        {
+          "value": "title5",
+          "label": "Title 5"
+        },
+        {
+          "value": "title6",
+          "label": "Title 6"
+        }
       ]
     },
     {
@@ -280,7 +316,7 @@
       "type": "text",
       "id": "note",
       "label": "t:sections.payment_gateway_setup.settings.note.label",
-      "default": "Your credentials are sent straight to your own configuration endpoint."
+      "default": "Your keys go straight to your own checkout service and are encrypted the moment they arrive. Nobody can read them back - not even us."
     },
     {
       "type": "group_header",
@@ -289,10 +325,10 @@
     },
     {
       "type": "text",
-      "id": "api_url",
-      "label": "t:sections.payment_gateway_setup.settings.api_url.label",
-      "info": "t:sections.payment_gateway_setup.settings.api_url.info",
-      "default": "https://6aa7e0369b08676cd32b9a36.mockapi.io/key"
+      "id": "api_base_url",
+      "label": "t:sections.payment_gateway_setup.settings.api_base_url.label",
+      "info": "t:sections.payment_gateway_setup.settings.api_base_url.info",
+      "default": ""
     },
     {
       "type": "switch",
@@ -318,6 +354,19 @@
       "id": "required_text",
       "label": "t:sections.payment_gateway_setup.settings.required_text.label",
       "default": "Please fill in every field before saving."
+    },
+    {
+      "type": "text",
+      "id": "passcode_label",
+      "label": "t:sections.payment_gateway_setup.settings.passcode_label.label",
+      "info": "t:sections.payment_gateway_setup.settings.passcode_label.info",
+      "default": "Setup code"
+    },
+    {
+      "type": "text",
+      "id": "passcode_error_text",
+      "label": "t:sections.payment_gateway_setup.settings.passcode_error_text.label",
+      "default": "That setup code is not right. Ask your developer for it."
     },
     {
       "type": "text",

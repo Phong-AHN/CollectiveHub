@@ -1,5 +1,7 @@
 import { allowedOrigins, json } from '../lib/http.js';
-import { HOLD_MINUTES, activeGateway, envValue, paypalCredentials, stripeSecretKey } from '../lib/config.js';
+import {
+  HOLD_MINUTES, activeGateway, envValue, gatewayStatus, paypalCredentials, stripeSecretKey,
+} from '../lib/config.js';
 import { listBooths } from '../lib/expofp.js';
 
 export const config = { runtime: 'nodejs' };
@@ -57,7 +59,11 @@ async function handler(request) {
       stripeKeyInEnv: stripeKey ? (stripeKey.startsWith('pk_') ? 'WRONG KIND (pk_ publishable key)' : stripeKey.includes('_live_') ? 'live' : 'test') : 'no',
       stripeWebhookSecret: has('STRIPE_WEBHOOK_SECRET') ? 'set' : 'not set',
       paypalInEnv: has('PAYPAL_CLIENT_ID') && has('PAYPAL_CLIENT_SECRET') ? (envValue('PAYPAL_ENV') || 'sandbox') : 'no',
-      keyStore: has('GATEWAY_KEYS_URL') ? 'set' : 'not set',
+      setupPasscode: has('SETUP_PASSCODE') ? 'set' : 'MISSING - nobody can save keys through the form',
+      secretsKey: has('SECRETS_KEY') ? 'set' : 'MISSING - saved keys cannot be encrypted',
+      ...(has('GATEWAY_KEYS_URL')
+        ? { legacyKeyStore: 'GATEWAY_KEYS_URL is still set and no longer used - unset it' }
+        : {}),
     },
     storage: storageStatus(has),
     storefront: {
@@ -70,6 +76,8 @@ async function handler(request) {
 
   // Same checks checkout/start makes before it touches a booth.
   try {
+    const status = await gatewayStatus();
+    report.gateway.savedKeys = status.source === 'saved' ? `${status.gateway} ${status.hint} (saved ${status.savedAt})` : 'none';
     report.gateway.active = await activeGateway();
     if (report.gateway.active === 'stripe') await stripeSecretKey();
     else await paypalCredentials();

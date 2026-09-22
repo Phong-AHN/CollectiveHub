@@ -14644,11 +14644,11 @@
         },
         "group_header_2": {
           "label": "Endpoint & behaviour",
-          "info": "Credentials are posted straight from the visitor's browser, so anyone who opens this page can read the endpoint and the values sent to it. Use a private endpoint and keep this section limited to trusted traffic."
+          "info": "Keys are posted to your own checkout service over HTTPS and saved encrypted. Saving requires the setup code, and nothing here can read a saved key back - only a hint such as sk_live_****4242."
         },
-        "api_url": {
-          "label": "Save endpoint",
-          "info": "A POST is sent here with paymentgateway, clientId, clientscrect and stripeapikey."
+        "api_base_url": {
+          "label": "Checkout API address",
+          "info": "The same address as the booth checkout section, ending in /api. Keys are encrypted before they are stored, and no page can read them back."
         },
         "hide_when_configured": {
           "label": "Hide once configured",
@@ -14662,6 +14662,13 @@
         },
         "required_text": {
           "label": "Missing fields message"
+        },
+        "passcode_label": {
+          "label": "Setup code field label",
+          "info": "The code from SETUP_PASSCODE on the checkout service. Without it nothing is saved, so a stranger who finds this page cannot redirect payments."
+        },
+        "passcode_error_text": {
+          "label": "Wrong setup code message"
         },
         "design_mode_text": {
           "label": "Editor preview message",

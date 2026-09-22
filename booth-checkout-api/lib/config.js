@@ -1,57 +1,84 @@
 import { HttpError } from './http.js';
+import { decryptSecret, encryptSecret, keyHint } from './secrets.js';
+import { readSecret, saveSecret } from './store.js';
 
 /**
  * Payment gateway selection and credentials.
  *
- * The storefront's "Payment Gateway Setup" section lets the client pick PayPal
- * or Stripe and stores their keys at GATEWAY_KEYS_URL. Environment variables
- * always win over that store, so production can move to real secret storage
- * without touching this code or the storefront section.
+ * The storefront's "Payment Gateway Setup" section posts the client's keys to
+ * this service, which encrypts them and keeps them in Redis - no endpoint ever
+ * gives a key back, only a hint like sk_live_****4242. Environment variables
+ * still win, so a deployment can be pinned to keys held by Vercel instead.
  */
 export const GATEWAYS = ['paypal', 'stripe'];
 
-const USABLE = {
-  paypal: (record) => Boolean(record.clientId && record.clientscrect),
-  stripe: (record) => Boolean(record.stripeapikey),
-};
-
 const norm = (value) => String(value || '').trim().toLowerCase();
+const SECRET_NAME = 'gateway';
 
-let records = null;
-let recordsAt = 0;
+let cached = null;
+let cachedAt = 0;
 const TTL_MS = 60_000;
 
-/** Records submitted through the storefront section, newest first. */
-async function gatewayRecords() {
-  if (records && Date.now() - recordsAt < TTL_MS) return records;
+/** What the client saved, decrypted. Null when they have saved nothing. */
+async function storedCredentials() {
+  if (cached && Date.now() - cachedAt < TTL_MS) return cached;
 
-  const url = process.env.GATEWAY_KEYS_URL;
-  if (!url) return [];
+  const record = await readSecret(SECRET_NAME);
+  if (!record || !record.blob) return null;
 
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
-  if (!response.ok) {
-    throw new HttpError(502, 'gateway_keys_unreachable', `Keys endpoint returned ${response.status}`);
+  let secrets;
+  try {
+    secrets = JSON.parse(decryptSecret(record.blob));
+  } catch (error) {
+    // Almost always SECRETS_KEY changed: the keys are still there, just no
+    // longer readable. Say so, rather than letting it surface as a 500.
+    throw new HttpError(500, 'gateway_keys_unreadable',
+      'The saved payment keys cannot be decrypted - SECRETS_KEY is not the value they were saved with. '
+      + 'Restore that value, or save the keys again through the Payment Gateway Setup section.');
   }
 
-  const payload = await response.json();
-  records = (Array.isArray(payload) ? payload : [payload])
-    .filter((record) => record && typeof record === 'object')
-    .sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
-  recordsAt = Date.now();
-  return records;
+  cached = { gateway: norm(record.gateway), savedAt: record.savedAt, hint: record.hint, ...secrets };
+  cachedAt = Date.now();
+  return cached;
 }
 
-async function latestRecord(gateway) {
-  return (await gatewayRecords()).find(
-    (record) => norm(record.paymentgateway) === gateway && USABLE[gateway](record),
-  ) || null;
+/** Encrypts and stores what the setup form submitted. */
+export async function saveGatewayCredentials({ gateway, stripeSecretKey: stripeKey, paypalClientId, paypalClientSecret }) {
+  const secrets = gateway === 'stripe'
+    ? { stripeSecretKey: stripeKey }
+    : { paypalClientId, paypalClientSecret };
+
+  const record = {
+    gateway,
+    savedAt: new Date().toISOString(),
+    hint: keyHint(gateway === 'stripe' ? stripeKey : paypalClientId),
+    blob: encryptSecretPayload(secrets),
+  };
+
+  await saveSecret(SECRET_NAME, record);
+  cached = null;
+  cachedAt = 0;
+  return { gateway: record.gateway, hint: record.hint, savedAt: record.savedAt };
+}
+
+/** What the setup section shows: enough to recognise, never enough to use. */
+export async function gatewayStatus() {
+  const envStripe = Boolean(envValue('STRIPE_SECRET_KEY'));
+  const envPaypal = Boolean(envValue('PAYPAL_CLIENT_ID') && envValue('PAYPAL_CLIENT_SECRET'));
+  if (envStripe || envPaypal) {
+    return { configured: true, source: 'environment', gateway: envStripe ? 'stripe' : 'paypal', hint: null, savedAt: null };
+  }
+
+  const stored = await storedCredentials();
+  if (!stored) return { configured: false, source: null, gateway: null, hint: null, savedAt: null };
+  return { configured: true, source: 'saved', gateway: stored.gateway, hint: stored.hint, savedAt: stored.savedAt };
 }
 
 /**
  * Which gateway a new checkout should use:
  *   1. PAYMENT_GATEWAY, when set - an explicit override;
  *   2. otherwise whatever the client most recently chose in the storefront
- *      section (the newest usable record at GATEWAY_KEYS_URL);
+ *      section, as saved by this service;
  *   3. otherwise whichever gateway has credentials in the environment,
  *      PayPal first.
  */
@@ -65,18 +92,15 @@ export async function activeGateway() {
   }
 
   try {
-    const newest = (await gatewayRecords()).find((record) => {
-      const gateway = norm(record.paymentgateway);
-      return GATEWAYS.includes(gateway) && USABLE[gateway](record);
-    });
-    if (newest) return norm(newest.paymentgateway);
+    const stored = await storedCredentials();
+    if (stored && GATEWAYS.includes(stored.gateway)) return stored.gateway;
   } catch (error) {
-    // The key store being down should not block a gateway configured in env.
-    console.error('[config] gateway records unavailable:', error.message);
+    // Unreadable stored keys must not hide a gateway configured in env.
+    console.error('[config] stored gateway credentials unreadable:', error.message);
   }
 
-  if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) return 'paypal';
-  if (process.env.STRIPE_SECRET_KEY) return 'stripe';
+  if (envValue('PAYPAL_CLIENT_ID') && envValue('PAYPAL_CLIENT_SECRET')) return 'paypal';
+  if (envValue('STRIPE_SECRET_KEY')) return 'stripe';
 
   throw new HttpError(500, 'gateway_not_configured',
     'No payment gateway configured: submit keys through the Payment Gateway Setup section, ' +
@@ -84,25 +108,24 @@ export async function activeGateway() {
 }
 
 export async function paypalCredentials() {
-  if (process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET) {
+  if (envValue('PAYPAL_CLIENT_ID') && envValue('PAYPAL_CLIENT_SECRET')) {
     return {
-      clientId: process.env.PAYPAL_CLIENT_ID.trim(),
-      clientSecret: process.env.PAYPAL_CLIENT_SECRET.trim(),
+      clientId: envValue('PAYPAL_CLIENT_ID'),
+      clientSecret: envValue('PAYPAL_CLIENT_SECRET'),
       source: 'env',
     };
   }
 
-  const record = await latestRecord('paypal');
-  if (!record) {
+  const stored = await storedCredentials();
+  if (!stored?.paypalClientId || !stored?.paypalClientSecret) {
     throw new HttpError(500, 'gateway_keys_missing',
       'No PayPal credentials: set PAYPAL_CLIENT_ID/PAYPAL_CLIENT_SECRET, or submit them through the Payment Gateway Setup section.');
   }
 
   return {
-    clientId: String(record.clientId).trim(),
-    // Field name follows the storefront/API spelling, which is "clientscrect".
-    clientSecret: String(record.clientscrect).trim(),
-    source: 'gateway_keys_url',
+    clientId: String(stored.paypalClientId).trim(),
+    clientSecret: String(stored.paypalClientSecret).trim(),
+    source: 'saved',
   };
 }
 
@@ -112,7 +135,7 @@ export async function paypalCredentials() {
  * and is the easiest one to paste by mistake.
  */
 export async function stripeSecretKey() {
-  const raw = process.env.STRIPE_SECRET_KEY || (await latestRecord('stripe'))?.stripeapikey;
+  const raw = envValue('STRIPE_SECRET_KEY') || (await storedCredentials())?.stripeSecretKey;
   if (!raw) {
     throw new HttpError(500, 'gateway_keys_missing',
       'No Stripe key: set STRIPE_SECRET_KEY, or submit one through the Payment Gateway Setup section.');
@@ -149,3 +172,8 @@ export function requiredEnv(name) {
 }
 
 export const HOLD_MINUTES = Number(process.env.HOLD_MINUTES || 30);
+
+// Kept at the bottom so encryptSecret's import does not shadow the export above.
+function encryptSecretPayload(secrets) {
+  return encryptSecret(JSON.stringify(secrets));
+}

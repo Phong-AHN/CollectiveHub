@@ -1,18 +1,9 @@
 defineModule('theme-payment-gateway-setup', () => {
   const STORAGE_KEY = 'theme:payment-gateway-configured';
 
-  // The endpoint stores one flat record per gateway, so both sets of fields are
-  // always present and the ones that do not apply are sent empty.
-  const EMPTY_RECORD = {
-    paymentgateway: '',
-    clientId: '',
-    clientscrect: '',
-    stripeapikey: '',
-  };
-
   const REQUIRED_FIELDS = {
-    paypal: ['clientId', 'clientscrect'],
-    stripe: ['stripeapikey'],
+    paypal: ['paypalClientId', 'paypalClientSecret'],
+    stripe: ['stripeSecretKey'],
   };
 
   const readFlag = () => {
@@ -101,23 +92,31 @@ defineModule('theme-payment-gateway-setup', () => {
       }
 
       const gateway = this.gateway;
-      const record = { ...EMPTY_RECORD, paymentgateway: gateway };
+      const field = (name) => this.querySelector(`[name="${name}"]`)?.value.trim() || '';
+
+      const passcode = field('passcode');
+      const payload = { gateway, passcode };
 
       for (const name of REQUIRED_FIELDS[gateway] || []) {
-        const value = this.querySelector(`[name="${name}"]`)?.value.trim() || '';
+        const value = field(name);
         if (!value) {
           this.#message(this.dataset.requiredText, 'error');
           return;
         }
-        record[name] = value;
+        payload[name] = value;
+      }
+      if (!passcode) {
+        this.#message(this.dataset.requiredText, 'error');
+        this.querySelector('[name="passcode"]')?.focus();
+        return;
       }
 
       // Stripe checkout is created on the server, which needs the secret key.
       // A publishable key (pk_) is the easy mistake, and this section hides
-      // itself after the first save - so catch it before anything is stored.
-      if (gateway === 'stripe' && !/^(sk|rk)_(test|live)_/.test(record.stripeapikey)) {
+      // itself after the first save - so catch it before anything is sent.
+      if (gateway === 'stripe' && !/^(sk|rk)_(test|live)_/.test(payload.stripeSecretKey)) {
         this.#message(this.dataset.stripeKeyText, 'error');
-        this.querySelector('[name="stripeapikey"]')?.focus();
+        this.querySelector('[name="stripeSecretKey"]')?.focus();
         return;
       }
 
@@ -125,13 +124,18 @@ defineModule('theme-payment-gateway-setup', () => {
       this.#message('', null);
 
       try {
-        const response = await fetch(this.dataset.apiUrl, {
+        const response = await fetch(this.#endpoint(), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(record),
+          body: JSON.stringify(payload),
         });
 
-        if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+        if (!response.ok) {
+          const problem = await response.json().catch(() => null);
+          const error = new Error(`Request failed with ${response.status}`);
+          error.code = problem && problem.error;
+          throw error;
+        }
 
         writeFlag();
         this.formEl?.reset();
@@ -142,10 +146,24 @@ defineModule('theme-payment-gateway-setup', () => {
           this.hideTimer = setTimeout(() => this.#hide(), 1800);
         }
       } catch (error) {
-        console.error('[theme-payment-gateway-setup]', error);
+        console.error('[theme-payment-gateway-setup]', error.code || '', error);
         this.dataset.state = 'form';
-        this.#message(this.dataset.errorText, 'error');
+        if (error.code === 'passcode_wrong' || error.code === 'too_many_attempts') {
+          this.#message(this.dataset.passcodeErrorText, 'error');
+          this.querySelector('[name="passcode"]')?.focus();
+        } else if (error.code === 'stripe_publishable_key' || error.code === 'stripe_key_invalid') {
+          this.#message(this.dataset.stripeKeyText, 'error');
+        } else {
+          this.#message(this.dataset.errorText, 'error');
+        }
       }
+    }
+
+    /** The service holds the keys now - this is where they go. */
+    #endpoint() {
+      const base = (this.dataset.apiBase || '').trim().replace(/\/+$/, '');
+      if (!base) throw new Error('This section has no checkout API address set');
+      return `${base}/gateway/keys`;
     }
 
     async #checkConfigured() {
@@ -162,15 +180,11 @@ defineModule('theme-payment-gateway-setup', () => {
       this.controller = new AbortController();
 
       try {
-        const response = await fetch(this.dataset.apiUrl, { signal: this.controller.signal });
+        const response = await fetch(this.#endpoint(), { signal: this.controller.signal });
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 
-        const records = await response.json();
-        const configured = Array.isArray(records)
-          ? records.some((record) => record && record.paymentgateway)
-          : Boolean(records && records.paymentgateway);
-
-        if (configured) {
+        const status = await response.json();
+        if (status && status.configured) {
           writeFlag();
           this.#hide();
           return;

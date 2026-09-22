@@ -40,6 +40,44 @@ const HOLDS = 'holds:due';
 const RETRIES = 'fulfil:retry';
 
 /**
+ * Long-lived configuration, such as the encrypted payment keys. No TTL: this
+ * is the only copy and it is meant to outlive every checkout.
+ */
+export async function saveSecret(name, value) {
+  const { kv: k, memory: m } = await client();
+  if (k) await k.set(`secret:${name}`, value);
+  else m.records.set(`secret:${name}`, value);
+}
+
+export async function readSecret(name) {
+  const { kv: k, memory: m } = await client();
+  if (k) return (await k.get(`secret:${name}`)) || null;
+  return m.records.get(`secret:${name}`) || null;
+}
+
+/**
+ * Counts attempts within a window - used to stop someone guessing the setup
+ * passcode. Returns how many have been made, this one included.
+ */
+export async function countAttempt(name, windowSeconds) {
+  const { kv: k, memory: m } = await client();
+  const name_ = `attempts:${name}`;
+  if (k) {
+    const count = Number(await k.incr(name_));
+    if (count === 1) await k.expire(name_, windowSeconds);
+    return count;
+  }
+  const entry = m.records.get(name_);
+  const now = Date.now();
+  if (!entry || entry.until <= now) {
+    m.records.set(name_, { count: 1, until: now + windowSeconds * 1000 });
+    return 1;
+  }
+  entry.count += 1;
+  return entry.count;
+}
+
+/**
  * Paid checkouts whose ExpoFP write failed, scored by when to try again.
  * The cron (and any external scheduler) works through them.
  */
