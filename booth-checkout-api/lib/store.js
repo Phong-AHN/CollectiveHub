@@ -1,23 +1,30 @@
 /**
- * Pending checkouts and booth holds.
+ * Pending checkouts, booth holds and claims.
  *
- * Backed by Vercel KV. Without KV credentials it falls back to process memory,
- * which is fine for `vercel dev` but useless across serverless invocations —
- * the warning below is deliberately loud.
+ * Backed by Upstash Redis (the Vercel Marketplace integration; Vercel KV itself
+ * is deprecated). Without credentials it falls back to process memory, which
+ * only works when everything runs in one process - tests, a local script. On
+ * Vercel every /api file is its own function with its own memory, so a
+ * checkout started in one could never be found by another; checkout/start
+ * therefore refuses to run there without Redis.
  */
 let kv = null;
 let memory = null;
 
+// The Upstash integration may inject either naming scheme.
+const redisUrl = () => (process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '').trim();
+const redisToken = () => (process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '').trim();
+
+export function persistentStorageConfigured() {
+  return Boolean(redisUrl() && redisToken());
+}
+
 async function client() {
   if (kv || memory) return { kv, memory };
 
-  // The Upstash Redis integration may inject either naming scheme.
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (url && token) {
-    const { createClient } = await import('@vercel/kv');
-    kv = createClient({ url, token });
+  if (persistentStorageConfigured()) {
+    const { Redis } = await import('@upstash/redis');
+    kv = new Redis({ url: redisUrl(), token: redisToken() });
     return { kv, memory };
   }
 

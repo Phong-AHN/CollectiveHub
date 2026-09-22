@@ -126,11 +126,16 @@ than fall back to the editable price.
 
 ## Deploying
 
-1. Create a Vercel project with **Root Directory** set to `booth-checkout-api`.
-   The rest of this repository is a SHOPLINE theme and must not be part of the
-   build; likewise, exclude this folder from theme uploads.
-2. Add a **KV store** to the project. Without it, holds and idempotency fall
-   back to process memory and will not survive between invocations.
+1. Create a Vercel project from this repository (Root Directory: the repo root).
+2. **Connect an Upstash Redis store — required.** Vercel → project → Storage →
+   Create Database → Upstash for Redis (Marketplace; the free plan is enough),
+   connected to Production and Preview. It injects `KV_REST_API_URL` /
+   `KV_REST_API_TOKEN` or `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`;
+   either pair works. (Vercel KV itself is deprecated.) Every `/api` file is a
+   separate function with its own memory, so without Redis the return page and
+   webhooks can never find a checkout: `checkout/start` refuses with
+   `503 storage_not_configured` rather than take money it cannot follow up.
+   `/api/health` shows `"storage": "redis"` once it is connected.
 3. Copy `.env.example` into the project's environment variables and fill it in.
 4. Register the PayPal webhook at `https://<deployment>/api/webhooks/paypal`
    for `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.DENIED` and
@@ -161,7 +166,7 @@ nothing on ExpoFP's side does that for us. Three triggers share the job:
    any of these at `https://<deployment>/api/cron/release-holds` every 5-10
    minutes, sending `Authorization: Bearer <CRON_SECRET>`:
    - [cron-job.org](https://cron-job.org) — free, set the header in "Advanced";
-   - Upstash QStash schedules — same account as the KV store.
+   - Upstash QStash schedules — same account as the Redis store.
 
    On the Pro plan, change `vercel.json` to `*/10 * * * *` instead.
 

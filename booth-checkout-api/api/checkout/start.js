@@ -5,7 +5,9 @@ import { checkBoothForSale, setBoothOnHold } from '../../lib/expofp.js';
 import { sweepExpiredHolds } from '../../lib/fulfil.js';
 import { createOrder } from '../../lib/paypal.js';
 import { createCheckoutSession } from '../../lib/stripe.js';
-import { claimBooth, putCheckout, releaseBoothClaim, trackHold } from '../../lib/store.js';
+import {
+  claimBooth, persistentStorageConfigured, putCheckout, releaseBoothClaim, trackHold,
+} from '../../lib/store.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -26,6 +28,17 @@ async function handler(request) {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, cors);
 
   try {
+    // On Vercel each /api file runs in its own function, so a checkout kept in
+    // memory here is invisible to the return page and the webhooks: the buyer
+    // would pay, the booth would never be assigned, and its hold never
+    // released. Refuse before touching the booth or the gateway.
+    if (process.env.VERCEL && !persistentStorageConfigured() && !process.env.ALLOW_MEMORY_STORE) {
+      const error = new HttpError(503, 'storage_not_configured',
+        'No Redis connected: add an Upstash Redis store to the Vercel project and redeploy.');
+      error.reason = 'storage_not_configured';
+      throw error;
+    }
+
     const body = await request.json();
     const booth = body.booth || {};
     const exhibitor = body.exhibitor || {};
