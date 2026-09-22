@@ -123,6 +123,8 @@ defineModule('theme-booth-checkout', () => {
         if (!response.ok) {
           const error = new Error(`Request failed with ${response.status}`);
           error.code = payload && payload.error;
+          // Operator-facing cause (e.g. missing_env:EXPOFP_API_TOKEN) - logged, not shown.
+          error.reason = payload && payload.reason;
           throw error;
         }
         if (!payload || !payload.url) throw new Error('No payment URL returned');
@@ -130,7 +132,7 @@ defineModule('theme-booth-checkout', () => {
         // The backend has put the booth on hold and opened a payment session.
         window.location.assign(payload.url);
       } catch (error) {
-        console.error('[theme-booth-checkout]', error);
+        console.error('[theme-booth-checkout]', error.code || '', error.reason || '', error);
         this.dataset.state = 'ready';
         // Someone else is paying for (or has bought) this booth: say so, rather
         // than inviting a retry that cannot succeed.

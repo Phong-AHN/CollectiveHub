@@ -97,7 +97,11 @@ async function handler(request) {
       // Without ExpoFP's price the only price left is the editable one on the
       // link - so refuse rather than guess.
       console.error('[checkout/start] booth check failed', error.message, error.payload || '');
-      throw new HttpError(503, 'booth_check_failed', 'Could not confirm the booth with ExpoFP.');
+      const failure = new HttpError(503, 'booth_check_failed', 'Could not confirm the booth with ExpoFP.');
+      // A short cause, never a secret: enough to fix it without reading logs.
+      failure.reason = error.envName ? `missing_env:${error.envName}`
+        : error.status ? `expofp_http_${error.status}` : 'expofp_unreachable';
+      throw failure;
     }
     if (!check.ok) {
       if (check.reason === 'booth_unknown') throw new HttpError(400, 'booth_unknown', 'ExpoFP has no such booth.');
@@ -190,7 +194,7 @@ async function handler(request) {
   } catch (error) {
     if (error instanceof HttpError) {
       console.error('[checkout/start]', error.code, error.detail || '');
-      return json({ error: error.code, detail: error.detail }, error.status, cors);
+      return json({ error: error.code, detail: error.detail, reason: error.reason }, error.status, cors);
     }
     console.error('[checkout/start]', error);
     return json({ error: 'internal_error' }, 500, cors);

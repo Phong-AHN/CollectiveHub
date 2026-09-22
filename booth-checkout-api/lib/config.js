@@ -130,9 +130,21 @@ export async function stripeSecretKey() {
   return key;
 }
 
+/**
+ * An env var, with the whitespace and wrapping quotes that pasting into a
+ * dashboard tends to add taken off - a token with a trailing space is a 401.
+ */
+export function envValue(name) {
+  return String(process.env[name] ?? '').trim().replace(/^(['"])(.*)\1$/, '$2').trim();
+}
+
 export function requiredEnv(name) {
-  const value = process.env[name];
-  if (!value) throw new HttpError(500, 'missing_env', `Environment variable ${name} is not set.`);
+  const value = envValue(name);
+  if (!value) {
+    const error = new HttpError(500, 'missing_env', `Environment variable ${name} is not set.`);
+    error.envName = name;
+    throw error;
+  }
   return value;
 }
 

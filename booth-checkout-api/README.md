@@ -52,7 +52,30 @@ PayPal retries.
 | `POST /api/webhooks/paypal` | `PAYMENT.CAPTURE.COMPLETED` fulfils; denials release the hold — both only after PayPal's API confirms |
 | `POST /api/webhooks/stripe` | `checkout.session.completed` / `async_payment_succeeded` fulfil; `expired` / `async_payment_failed` release — both only after Stripe's API confirms |
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
-| `GET/POST /api/cron/release-holds` | Puts abandoned booths back on sale (see "Releasing holds") |
+| `GET/POST /api/cron/release-holds` | Releases expired holds and retries failed fulfilments (see "Releasing holds", "Retrying") |
+| `GET /api/health` | Configuration report — what is set, never the values; `?deep=1` (cron secret) proves the ExpoFP token |
+
+## Troubleshooting
+
+The checkout page shows one generic message ("We could not start the
+payment"). The cause is in the API response and the browser console — DevTools
+→ Console shows e.g. `booth_check_failed missing_env:EXPOFP_API_TOKEN` — and
+`https://<deployment>/api/health` lists what is missing.
+
+| Response | Meaning | Fix |
+| --- | --- | --- |
+| `503 booth_check_failed`, `missing_env:EXPOFP_*` | That variable is not set **on this deployment** | Add it in Vercel → Settings → Environment Variables for **Production**, then **redeploy** — env changes only reach new deployments |
+| `503 booth_check_failed`, `expofp_http_401` / `403` | ExpoFP refused the token | Copy the token again from app.expofp.com/profile |
+| `503 booth_check_failed`, `expofp_unreachable` | ExpoFP did not answer | Retry; check status of app.expofp.com |
+| `400 booth_unknown` | The booth name from the link is not in `EXPOFP_EXPO_ID`'s expo | Wrong expo id, or the booth parameter name on the checkout section is wrong (see its debug panel) |
+| `409 booth_unavailable` | On hold, sold, or someone else is checking out | Working as intended |
+| `500 gateway_*` / `stripe_*` | Payment keys missing or of the wrong kind | See `/api/health` → `gateway.problem` |
+
+To prove the ExpoFP token and expo from the deployment itself:
+
+```bash
+curl -H "Authorization: Bearer <CRON_SECRET>" "https://<deployment>/api/health?deep=1"
+```
 
 ## Before it can run
 

@@ -14,6 +14,11 @@ const ALLOWED = (process.env.ALLOWED_ORIGINS || '')
     }
   });
 
+/** The storefront origins allowed to call this API, as parsed. */
+export function allowedOrigins() {
+  return [...ALLOWED];
+}
+
 export function corsHeaders(request) {
   const origin = request.headers.get('origin') || '';
   // No allowlist configured means same-origin only: reflect nothing.
