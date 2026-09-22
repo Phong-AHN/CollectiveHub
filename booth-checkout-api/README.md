@@ -80,8 +80,12 @@ sale continue (see the race-condition note below).
 4. Register the PayPal webhook at `https://<deployment>/api/webhooks/paypal`
    for `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.DENIED` and
    `CHECKOUT.ORDER.VOIDED`, then put its id in `PAYPAL_WEBHOOK_ID`.
-5. Register the ExpoFP webhook at `https://<deployment>/api/webhooks/expofp`
-   with a secret, and put that secret in `EXPOFP_WEBHOOK_SECRET`.
+5. Register the ExpoFP webhook at `https://<production-domain>/api/webhooks/expofp`
+   on your ExpoFP profile page, generate a secret there (shown once — copy it
+   straight away), put it in `EXPOFP_WEBHOOK_SECRET`, redeploy, then press
+   **Test webhook**. Use the production domain, not a per-deployment preview
+   URL: previews sit behind Vercel Deployment Protection and answer 401 before
+   the function runs.
 6. In the theme editor, set the Booth Checkout section's **API base URL** to
    `https://<deployment>/api`.
 
@@ -135,6 +139,13 @@ payment the booth is on sale to everyone. `checkout/start` calls
 `setBoothOnHold(...)` first for that reason. If `EXPOFP_PATH_SET_BOOTH_STATUS`
 is blank the sale still goes through, but two people can buy the same booth —
 fill that path in before taking real money.
+
+**Webhook signatures.** `api/webhooks/expofp.js` follows ExpoFP's
+receiving-webhooks order: read raw bytes, verify HMAC-SHA256 over those bytes
+in constant time, reject on mismatch *and* on absence, parse only afterwards,
+de-duplicate on `X-ExpoFP-Delivery`. `EXPOFP_WEBHOOK_SECRET` takes a
+comma-separated list so a rotation costs no failed deliveries. The
+implementation is checked against ExpoFP's published offline test vector.
 
 **The webhook pair.** One booth assignment produces two ExpoFP deliveries,
 `booth_assigned` then `booth_reserved`, carrying identical values. Booth events

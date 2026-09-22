@@ -10,7 +10,7 @@ export const config = { runtime: 'nodejs' };
  * sees a real answer; the PayPal webhook covers the case where the buyer
  * closes the tab before landing here.
  */
-export default async function handler(request) {
+async function handler(request) {
   const url = new URL(request.url);
   const checkoutId = url.searchParams.get('cid') || '';
   const cancelled = url.searchParams.get('cancel') === '1';
@@ -52,3 +52,8 @@ export default async function handler(request) {
     return redirect(withParam(page, 'status', 'error'));
   }
 }
+
+// Vercel runs /api files as Web handlers only through this shape (or named
+// GET/POST exports). A bare default-exported function is called as a legacy
+// Node (req, res) handler instead, where Request/Response APIs do not exist.
+export default { fetch: handler };

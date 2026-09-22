@@ -1,7 +1,18 @@
+// Browsers send Origin as scheme://host[:port] with no path or trailing slash,
+// so "https://shop.example/" pasted from the address bar would never match.
+// Reduce every entry to its origin.
 const ALLOWED = (process.env.ALLOWED_ORIGINS || '')
   .split(',')
   .map((value) => value.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map((value) => {
+    if (value === '*') return value;
+    try {
+      return new URL(value).origin;
+    } catch (error) {
+      return value.replace(/\/+$/, '');
+    }
+  });
 
 export function corsHeaders(request) {
   const origin = request.headers.get('origin') || '';

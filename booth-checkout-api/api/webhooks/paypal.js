@@ -7,7 +7,7 @@ export const config = { runtime: 'nodejs' };
 const PAID = new Set(['PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED']);
 const FAILED = new Set(['PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED', 'CHECKOUT.ORDER.VOIDED']);
 
-export default async function handler(request) {
+async function handler(request) {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   const raw = await request.text();
@@ -53,3 +53,8 @@ export default async function handler(request) {
 
   return json({ ok: true, ignored: event.event_type });
 }
+
+// Vercel runs /api files as Web handlers only through this shape (or named
+// GET/POST exports). A bare default-exported function is called as a legacy
+// Node (req, res) handler instead, where Request/Response APIs do not exist.
+export default { fetch: handler };

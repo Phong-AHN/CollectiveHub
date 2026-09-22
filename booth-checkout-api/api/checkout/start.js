@@ -10,7 +10,7 @@ export const config = { runtime: 'nodejs' };
 
 const clean = (value, max = 200) => String(value ?? '').trim().slice(0, max);
 
-export default async function handler(request) {
+async function handler(request) {
   const pre = preflight(request);
   if (pre) return pre;
 
@@ -104,3 +104,8 @@ export default async function handler(request) {
     return json({ error: 'internal_error' }, 500, cors);
   }
 }
+
+// Vercel runs /api files as Web handlers only through this shape (or named
+// GET/POST exports). A bare default-exported function is called as a legacy
+// Node (req, res) handler instead, where Request/Response APIs do not exist.
+export default { fetch: handler };

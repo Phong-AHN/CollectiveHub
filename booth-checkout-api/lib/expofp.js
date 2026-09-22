@@ -99,19 +99,42 @@ export async function setBoothOnHold(booth, onHold) {
 }
 
 /**
- * ExpoFP signs webhook deliveries with HMAC-SHA256 over the raw body bytes.
- * Header: X-ExpoFP-Signature-256, value "sha256=<lowercase hex>".
+ * Accepted webhook secrets. Comma or whitespace separated, so that during a
+ * rotation both the current and the replacement secret verify - ExpoFP signs
+ * with exactly one, and the overlap has to live on our side.
  */
-export function verifyWebhook(rawBody, signatureHeader) {
-  const secret = process.env.EXPOFP_WEBHOOK_SECRET;
-  if (!secret) return { ok: true, skipped: true };
+function webhookSecrets() {
+  return (process.env.EXPOFP_WEBHOOK_SECRET || '')
+    .split(/[\s,]+/)
+    .map((secret) => secret.trim())
+    .filter(Boolean);
+}
+
+/**
+ * ExpoFP signs deliveries with HMAC-SHA256:
+ *   key     = UTF-8 bytes of the secret string, whsec_ prefix included
+ *   message = the raw request body bytes, exactly as they arrived
+ * Header: X-ExpoFP-Signature-256: sha256=<64 lowercase hex chars>
+ *
+ * `rawBytes` must be the untouched body (a Buffer). Decoding it to a string
+ * first can drop a BOM or alter invalid sequences, and the hash then fails.
+ */
+export function verifyWebhook(rawBytes, signatureHeader) {
+  const secrets = webhookSecrets();
+  if (!secrets.length) return { ok: true, skipped: true };
+  // With a secret configured, an unsigned delivery is indistinguishable from
+  // a forged one: reject on absence as well as on mismatch.
   if (!signatureHeader) return { ok: false, reason: 'missing_signature' };
 
-  const expected = `sha256=${crypto.createHmac('sha256', secret).update(rawBody, 'utf8').digest('hex')}`;
-  const a = Buffer.from(expected);
-  const b = Buffer.from(signatureHeader);
-  const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
-  return { ok, reason: ok ? undefined : 'mismatch' };
+  const given = Buffer.from(String(signatureHeader).trim(), 'utf8');
+  for (const secret of secrets) {
+    const digest = crypto.createHmac('sha256', Buffer.from(secret, 'utf8')).update(rawBytes).digest('hex');
+    const expected = Buffer.from(`sha256=${digest}`, 'utf8');
+    if (expected.length === given.length && crypto.timingSafeEqual(expected, given)) {
+      return { ok: true };
+    }
+  }
+  return { ok: false, reason: 'mismatch' };
 }
 
 /**

@@ -11,13 +11,19 @@ let memory = null;
 async function client() {
   if (kv || memory) return { kv, memory };
 
-  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-    ({ kv } = await import('@vercel/kv'));
+  // The Upstash Redis integration may inject either naming scheme.
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (url && token) {
+    const { createClient } = await import('@vercel/kv');
+    kv = createClient({ url, token });
     return { kv, memory };
   }
 
-  console.warn('[store] KV is not configured - falling back to in-process memory. ' +
-    'Holds and idempotency will not survive across invocations.');
+  const log = process.env.VERCEL_ENV === 'production' ? console.error : console.warn;
+  log('[store] No Redis/KV credentials found - falling back to in-process memory. ' +
+    'Holds and idempotency will not survive across invocations. Connect an Upstash Redis store.');
   memory = { records: new Map(), holds: new Map() };
   return { kv, memory };
 }
@@ -64,6 +70,23 @@ export async function releaseClaim(id) {
   const { kv: k, memory: m } = await client();
   if (k) await k.del(`${key(id)}:fulfilling`);
   else m.records.delete(`${id}:fulfilling`);
+}
+
+/**
+ * True the first time a webhook delivery id is seen. ExpoFP keeps
+ * X-ExpoFP-Delivery stable when it re-sends an event, so this is the natural
+ * idempotency key for inbound deliveries.
+ */
+export async function firstDelivery(deliveryId, ttlSeconds = 60 * 60 * 24 * 7) {
+  const { kv: k, memory: m } = await client();
+  const name = `expofp:delivery:${deliveryId}`;
+  if (k) {
+    const won = await k.set(name, '1', { nx: true, ex: ttlSeconds });
+    return won === 'OK' || won === true;
+  }
+  if (m.records.has(name)) return false;
+  m.records.set(name, '1');
+  return true;
 }
 
 export async function trackHold(id, expiresAtMs) {
