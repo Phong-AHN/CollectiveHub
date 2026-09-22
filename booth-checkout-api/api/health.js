@@ -15,6 +15,30 @@ export const config = { runtime: 'nodejs' };
  * accepted. That makes a real API call, so it needs the CRON_SECRET bearer:
  *   curl -H "Authorization: Bearer <CRON_SECRET>" "https://<deployment>/api/health?deep=1"
  */
+/**
+ * "redis", or what is wrong. The two common mistakes both leave a variable
+ * behind that says what happened, so name it.
+ */
+function storageStatus(has) {
+  if ((has('KV_REST_API_URL') || has('UPSTASH_REDIS_REST_URL'))
+    && (has('KV_REST_API_TOKEN') || has('UPSTASH_REDIS_REST_TOKEN'))) return 'redis';
+
+  // Redis Cloud (the Marketplace's "Redis") gives only a TCP URL. Upstash gives
+  // REDIS_URL too, but always alongside the REST pair checked above.
+  if (has('REDIS_URL') || has('KV_URL')) {
+    return 'MEMORY - found REDIS_URL, a TCP Redis such as Redis Cloud. This service talks to Upstash ' +
+      'over HTTP and needs KV_REST_API_URL + KV_REST_API_TOKEN: connect "Upstash for Redis" instead';
+  }
+
+  const prefixed = Object.keys(process.env).find((k) => /.+_(KV_REST_API_URL|UPSTASH_REDIS_REST_URL)$/.test(k));
+  if (prefixed) {
+    return `MEMORY - found ${prefixed}: the store was connected with a custom variable prefix. ` +
+      'Reconnect it without a prefix so the names are KV_REST_API_URL / KV_REST_API_TOKEN';
+  }
+
+  return 'MEMORY - not persistent; connect an Upstash Redis store';
+}
+
 async function handler(request) {
   const url = new URL(request.url);
   const has = (name) => Boolean(envValue(name));
@@ -35,10 +59,7 @@ async function handler(request) {
       paypalInEnv: has('PAYPAL_CLIENT_ID') && has('PAYPAL_CLIENT_SECRET') ? (envValue('PAYPAL_ENV') || 'sandbox') : 'no',
       keyStore: has('GATEWAY_KEYS_URL') ? 'set' : 'not set',
     },
-    storage: (has('KV_REST_API_URL') || has('UPSTASH_REDIS_REST_URL'))
-      && (has('KV_REST_API_TOKEN') || has('UPSTASH_REDIS_REST_TOKEN'))
-      ? 'redis'
-      : 'MEMORY - not persistent; connect an Upstash Redis store',
+    storage: storageStatus(has),
     storefront: {
       allowedOrigins: allowedOrigins(),
       checkoutPage: envValue('CHECKOUT_PAGE_URL') || 'not set',

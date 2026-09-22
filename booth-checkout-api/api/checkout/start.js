@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { HttpError, corsHeaders, json, preflight, safeReturnUrl } from '../../lib/http.js';
 import { HOLD_MINUTES, activeGateway, paypalCredentials, stripeSecretKey } from '../../lib/config.js';
 import { checkBoothForSale, setBoothOnHold } from '../../lib/expofp.js';
+import { priceSelectedExtras } from '../../lib/extras.js';
 import { sweepExpiredHolds } from '../../lib/fulfil.js';
 import { createOrder } from '../../lib/paypal.js';
 import { createCheckoutSession } from '../../lib/stripe.js';
@@ -124,11 +125,21 @@ async function handler(request) {
       console.warn('[checkout/start] link price', linkPrice, 'differs from ExpoFP price', check.price,
         'for booth', check.name, '- charging the ExpoFP price');
     }
-    const amount = check.price;
     record.booth.booth = check.name;
-    record.booth.price = amount;
+    record.booth.price = check.price;
     record.booth.type = record.booth.type || clean(check.type);
     record.booth.size = record.booth.size || clean(check.size);
+
+    // Add-ons: the page sends ids, the prices come from our own catalogue.
+    const extras = priceSelectedExtras(body.extras);
+    if (extras.unknown.length) {
+      console.warn('[checkout/start] ignoring unknown add-ons:', extras.unknown.join(', '));
+    }
+    record.extras = extras.items;
+    record.extrasTotal = extras.total;
+
+    const amount = check.price + extras.total;
+    record.amount = amount;
 
     // One checkout per booth: the ExpoFP check and the hold below are two
     // calls, so two buyers could both pass the check - only one gets the claim.
@@ -145,6 +156,10 @@ async function handler(request) {
 
     const label = `Booth ${record.booth.booth || record.booth.boothId}`;
     const detail = [record.booth.type, record.booth.size].filter(Boolean).join(' - ');
+    const lineItems = [
+      { name: label, description: detail, amount: check.price },
+      ...extras.items.map((extra) => ({ name: extra.name, description: extra.description, amount: extra.price })),
+    ];
     let paymentUrl;
     let holdUntil;
 
@@ -154,10 +169,8 @@ async function handler(request) {
         const expiresAt = nowS + Math.min(STRIPE_MAX_EXPIRY_S, Math.max(STRIPE_MIN_EXPIRY_S, HOLD_MINUTES * 60));
         const session = await createCheckoutSession({
           checkoutId,
-          amount,
+          items: lineItems,
           currency,
-          name: label,
-          description: detail,
           email: record.exhibitor.email,
           // Stripe substitutes {CHECKOUT_SESSION_ID}; we look the session up by
           // our own record anyway, so a tampered id in the URL changes nothing.
@@ -175,7 +188,8 @@ async function handler(request) {
           checkoutId,
           amount,
           currency,
-          description: label,
+          // PayPal takes one amount, so the add-ons ride in the description.
+          description: [label, ...extras.items.map((extra) => extra.name)].join(' + '),
           returnUrl: returnBase,
           cancelUrl: `${returnBase}&cancel=1`,
         });
@@ -202,6 +216,10 @@ async function handler(request) {
       checkoutId,
       gateway,
       url: paymentUrl,
+      currency,
+      amount,
+      booth: { name: record.booth.booth, price: record.booth.price },
+      extras: record.extras,
       holdUntil: record.held ? new Date(holdUntil).toISOString() : null,
     }, 200, cors);
   } catch (error) {

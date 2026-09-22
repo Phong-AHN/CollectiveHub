@@ -203,14 +203,37 @@ export async function addExhibitorBooth(exhibitorId, booth) {
   });
 }
 
-// Body not yet confirmed (and not used by the checkout) - names come from FIELDS.
-export async function addExhibitorExtra(exhibitorId, extra) {
-  if (!isConfigured('addExhibitorExtra')) return null;
-  return call('addExhibitorExtra', {
-    [FIELDS.expoId]: expoId(),
-    [FIELDS.exhibitorId]: asId(exhibitorId),
-    ...extra,
-  });
+/**
+ * Puts the add-ons someone paid for onto their exhibitor record.
+ *
+ * add-exhibitor-extra's request body is the one this service has not seen, and
+ * ExpoFP only accepts extras that already exist on the expo - so this is off
+ * until both are settled: set EXPOFP_ASSIGN_EXTRAS=1 to turn it on, and give
+ * each catalogue entry an `expofpName` if ExpoFP spells the extra differently.
+ *
+ * Never throws and never fails a fulfilment: the booth and the money matter
+ * more, and what was bought is written into the exhibitor's admin notes either
+ * way.
+ */
+export async function assignExtras(exhibitorId, extras = [], booth = {}) {
+  if (!extras.length) return { assigned: 0, skipped: 'none' };
+  if (process.env.EXPOFP_ASSIGN_EXTRAS !== '1') return { assigned: 0, skipped: 'disabled' };
+
+  let assigned = 0;
+  for (const extra of extras) {
+    try {
+      await call('addExhibitorExtra', {
+        eventId: expoId(),
+        exhibitorId: String(exhibitorId),
+        extraName: extra.expofpName || extra.name,
+        ...(booth.booth ? { boothName: String(booth.booth) } : {}),
+      });
+      assigned += 1;
+    } catch (error) {
+      console.error('[expofp] add-exhibitor-extra failed for', extra.name, error.message, error.payload || '');
+    }
+  }
+  return { assigned };
 }
 
 /**

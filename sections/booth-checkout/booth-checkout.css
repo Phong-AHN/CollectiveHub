@@ -79,6 +79,47 @@ theme-booth-checkout[data-state='paid'] .booth-checkout__layout {
   text-align: end;
 }
 
+.booth-checkout__extras {
+  padding-block-start: 16px;
+  margin-block-start: 16px;
+  border-block-start: 1px solid rgba(var(--color-text), 0.15);
+}
+
+.booth-checkout__extras[hidden] {
+  display: none;
+}
+
+.booth-checkout__extras-title {
+  margin: 0 0 10px;
+}
+
+.booth-checkout__extra {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 10px;
+  align-items: start;
+  padding-block: 6px;
+  cursor: pointer;
+}
+
+.booth-checkout__extra input {
+  width: 17px;
+  height: 17px;
+  margin-block-start: 2px;
+  accent-color: rgb(var(--color-text));
+  cursor: pointer;
+}
+
+.booth-checkout__extra-note {
+  display: block;
+  margin-block-start: 2px;
+  color: rgba(var(--color-text), 0.7);
+}
+
+.booth-checkout__extra-price {
+  white-space: nowrap;
+}
+
 .booth-checkout__total {
   display: flex;
   gap: 16px;

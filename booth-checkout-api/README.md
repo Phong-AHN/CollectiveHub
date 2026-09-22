@@ -53,6 +53,7 @@ PayPal retries.
 | `POST /api/webhooks/stripe` | `checkout.session.completed` / `async_payment_succeeded` fulfil; `expired` / `async_payment_failed` release — both only after Stripe's API confirms |
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
 | `GET/POST /api/cron/release-holds` | Releases expired holds and retries failed fulfilments (see "Releasing holds", "Retrying") |
+| `GET /api/extras` | The add-on catalogue the checkout page offers (ids, names, prices) |
 | `GET /api/health` | Configuration report — what is set, never the values; `?deep=1` (cron secret) proves the ExpoFP token |
 
 ## Troubleshooting
@@ -210,6 +211,27 @@ Every path that fulfils or releases re-reads the session / order from the
 gateway's API first. A webhook payload — signed or not — is never enough on
 its own to hand out or free a booth.
 
+## Add-ons
+
+`lib/extras.js` holds the catalogue — by default one entry, **Power Plugs at
+$20**. Replace it with `BOOTH_EXTRAS`, a JSON array of
+`{ id, name, price, description }` (add `expofpName` when ExpoFP spells the
+extra differently). The checkout page reads `/api/extras` rather than carrying
+its own list, so a price is set in one place and what the page shows is what
+gets charged.
+
+The page sends **ids only**; prices come from the catalogue here, the same way
+the booth price comes from ExpoFP. An unknown id is dropped, not charged.
+Stripe gets one line per thing bought, so the receipt itemises booth and
+add-ons; PayPal takes a single amount and names the add-ons in the description.
+
+Putting the add-ons onto the ExpoFP exhibitor record is **off by default**:
+`add-exhibitor-extra`'s request body is the one this service has not seen, and
+ExpoFP only accepts extras that already exist on the expo. Set
+`EXPOFP_ASSIGN_EXTRAS=1` once both are settled. Either way, what was bought is
+written into the exhibitor's `adminNotes`, and a failure there never fails a
+fulfilment.
+
 ## Retrying
 
 A paid checkout whose ExpoFP write fails is not lost:
@@ -226,6 +248,11 @@ A paid checkout whose ExpoFP write fails is not lost:
   every queued checkout at once instead of waiting out the backoff.
 - The exhibitor id is saved as soon as it exists, so a retry only redoes the
   step that failed.
+- Clearing the booth's hold is the last step, **after** the assignment: until
+  then the hold is what keeps the booth off the market, but left on it also
+  makes an assigned booth read as On Hold instead of Reserved on the floor
+  plan. If that call fails the sale still stands and the retry queue comes back
+  for just that flag.
 
 **Late PayPal approvals.** The booth hold lasts `HOLD_MINUTES`, but PayPal keeps
 an order approvable for hours. Nothing is charged until this service captures,

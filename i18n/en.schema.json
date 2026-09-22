@@ -14820,6 +14820,10 @@
         "unavailable_text": {
           "label": "Booth already taken",
           "info": "Shown when someone else is paying for, or has bought, the booth in the meantime."
+        },
+        "extras_title": {
+          "label": "Add-ons heading",
+          "info": "The add-ons themselves and their prices come from the checkout service, so they are set in one place only."
         }
       },
       "presets": {

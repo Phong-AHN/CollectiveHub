@@ -1,4 +1,4 @@
-import { addExhibitor, addExhibitorBooth, setBoothOnHold } from './expofp.js';
+import { addExhibitor, addExhibitorBooth, assignExtras, setBoothOnHold } from './expofp.js';
 import {
   claimFulfilment, clearRetry, dueHolds, dueRetries, getCheckout, patchCheckout,
   releaseBoothClaim, releaseClaim, scheduleRetry, untrackHold,
@@ -16,8 +16,10 @@ const PAID_STATES = new Set(['paid', 'fulfilment_failed', 'fulfilled']);
 function adminNoteFor(record, payment) {
   const b = record.booth || {};
   const e = record.exhibitor || {};
+  const extras = (record.extras || []).map((extra) => `${extra.name} ${extra.price}`).join(', ');
   return [
-    `Booth ${b.booth} paid ${b.price} ${b.currency} via ${record.gateway || 'paypal'}`,
+    `Booth ${b.booth} paid ${record.amount ?? b.price} ${b.currency} via ${record.gateway || 'paypal'}`,
+    extras ? `add-ons: ${extras}` : null,
     payment.reference || record.paymentReference ? `ref ${payment.reference || record.paymentReference}` : null,
     `contact ${e.contactName || '-'} <${e.email || '-'}>${e.phone ? ` ${e.phone}` : ''}`,
     `checkout ${record.id}`,
@@ -36,10 +38,43 @@ function adminNoteFor(record, payment) {
  * payment.reference   - PayPal order id / Stripe Checkout Session id
  * payment.transaction - PayPal capture id / Stripe PaymentIntent id
  */
+/**
+ * Takes the ExpoFP hold off a booth that has just been assigned.
+ *
+ * The hold is what keeps the booth off the market while the buyer pays, but it
+ * also overrides how the booth reads on the floor plan: left on, an assigned
+ * booth still shows as On Hold instead of Reserved. Clearing it any earlier
+ * would put the booth back on sale mid-payment.
+ *
+ * Best effort: the booth is already assigned and paid for, so a failure here
+ * is cosmetic - record it and let the retry queue come back to it.
+ */
+async function clearHoldAfterAssignment(checkoutId, record) {
+  const result = await setBoothOnHold(record.booth, false);
+  const cleared = !result.reason;
+
+  await patchCheckout(checkoutId, { holdCleared: cleared });
+  if (!cleared) {
+    console.error('[fulfil] booth assigned but its hold is still on', checkoutId, record.booth?.booth, result.reason);
+    await scheduleRetry(checkoutId, Date.now() + 5 * 60_000);
+  }
+  return cleared;
+}
+
 export async function fulfil(checkoutId, payment = {}) {
   const record = await getCheckout(checkoutId);
   if (!record) return { ok: false, reason: 'unknown_checkout' };
-  if (record.status === 'fulfilled') return { ok: true, already: true, record };
+  if (record.status === 'fulfilled') {
+    // Everything is done except, possibly, clearing the hold flag - so a
+    // booth left reading On Hold heals itself on the next retry sweep.
+    const holdCleared = !record.held || record.holdCleared
+      ? true
+      : await clearHoldAfterAssignment(checkoutId, record);
+
+    // Only stop retrying once there is nothing left to do.
+    if (holdCleared) await clearRetry(checkoutId);
+    return { ok: true, already: true, record, holdCleared };
+  }
 
   const claimed = await claimFulfilment(checkoutId);
   if (!claimed) return { ok: true, inFlight: true };
@@ -69,9 +104,22 @@ export async function fulfil(checkoutId, payment = {}) {
 
     await addExhibitorBooth(exhibitorId, record.booth);
 
-    await clearRetry(checkoutId);
-    await patchCheckout(checkoutId, { status: 'fulfilled', fulfilledAt: Date.now(), nextAttemptAt: null });
-    return { ok: true, exhibitorId };
+    // Add-ons are recorded in the exhibitor's admin notes regardless; this
+    // also puts them on the ExpoFP record where that is switched on.
+    const extras = await assignExtras(exhibitorId, record.extras, record.booth);
+    if (record.extras?.length) await patchCheckout(checkoutId, { extrasAssigned: extras.assigned });
+
+    // Assigned - now, and only now, the booth can stop reading as On Hold.
+    const holdCleared = record.held ? await clearHoldAfterAssignment(checkoutId, record) : true;
+
+    if (holdCleared) await clearRetry(checkoutId);
+    await patchCheckout(checkoutId, {
+      status: 'fulfilled',
+      fulfilledAt: Date.now(),
+      // Keep the pending attempt when only the hold flag is left to clear.
+      ...(holdCleared ? { nextAttemptAt: null } : {}),
+    });
+    return { ok: true, exhibitorId, holdCleared };
   } catch (error) {
     const giveUp = attempts >= MAX_ATTEMPTS;
     const delay = RETRY_BACKOFF_MIN[Math.min(attempts - 1, RETRY_BACKOFF_MIN.length - 1)] * 60_000;

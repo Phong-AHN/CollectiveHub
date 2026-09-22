@@ -42,6 +42,12 @@
         <aside class="booth-checkout__summary" data-role="summary">
           <h2 class="booth-checkout__summary-title body1">{{ section.settings.summary_title }}</h2>
           <dl class="booth-checkout__lines" data-role="lines"></dl>
+
+          <div class="booth-checkout__extras" data-role="extras" hidden>
+            <h3 class="booth-checkout__extras-title body2">{{ section.settings.extras_title }}</h3>
+            <div data-role="extras-list"></div>
+          </div>
+
           <div class="booth-checkout__total" data-role="total" hidden>
             <span class="body2">{{ section.settings.total_label }}</span>
             <span class="booth-checkout__total-value body1" data-role="total-value"></span>
@@ -229,6 +235,13 @@
       "id": "total_label",
       "label": "t:sections.booth_checkout.settings.total_label.label",
       "default": "Total"
+    },
+    {
+      "type": "text",
+      "id": "extras_title",
+      "label": "t:sections.booth_checkout.settings.extras_title.label",
+      "info": "t:sections.booth_checkout.settings.extras_title.info",
+      "default": "Add-ons"
     },
     {
       "type": "text",

@@ -82,6 +82,9 @@ defineModule('theme-booth-checkout', () => {
         this.submit();
       };
       this.formEl?.addEventListener('submit', this.handleSubmit);
+
+      // Prices come from the service, so the page never carries its own.
+      this.#loadExtras();
     }
 
     unmounted() {
@@ -114,6 +117,8 @@ defineModule('theme-booth-checkout', () => {
             // did not map into a named field.
             source: Object.fromEntries(this.params.entries()),
             exhibitor,
+            // Only the ids: the service holds the prices.
+            extras: this.#selectedExtras(),
             returnUrl: this.#returnUrl(),
           }),
         });
@@ -197,11 +202,86 @@ defineModule('theme-booth-checkout', () => {
         el.append(dt, dd);
       }
 
+      this.#renderTotal();
+    }
+
+    /** Booth plus whatever add-ons are ticked. */
+    #renderTotal() {
       const total = this.querySelector('[data-role="total"]');
       const totalValue = this.querySelector('[data-role="total-value"]');
-      if (price && total && totalValue) {
-        totalValue.textContent = money(price, currency);
-        total.hidden = false;
+      if (!total || !totalValue) return;
+
+      const { price, currency } = this.booth.values;
+      const booth = Number(String(price).replace(/[^0-9.]/g, ''));
+      if (!Number.isFinite(booth)) return;
+
+      const addOns = (this.extras || [])
+        .filter((extra) => this.#selectedExtras().includes(extra.id))
+        .reduce((sum, extra) => sum + Number(extra.price), 0);
+
+      totalValue.textContent = money(booth + addOns, currency);
+      total.hidden = false;
+    }
+
+    #selectedExtras() {
+      return Array.from(this.querySelectorAll('[data-role="extra"]:checked')).map((input) => input.value);
+    }
+
+    /**
+     * Add-ons come from the service so there is one price list, not two.
+     * If it cannot be reached the block simply stays hidden - a booth on its
+     * own can still be bought.
+     */
+    async #loadExtras() {
+      const base = this.dataset.apiBase;
+      const box = this.querySelector('[data-role="extras"]');
+      const list = this.querySelector('[data-role="extras-list"]');
+      if (!base || !box || !list) return;
+
+      try {
+        const response = await fetch(`${base.replace(/\/+$/, '')}/extras`);
+        if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+
+        const payload = await response.json();
+        this.extras = Array.isArray(payload?.extras) ? payload.extras : [];
+        if (!this.extras.length) return;
+
+        const currency = this.booth.values.currency || payload.currency;
+        list.innerHTML = '';
+        for (const extra of this.extras) {
+          const row = document.createElement('label');
+          row.className = 'booth-checkout__extra';
+
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.value = extra.id;
+          input.id = `extra-${this.dataset.sectionId}-${extra.id}`;
+          input.dataset.role = 'extra';
+          input.addEventListener('change', () => this.#renderTotal());
+
+          const text = document.createElement('span');
+          const name = document.createElement('span');
+          name.className = 'booth-checkout__extra-name body3';
+          name.textContent = extra.name;
+          text.append(name);
+
+          if (extra.description) {
+            const note = document.createElement('span');
+            note.className = 'booth-checkout__extra-note body5';
+            note.textContent = extra.description;
+            text.append(note);
+          }
+
+          const price = document.createElement('span');
+          price.className = 'booth-checkout__extra-price body3';
+          price.textContent = money(extra.price, currency);
+
+          row.append(input, text, price);
+          list.append(row);
+        }
+        box.hidden = false;
+      } catch (error) {
+        console.error('[theme-booth-checkout] add-ons unavailable', error);
       }
     }
 

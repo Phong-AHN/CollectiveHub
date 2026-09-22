@@ -69,7 +69,7 @@ async function api(path, { method = 'POST', params, idempotencyKey } = {}) {
  * the booth hold end safely - see checkout/start.
  */
 export async function createCheckoutSession({
-  checkoutId, amount, currency, name, description, email, successUrl, cancelUrl, expiresAt,
+  checkoutId, items, currency, email, successUrl, cancelUrl, expiresAt,
 }) {
   const session = await api('/v1/checkout/sessions', {
     idempotencyKey: `cs-${checkoutId}`,
@@ -83,17 +83,19 @@ export async function createCheckoutSession({
       payment_intent_data: { metadata: { checkoutId } },
       customer_email: email || undefined,
       expires_at: expiresAt,
-      line_items: [{
+      // One line per thing bought - the booth, then any add-ons - so the
+      // Stripe page and the receipt itemise what the exhibitor is paying for.
+      line_items: items.map((item) => ({
         quantity: 1,
         price_data: {
           currency: String(currency).toLowerCase(),
-          unit_amount: toMinorUnits(amount, currency),
+          unit_amount: toMinorUnits(item.amount, currency),
           product_data: {
-            name: name.slice(0, 250),
-            ...(description ? { description: description.slice(0, 500) } : {}),
+            name: String(item.name).slice(0, 250),
+            ...(item.description ? { description: String(item.description).slice(0, 500) } : {}),
           },
         },
-      }],
+      })),
     },
   });
 
