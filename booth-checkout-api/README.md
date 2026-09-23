@@ -54,7 +54,8 @@ PayPal retries.
 | `POST /api/webhooks/expofp` | Inbound sync; verifies HMAC and de-duplicates the assigned/reserved pair |
 | `GET/POST /api/cron/release-holds` | Releases expired holds and retries failed fulfilments (see "Releasing holds", "Retrying") |
 | `GET /api/gateway/keys` | Whether payment keys are saved, and a hint (`sk_live_****4242`) — never a key |
-| `POST /api/gateway/keys` | Saves the client's keys from the storefront setup section; needs `SETUP_PASSCODE` |
+| `POST /api/gateway/keys` | Saves the client's keys from the storefront setup section; needs `SETUP_PASSCODE` when one is set |
+| `DELETE /api/gateway/keys` | Forgets the saved keys so the setup section reappears; needs the `CRON_SECRET` bearer |
 | `GET /api/extras` | The add-on catalogue the checkout page offers (ids, names, prices) |
 | `GET /api/health` | Configuration report — what is set, never the values; `?deep=1` (cron secret) proves the ExpoFP token |
 
@@ -99,7 +100,9 @@ configuring beyond `EXPOFP_API_TOKEN` and `EXPOFP_EXPO_ID`:
 | add exhibitor | `/api/v1/add-exhibitor` | `{ token, eventId, name, externalId, contactName, contactPhone, privateEmail, website, adminNotes }` → `{ id }` — confirmed |
 | find exhibitor | `/api/v1/get-exhibitor-id` | `{ token, eventId, externalId }` → `{ id }` — confirmed |
 | assign booth | `/api/v1/add-exhibitor-booth` | `{ token, eventId, boothName, exhibitorId }` — confirmed; `exhibitorId` **as a string**; 200 empty or 200 `Already added` |
-| add extra | `/api/v1/add-exhibitor-extra` | not yet seen; not used by the checkout |
+| list extras | `/api/v1/list-extras` | `{ token, eventId }` → `{ extras, boothExtras }` — confirmed; **two** arrays: `extras` are bought once per company, `boothExtras` per booth (Power Plugs is one). Either `id` is an `extraId` |
+| exhibitor's extras | `/api/v1/list-exhibitor-extras` | `{ token, exhibitorId }` → one array of both kinds — confirmed; a booth extra carries `booths`, an exhibitor extra does not |
+| add extra | `/api/v1/add-exhibitor-extra` | `{ token, exhibitorId, extraId, quantity }` — confirmed, all three numeric. Quantity **adds** to what they hold, so what they hold is read first; over `limitPerExhibitor` is refused |
 
 `name` on the booth calls is the booth key as drawn on the floor plan. The new
 exhibitor gets `externalId` = the checkout id (so one exhibitor per purchase),
@@ -244,6 +247,27 @@ ExpoFP only accepts extras that already exist on the expo. Set
 written into the exhibitor's `adminNotes`, and a failure there never fails a
 fulfilment.
 
+### Which booths an add-on fits
+
+Power Plugs only reaches the tables with wall space: **5, 4, 3, 2, 29, 28, 27**
+(`POWER_PLUGS_BOOTHS`, or `booths` on a `BOOTH_EXTRAS` entry; no list means
+every booth). The limit is enforced in two places for two different reasons:
+`GET /api/extras?booth=5` decides what the checkout page shows, and
+`checkout/start` re-checks against the booth ExpoFP confirmed, so a request
+that asks for Power Plugs on booth 7 gets the booth and no add-on rather than
+a $20 line nobody can install.
+
+### Add-ons on the floor plan
+
+The catalogue in `lib/extras.js` is ours (the page sends ids, never prices);
+ExpoFP needs a numeric `extraId`, which `assignExtras` resolves from
+`list-extras` by name, or from `expofpExtraId` in `BOOTH_EXTRAS`. On expo
+36986 "Power Plugs" is a **booth extra**, id `17477`, $20.
+
+An add-on that the expo does not offer is still charged and written into the
+exhibitor's admin notes — it simply is not assigned, and the booth sale goes
+through either way. `EXPOFP_ASSIGN_EXTRAS=0` turns assignment off entirely.
+
 ## Retrying
 
 A paid checkout whose ExpoFP write fails is not lost:
@@ -299,6 +323,16 @@ section posts to `/api/gateway/keys` here — it is the only way in:
   environment variable — the theme needs no change either way.
 - **No keys without Redis.** On Vercel, a `POST` without a Redis store is
   refused (`storage_not_configured`) rather than accepting a key it would lose.
+
+Once keys are saved, the storefront section hides itself (`hide_when_configured`),
+so handing the shop to someone else means forgetting them first:
+
+```
+curl -X DELETE -H "Authorization: Bearer $CRON_SECRET"   https://<deployment>/api/gateway/keys
+```
+
+The section comes back on the next page load — the browser flag it keeps is
+cleared as soon as `GET` answers `configured: false`.
 
 Rotating `SECRETS_KEY` makes the saved keys unreadable: checkout then fails
 with `gateway_keys_unreadable`, and the client has to paste the keys again.

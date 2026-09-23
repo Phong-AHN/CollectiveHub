@@ -55,6 +55,12 @@ export async function readSecret(name) {
   return m.records.get(`secret:${name}`) || null;
 }
 
+export async function deleteSecret(name) {
+  const { kv: k, memory: m } = await client();
+  if (k) await k.del(`secret:${name}`);
+  else m.records.delete(`secret:${name}`);
+}
+
 /**
  * Counts attempts within a window - used to stop someone guessing the setup
  * passcode. Returns how many have been made, this one included.

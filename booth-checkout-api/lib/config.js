@@ -1,6 +1,6 @@
 import { HttpError } from './http.js';
 import { decryptSecret, encryptSecret, keyHint } from './secrets.js';
-import { readSecret, saveSecret } from './store.js';
+import { deleteSecret, readSecret, saveSecret } from './store.js';
 
 /**
  * Payment gateway selection and credentials.
@@ -59,6 +59,16 @@ export async function saveGatewayCredentials({ gateway, stripeSecretKey: stripeK
   cached = null;
   cachedAt = 0;
   return { gateway: record.gateway, hint: record.hint, savedAt: record.savedAt };
+}
+
+/**
+ * Forgets the saved keys, so the storefront's setup section comes back and the
+ * next person to use it starts from nothing. Used when handing the shop over.
+ */
+export async function clearGatewayCredentials() {
+  await deleteSecret(SECRET_NAME);
+  cached = null;
+  cachedAt = 0;
 }
 
 /** What the setup section shows: enough to recognise, never enough to use. */

@@ -34,12 +34,12 @@ export const PATHS = {
   getExhibitorId: process.env.EXPOFP_PATH_GET_EXHIBITOR_ID || '/api/v1/get-exhibitor-id',
   addExhibitorBooth: process.env.EXPOFP_PATH_ADD_EXHIBITOR_BOOTH || '/api/v1/add-exhibitor-booth',
   addExhibitorExtra: process.env.EXPOFP_PATH_ADD_EXHIBITOR_EXTRA || '/api/v1/add-exhibitor-extra',
+  listExtras: process.env.EXPOFP_PATH_LIST_EXTRAS || '/api/v1/list-extras',
+  listExhibitorExtras: process.env.EXPOFP_PATH_LIST_EXHIBITOR_EXTRAS || '/api/v1/list-exhibitor-extras',
 };
 
 /**
- * Field names for add-exhibitor-extra, the one body not yet confirmed (the
- * checkout does not call it). Defaults follow the confirmed calls' naming.
- * `token` is shared by every call.
+ * Field names shared by the calls. `token` goes in every body.
  */
 export const FIELDS = {
   token: 'token',

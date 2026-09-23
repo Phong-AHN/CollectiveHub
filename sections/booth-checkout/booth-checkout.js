@@ -228,9 +228,10 @@ defineModule('theme-booth-checkout', () => {
     }
 
     /**
-     * Add-ons come from the service so there is one price list, not two.
-     * If it cannot be reached the block simply stays hidden - a booth on its
-     * own can still be bought.
+     * Add-ons come from the service so there is one price list, not two, and
+     * the booth goes with the question: some add-ons only fit certain booths
+     * (Power Plugs needs wall space). If it cannot be reached the block simply
+     * stays hidden - a booth on its own can still be bought.
      */
     async #loadExtras() {
       const base = this.dataset.apiBase;
@@ -239,7 +240,9 @@ defineModule('theme-booth-checkout', () => {
       if (!base || !box || !list) return;
 
       try {
-        const response = await fetch(`${base.replace(/\/+$/, '')}/extras`);
+        const booth = this.booth.values.booth || '';
+        const query = booth ? `?booth=${encodeURIComponent(booth)}` : '';
+        const response = await fetch(`${base.replace(/\/+$/, '')}/extras${query}`);
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 
         const payload = await response.json();

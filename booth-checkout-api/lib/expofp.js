@@ -204,29 +204,93 @@ export async function addExhibitorBooth(exhibitorId, booth) {
 }
 
 /**
+ * Everything the expo sells, both kinds in one list.
+ *
+ * list-extras answers { extras, boothExtras }: `extras` are bought once by a
+ * company (a listing upgrade), `boothExtras` are bought per booth (furniture,
+ * power). Either id is the `extraId` that add-exhibitor-extra takes, so the
+ * two are merged here - Power Plugs, for one, is a booth extra.
+ */
+export async function listExtras() {
+  const data = await call('listExtras', { eventId: expoId() });
+  if (Array.isArray(data)) return data;
+  return [
+    ...(Array.isArray(data?.extras) ? data.extras.map((e) => ({ ...e, kind: 'exhibitor' })) : []),
+    ...(Array.isArray(data?.boothExtras) ? data.boothExtras.map((e) => ({ ...e, kind: 'booth' })) : []),
+  ];
+}
+
+/**
+ * What one exhibitor already holds. Exhibitor extras and booth extras come
+ * back in one array, each with the quantity that exhibitor has of it; an extra
+ * they do not hold is absent rather than present with quantity zero.
+ */
+export async function listExhibitorExtras(exhibitorId) {
+  const data = await call('listExhibitorExtras', { exhibitorId: asId(exhibitorId) });
+  return Array.isArray(data) ? data : Array.isArray(data?.extras) ? data.extras : [];
+}
+
+/**
+ * Finds the expo's extra for one of our catalogue entries: its configured
+ * `expofpExtraId` first, otherwise the expo's extra of the same name.
+ */
+async function resolveExtraId(extra, catalogue) {
+  if (Number.isInteger(extra.expofpExtraId)) return extra.expofpExtraId;
+
+  const wanted = String(extra.expofpName || extra.name).trim().toLowerCase();
+  const match = catalogue.find((one) => String(one.name).trim().toLowerCase() === wanted);
+  if (!match) return null;
+
+  console.log(`[expofp] "${extra.name}" is ${match.kind || 'an'} extra ${match.id} on this expo`);
+  return asId(match.id);
+}
+
+/**
  * Puts the add-ons someone paid for onto their exhibitor record.
  *
- * add-exhibitor-extra's request body is the one this service has not seen, and
- * ExpoFP only accepts extras that already exist on the expo - so this is off
- * until both are settled: set EXPOFP_ASSIGN_EXTRAS=1 to turn it on, and give
- * each catalogue entry an `expofpName` if ExpoFP spells the extra differently.
+ * add-exhibitor-extra takes numeric ids - { token, exhibitorId, extraId,
+ * quantity } - so the extra has to exist on the expo first. Its quantity ADDS
+ * to what the exhibitor already holds, so a retried fulfilment would hand out
+ * a second one: what they hold is read back first, and an extra already there
+ * is left alone. Going over limitPerExhibitor is refused by ExpoFP, and
+ * nothing is written.
  *
  * Never throws and never fails a fulfilment: the booth and the money matter
  * more, and what was bought is written into the exhibitor's admin notes either
- * way.
+ * way. Set EXPOFP_ASSIGN_EXTRAS=0 to stop assigning altogether.
  */
-export async function assignExtras(exhibitorId, extras = [], booth = {}) {
+export async function assignExtras(exhibitorId, extras = []) {
   if (!extras.length) return { assigned: 0, skipped: 'none' };
-  if (process.env.EXPOFP_ASSIGN_EXTRAS !== '1') return { assigned: 0, skipped: 'disabled' };
+  if (process.env.EXPOFP_ASSIGN_EXTRAS === '0') return { assigned: 0, skipped: 'disabled' };
+
+  let catalogue = [];
+  let held = [];
+  try {
+    [catalogue, held] = await Promise.all([listExtras(), listExhibitorExtras(exhibitorId)]);
+  } catch (error) {
+    console.error('[expofp] could not read the expo extras:', error.message);
+    return { assigned: 0, skipped: 'lookup_failed' };
+  }
 
   let assigned = 0;
   for (const extra of extras) {
     try {
+      const extraId = await resolveExtraId(extra, catalogue);
+      if (!extraId) {
+        console.error(`[expofp] the expo has no extra named "${extra.name}" - paid for but not assigned. ` +
+          'Create it on the expo, then set its id as expofpExtraId in BOOTH_EXTRAS.');
+        continue;
+      }
+
+      if (held.some((one) => asId(one.id) === extraId && Number(one.quantity) > 0)) {
+        console.log('[expofp] exhibitor already holds', extra.name, '- not adding another');
+        continue;
+      }
+
       await call('addExhibitorExtra', {
-        eventId: expoId(),
-        exhibitorId: String(exhibitorId),
-        extraName: extra.expofpName || extra.name,
-        ...(booth.booth ? { boothName: String(booth.booth) } : {}),
+        exhibitorId: asId(exhibitorId),
+        extraId,
+        quantity: Number(extra.quantity) > 0 ? Number(extra.quantity) : 1,
       });
       assigned += 1;
     } catch (error) {

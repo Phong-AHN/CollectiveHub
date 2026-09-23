@@ -22,6 +22,14 @@ defineModule('theme-payment-gateway-setup', () => {
     }
   };
 
+  const clearFlag = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      /* nothing to clear if storage is blocked */
+    }
+  };
+
   class ThemePaymentGatewaySetup extends BaseElement {
     controller;
     handleSubmit;
@@ -184,10 +192,13 @@ defineModule('theme-payment-gateway-setup', () => {
      * already saved, and whether saving takes a setup code.
      */
     async #loadStatus() {
-      if (this.dataset.hideWhenConfigured === 'true' && readFlag()) {
-        this.#hide();
-        return;
-      }
+      const hideWhenConfigured = this.dataset.hideWhenConfigured === 'true';
+      const seenConfigured = hideWhenConfigured && readFlag();
+
+      // Hide straight away when this browser has seen the shop configured, so a
+      // live shop never flashes the form - but still ask, because the keys can
+      // be taken away again and the flag must not outlive them.
+      if (seenConfigured) this.#hide();
 
       this.controller = new AbortController();
 
@@ -196,20 +207,25 @@ defineModule('theme-payment-gateway-setup', () => {
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 
         const status = await response.json();
-        if (status && status.configured && this.dataset.hideWhenConfigured === 'true') {
+        const configured = Boolean(status && status.configured);
+
+        if (configured && hideWhenConfigured) {
           writeFlag();
           this.#hide();
           return;
         }
+        if (!configured) clearFlag();
 
         this.#showPasscode(Boolean(status && status.passcodeRequired));
-        this.dataset.state = 'form';
+        this.#show();
       } catch (error) {
         if (error.name === 'AbortError') return;
-        // Fail open: if the endpoint is unreachable the client can still set up.
-        // A code, if one is needed, is asked for after the first refusal.
+        // Fail open: if the endpoint is unreachable the client can still set up
+        // - unless this browser already knows the shop is configured, in which
+        // case the section stays hidden rather than reappearing on a live shop.
+        // A setup code, if one is needed, is asked for after the first refusal.
         console.error('[theme-payment-gateway-setup]', error);
-        this.dataset.state = 'form';
+        if (!seenConfigured) this.dataset.state = 'form';
       }
     }
 
@@ -259,6 +275,11 @@ defineModule('theme-payment-gateway-setup', () => {
     #hide() {
       this.dataset.state = 'hidden';
       if (this.root) this.root.hidden = true;
+    }
+
+    #show() {
+      this.dataset.state = 'form';
+      if (this.root) this.root.hidden = false;
     }
   }
 

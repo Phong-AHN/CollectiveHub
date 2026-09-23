@@ -1,5 +1,7 @@
 import { HttpError, corsHeaders, json, preflight } from '../../lib/http.js';
-import { GATEWAYS, envValue, gatewayStatus, saveGatewayCredentials } from '../../lib/config.js';
+import {
+  GATEWAYS, clearGatewayCredentials, envValue, gatewayStatus, saveGatewayCredentials,
+} from '../../lib/config.js';
 import { sameSecret } from '../../lib/secrets.js';
 import { countAttempt, persistentStorageConfigured } from '../../lib/store.js';
 
@@ -12,8 +14,10 @@ const ATTEMPT_WINDOW_S = 60 * 60;
 /**
  * The payment keys behind the storefront's "Payment Gateway Setup" section.
  *
- * GET  - whether keys are saved, and a hint like sk_live_****4242. Never a key.
- * POST - saves keys, encrypted.
+ * GET    - whether keys are saved, and a hint like sk_live_****4242. Never a key.
+ * POST   - saves keys, encrypted.
+ * DELETE - forgets them, so the setup section reappears for the next person.
+ *          Needs the CRON_SECRET bearer: this one is for us, not the client.
  *
  * SETUP_PASSCODE, when set, is required to save: this URL is visible in the
  * storefront's page source, and without a code anyone who reads it could point
@@ -35,6 +39,17 @@ async function handler(request) {
       const status = { ...(await gatewayStatus()), passcodeRequired: Boolean(envValue('SETUP_PASSCODE')) };
       return json(status, 200, { ...cors, 'Cache-Control': 'no-store' });
     }
+    if (request.method === 'DELETE') {
+      const secret = envValue('CRON_SECRET');
+      if (!secret) throw new HttpError(403, 'cron_secret_missing', 'Set CRON_SECRET to use this.');
+      if ((request.headers.get('authorization') || '') !== `Bearer ${secret}`) {
+        throw new HttpError(401, 'unauthorized', 'Send the CRON_SECRET as a bearer token.');
+      }
+      await clearGatewayCredentials();
+      console.log('[gateway/keys] cleared');
+      return json({ ok: true, cleared: true }, 200, cors);
+    }
+
     if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, cors);
 
     if (process.env.VERCEL && !persistentStorageConfigured()) {

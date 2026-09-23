@@ -106,7 +106,7 @@ export async function fulfil(checkoutId, payment = {}) {
 
     // Add-ons are recorded in the exhibitor's admin notes regardless; this
     // also puts them on the ExpoFP record where that is switched on.
-    const extras = await assignExtras(exhibitorId, record.extras, record.booth);
+    const extras = await assignExtras(exhibitorId, record.extras);
     if (record.extras?.length) await patchCheckout(checkoutId, { extrasAssigned: extras.assigned });
 
     // Assigned - now, and only now, the booth can stop reading as On Hold.

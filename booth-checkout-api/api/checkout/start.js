@@ -130,10 +130,12 @@ async function handler(request) {
     record.booth.type = record.booth.type || clean(check.type);
     record.booth.size = record.booth.size || clean(check.size);
 
-    // Add-ons: the page sends ids, the prices come from our own catalogue.
-    const extras = priceSelectedExtras(body.extras);
+    // Add-ons: the page sends ids, the prices come from our own catalogue -
+    // and so does the answer to whether this booth may have them at all.
+    const extras = priceSelectedExtras(body.extras, check.name);
     if (extras.unknown.length) {
-      console.warn('[checkout/start] ignoring unknown add-ons:', extras.unknown.join(', '));
+      console.warn('[checkout/start] ignoring add-ons not offered for booth', check.name + ':',
+        extras.unknown.join(', '));
     }
     record.extras = extras.items;
     record.extrasTotal = extras.total;

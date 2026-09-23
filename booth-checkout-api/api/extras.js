@@ -1,5 +1,5 @@
 import { corsHeaders, json, preflight } from '../lib/http.js';
-import { extrasCatalogue } from '../lib/extras.js';
+import { extrasCatalogue, extrasForBooth } from '../lib/extras.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -8,6 +8,10 @@ export const config = { runtime: 'nodejs' };
  *
  * The page reads this instead of carrying its own price list, so a price is
  * only ever set in one place - and what the page shows is what gets charged.
+ *
+ * ?booth=<name> narrows it to what that booth can have: Power Plugs only
+ * reaches the tables with wall space. Without a booth the whole catalogue
+ * comes back, each entry carrying the `booths` it is limited to.
  */
 async function handler(request) {
   const pre = preflight(request);
@@ -16,9 +20,13 @@ async function handler(request) {
   const cors = corsHeaders(request);
   if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405, cors);
 
+  const booth = new URL(request.url).searchParams.get('booth');
+  const extras = booth ? extrasForBooth(booth) : extrasCatalogue();
+
   return json({
     currency: (process.env.DEFAULT_CURRENCY || 'USD').toUpperCase(),
-    extras: extrasCatalogue(),
+    booth: booth || null,
+    extras,
   }, 200, { ...cors, 'Cache-Control': 'public, max-age=60' });
 }
 
