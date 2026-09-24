@@ -182,6 +182,31 @@
   position: relative;
   display: flex;
 }
+
+/*
+ * A line of text under the logo. Only a header that has one stacks, so every
+ * other header keeps the row it had - and the line stays outside the logo
+ * wrapper, which the transparent-header logo covers edge to edge.
+ */
+.header__logo:has(.header__tagline) {
+  flex-direction: column;
+  row-gap: 4px;
+}
+/*
+ * Druk is the display face the titles use (declared once in layout/theme.html),
+ * so the line under the logo reads as part of the brand rather than as body
+ * copy. Scoped under .header__logo so it outranks the body* class the
+ * typography setting puts on the same element.
+ */
+.header__logo .header__tagline {
+  font-family: Druk, var(--sort-title-font, sans-serif);
+  color: #fff;
+  text-align: center;
+  text-wrap: balance;
+}
+.header__logo .header__tagline--bold {
+  font-weight: 700;
+}
 .header__logo-link {
   display: inline-flex;
   align-items: center;
@@ -207,6 +232,10 @@
   .header__logo-image {
     width: var(--mobile-size);
     max-height: 100%;
+  }
+
+  .header__tagline--desktop-only {
+    display: none;
   }
 }
 .header__logo-link.transparent {

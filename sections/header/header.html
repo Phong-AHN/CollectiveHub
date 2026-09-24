@@ -148,6 +148,17 @@
                 mobile_size=section.settings.mobile_logo_width
               /}}
             </div>
+
+            {{#if section.settings.tagline | trim() }}
+              <span
+                class="
+                  header__tagline
+                  {{ section.settings.tagline_typography }}
+                  {{#if section.settings.tagline_font_bold }}header__tagline--bold{{/if}}
+                  {{#if !section.settings.tagline_show_on_mobile }}header__tagline--desktop-only{{/if}}
+                "
+              >{{ section.settings.tagline }}</span>
+            {{/if}}
           {{/capture}}
 
           
@@ -361,6 +372,49 @@
       "min": 30,
       "max": 200,
       "step": 10
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "t:sections.header.settings.tagline.label",
+      "info": "t:sections.header.settings.tagline.info",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "tagline_typography",
+      "label": "t:sections.header.settings.tagline_typography.label",
+      "default": "body3",
+      "options": [
+        {
+          "value": "body2",
+          "label": "t:sections.header.settings.tagline_typography.options_0.label"
+        },
+        {
+          "value": "body3",
+          "label": "t:sections.header.settings.tagline_typography.options_1.label"
+        },
+        {
+          "value": "body4",
+          "label": "t:sections.header.settings.tagline_typography.options_2.label"
+        },
+        {
+          "value": "body5",
+          "label": "t:sections.header.settings.tagline_typography.options_3.label"
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "id": "tagline_font_bold",
+      "label": "t:sections.header.settings.tagline_font_bold.label",
+      "default": true
+    },
+    {
+      "type": "switch",
+      "id": "tagline_show_on_mobile",
+      "label": "t:sections.header.settings.tagline_show_on_mobile.label",
+      "default": true
     },
     {
       "type": "group_header",

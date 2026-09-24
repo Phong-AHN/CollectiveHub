@@ -8053,6 +8053,31 @@
         "mobile_logo_width": {
           "label": "Mobile Logo width "
         },
+        "tagline": {
+          "label": "Tagline under the logo",
+          "info": "One line shown below the logo, such as \"Rare Finds. Epic Collections.\" Leave empty to hide it."
+        },
+        "tagline_typography": {
+          "label": "Tagline text size",
+          "options_0": {
+            "label": "Body 2"
+          },
+          "options_1": {
+            "label": "Body 3"
+          },
+          "options_2": {
+            "label": "Body 4"
+          },
+          "options_3": {
+            "label": "Body 5"
+          }
+        },
+        "tagline_font_bold": {
+          "label": "Bold tagline"
+        },
+        "tagline_show_on_mobile": {
+          "label": "Show tagline on mobile"
+        },
         "mobile_menu_layout": {
           "label": "Logo layout on mobile",
           "options_0": {

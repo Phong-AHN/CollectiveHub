@@ -66,6 +66,14 @@ async function handler(request) {
         ? { legacyKeyStore: 'GATEWAY_KEYS_URL is still set and no longer used - unset it' }
         : {}),
     },
+    receipts: {
+      resendKey: has('RESEND_API_KEY') ? 'set' : 'not set - buyers get no confirmation email',
+      from: envValue('EMAIL_FROM') || 'MISSING - nothing can be sent without it',
+      organiser: envValue('ORGANISER_EMAIL') || 'not set - nobody is told when a booth sells',
+      replyTo: envValue('EMAIL_REPLY_TO') || 'not set',
+      bcc: envValue('EMAIL_BCC') || 'not set',
+      floorPlanLink: envValue('FLOOR_PLAN_URL') || 'not set (the email shows no button)',
+    },
     storage: storageStatus(has),
     storefront: {
       allowedOrigins: allowedOrigins(),

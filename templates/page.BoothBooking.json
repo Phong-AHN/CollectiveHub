@@ -7,7 +7,7 @@
         "button_text": "Book Your Booth",
         "color_scheme": "scheme-7",
         "consent": "denied",
-        "description": "<p>Browse the live floor plan, check which tables are still open, then lock in your spot.</p>",
+        "description": "\u003cp\u003eBrowse the live floor plan, check which tables are still open, then lock in your spot.\u003c/p\u003e",
         "description_typography": "body3",
         "embed_mode": "iframe",
         "error_text": "The floor plan could not be loaded.",
@@ -60,11 +60,11 @@
       "type": "payment-gateway-setup",
       "settings": {
         "api_base_url": "https://collective-hub-umber.vercel.app/api",
-        "button_text": "Save & Connect",
+        "button_text": "Save \u0026 Connect",
         "choice_label": "Which gateway are you connecting?",
         "color_scheme": "scheme-2",
         "default_gateway": "paypal",
-        "description": "<p>Follow the guide for your provider, then connect it below. This step only needs to be done once.</p>",
+        "description": "\u003cp\u003eFollow the guide for your provider, then connect it below. This step only needs to be done once.\u003c/p\u003e",
         "design_mode_text": "Saving is disabled inside the theme editor preview.",
         "doc_link_text": "Read the instructions",
         "error_text": "We could not save your details. Please try again.",
@@ -84,6 +84,8 @@
           "row-gap": "24px"
         },
         "note": "Your keys go straight to your own checkout service and are encrypted the moment they arrive. Nobody can read them back - not even us.",
+        "passcode_error_text": "That setup code is not right. Ask your developer for it.",
+        "passcode_label": "Setup code",
         "paypal_client_id_label": "PayPal Client ID",
         "paypal_doc_text": "How to create a PayPal pay button and get your credentials.",
         "paypal_doc_title": "PayPal",
@@ -110,10 +112,8 @@
         "stripe_doc_text": "How to connect Stripe and find your API key.",
         "stripe_doc_title": "Stripe",
         "stripe_doc_url": "https://expofp.com/pages/stripe",
-        "success_text": "Saved. Your payment gateway is connected.",
         "stripe_key_text": "Use your Stripe secret key - it starts with sk_test_ or sk_live_. The publishable key (pk_) will not work.",
-        "passcode_label": "Setup code",
-        "passcode_error_text": "That setup code is not right. Ask your developer for it."
+        "success_text": "Saved. Your payment gateway is connected."
       },
       "disabled": true,
       "blocks": {},
@@ -157,7 +157,7 @@
           "padding-inline-start": "70px"
         }
       },
-      "disabled": false,
+      "disabled": true,
       "blocks": {
         "17897142540238be9072": {
           "type": "$group",

@@ -129,7 +129,7 @@
         "btn_shadow_offset_y": 4,
         "btn_shadow_opacity": 0,
         "btn_style": "primary",
-        "button_text1": "Subscribe & Save",
+        "button_text1": "Subscribe \u0026 Save",
         "button_text2": "",
         "container_bg_color": "#fdf7ef",
         "container_config": {
@@ -176,14 +176,14 @@
         "product_sales_point_4": "Early access to new set releases",
         "product_sales_point_4_icon": "checkmark",
         "show_divider": false,
-        "sub_title": "Subscribe & Save",
+        "sub_title": "Subscribe \u0026 Save",
         "sub_title_font_color": "#000000",
         "sub_title_font_family": "Poppins:400",
         "sub_title_letter_spacing": 100,
         "sub_title_line_height": 1.6,
         "sub_title_m_font_size": 14,
         "sub_title_pc_font_size": 16,
-        "text": "Subscribe &amp; S15% OFF every time you subscribe to our monthly Mystery Boxes.&nbsp;<br>Get premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
+        "text": "Subscribe \u0026amp; S15% OFF every time you subscribe to our monthly Mystery Boxes.\u0026nbsp;\u003cbr\u003eGet premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
         "text_position": "right",
         "title": "Never Run Out of Chases.",
         "title_font_color": "#000000",
@@ -442,7 +442,7 @@
         "sub_title_m_font_size": 16,
         "sub_title_pc_font_size": 18,
         "text_align": "left",
-        "title": "BLOG & RECIPE",
+        "title": "BLOG \u0026 RECIPE",
         "title_font_color": "#000000",
         "title_font_family": "Anton",
         "title_letter_spacing": 0,
@@ -831,7 +831,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🎟️ FREE admission for all Attendees! <br>🎉 First 100 attendees get a FREE mystery pack! <br>🗓️ September 20, 2026<br>⏰ 11AM–6PM",
+                    "text": "🎟️ FREE admission for all Attendees!\u2028\u003cbr\u003e🎉 First 100 attendees get a FREE mystery pack!\u2028\u003cbr\u003e🗓️ September 20, 2026\u003cbr\u003e⏰ 11AM–6PM",
                     "text_align": "center",
                     "typography": "typography-default"
                   },
@@ -1064,12 +1064,12 @@
             "card_border_opacity": 10,
             "card_border_radius": 0,
             "card_border_width": 0,
-            "description1": "<strong>Natural Ingredients</strong>",
+            "description1": "\u003cstrong\u003eNatural Ingredients\u003c/strong\u003e",
             "description10": "",
-            "description2": "<strong>Clean Ingredients</strong>",
-            "description3": "<strong>Gluten</strong>",
-            "description4": "<strong>Caffeine Source</strong>",
-            "description5": "<strong>Sugar</strong>",
+            "description2": "\u003cstrong\u003eClean Ingredients\u003c/strong\u003e",
+            "description3": "\u003cstrong\u003eGluten\u003c/strong\u003e",
+            "description4": "\u003cstrong\u003eCaffeine Source\u003c/strong\u003e",
+            "description5": "\u003cstrong\u003eSugar\u003c/strong\u003e",
             "description6": "",
             "description7": "",
             "description8": "",
@@ -1144,7 +1144,7 @@
             "previous-events-text": {
               "type": "text",
               "settings": {
-                "text": "<p>Follow &amp; tag us to show us your photos from our events!</p>",
+                "text": "\u003cp\u003eFollow \u0026amp; tag us to show us your photos from our events!\u003c/p\u003e",
                 "text_align": "center",
                 "typography": "body3"
               },
@@ -1575,7 +1575,7 @@
           "padding-inline-start": "100px"
         }
       },
-      "disabled": false,
+      "disabled": true,
       "blocks": {
         "1785490399071664ba46": {
           "type": "$container",
@@ -1619,7 +1619,7 @@
                   "padding-block-end": "0",
                   "padding-block-start": "0"
                 },
-                "text": "Rare Finds.<br>Epic Collections.",
+                "text": "Rare Finds.\u003cbr\u003eEpic Collections.",
                 "text_align": "left",
                 "text_align_mobile": "left",
                 "text_tag": "h1",
@@ -1737,9 +1737,25 @@
                 "178549184097264b4dda",
                 "17854918607334777a27"
               ]
+            },
+            "17901459676951f59199": {
+              "type": "subheading",
+              "settings": {
+                "size": {
+                  "height": "auto",
+                  "width": "auto"
+                },
+                "subtitle": "Collective Hub Center. All things collectibles.",
+                "text_align": "center",
+                "text_tag": "h1",
+                "typography": "body3"
+              },
+              "blocks": {},
+              "block_order": []
             }
           },
           "block_order": [
+            "17901459676951f59199",
             "17854903990715d09e2b",
             "1785491660342890a638",
             "1785491832321cf2b296"
@@ -1844,7 +1860,7 @@
             "1785492865144b40cc02": {
               "type": "rich-text",
               "settings": {
-                "content": "Subscribe &amp; get 15% OFF every time you subscribe to our monthly Mystery Boxes. <br>Get premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
+                "content": "Subscribe \u0026amp; get 15% OFF every time you subscribe to our monthly Mystery Boxes. \u003cbr\u003eGet premium packs, rare singles, and exclusive collectibles delivered straight to your door.",
                 "spacing": {
                   "@media (--mobile)": {
                     "padding-block-end": "0px",
@@ -1888,7 +1904,7 @@
                   "padding-right": "0px",
                   "padding-top": "0px"
                 },
-                "text": "<strong>Subscribe &amp; Save</strong>",
+                "text": "\u003cstrong\u003eSubscribe \u0026amp; Save\u003c/strong\u003e",
                 "text_align": "left",
                 "text_align_mobile": "left",
                 "typography": "body3",
@@ -1988,7 +2004,7 @@
                           "padding-right": "0px",
                           "padding-top": "0px"
                         },
-                        "text": "Change your TCG preferences whenever&nbsp;",
+                        "text": "Change your TCG preferences whenever\u0026nbsp;",
                         "text_align": "left",
                         "text_align_mobile": "left",
                         "typography": "body3",
@@ -2573,7 +2589,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "<strong>@collectivehubcenter</strong>",
+                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2598,7 +2614,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2666,7 +2682,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "<strong>@collectivehubcenter</strong>",
+                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2691,7 +2707,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2776,7 +2792,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "<strong>@collectivehubcenter</strong>",
+                    "text": "\u003cstrong\u003e@collectivehubcenter\u003c/strong\u003e",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -2818,7 +2834,7 @@
                       "padding-right": "0px",
                       "padding-top": "0px"
                     },
-                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥 <br>📅 September 20, 2026<br>⏰ 11AM–6PM<br>📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
+                    "text": "🔥COLLECTIVE HUB CARD SHOW🔥\u2028\u003cbr\u003e📅 September 20, 2026\u003cbr\u003e⏰ 11AM–6PM\u003cbr\u003e📍 Hotel Dena Pasadena 303 Cordova St, Pasadena, CA",
                     "text_align": "center",
                     "text_align_mobile": "center",
                     "typography": "body3",
@@ -3264,7 +3280,7 @@
         "button_text": "Book Your Booth",
         "color_scheme": "scheme-7",
         "consent": "denied",
-        "description": "<p>Explore the live floor plan of the Collective Hub Show, see which tables are still open, then lock in the spot you want.</p>",
+        "description": "\u003cp\u003eExplore the live floor plan of the Collective Hub Show, see which tables are still open, then lock in the spot you want.\u003c/p\u003e",
         "description_typography": "body3",
         "embed_mode": "iframe",
         "error_text": "The floor plan could not be loaded.",
@@ -3506,11 +3522,11 @@
       "type": "payment-gateway-setup",
       "settings": {
         "api_base_url": "https://collective-hub-umber.vercel.app/api",
-        "button_text": "Save & Connect",
+        "button_text": "Save \u0026 Connect",
         "choice_label": "Which gateway are you connecting?",
         "color_scheme": "scheme-2",
         "default_gateway": "paypal",
-        "description": "<p>Follow the guide for your provider, then connect it below. This step only needs to be done once.</p>",
+        "description": "\u003cp\u003eFollow the guide for your provider, then connect it below. This step only needs to be done once.\u003c/p\u003e",
         "design_mode_text": "Saving is disabled inside the theme editor preview.",
         "doc_link_text": "Read the instructions",
         "error_text": "We could not save your details. Please try again.",
@@ -3530,6 +3546,8 @@
           "row-gap": "24px"
         },
         "note": "Your keys go straight to your own checkout service and are encrypted the moment they arrive. Nobody can read them back - not even us.",
+        "passcode_error_text": "That setup code is not right. Ask your developer for it.",
+        "passcode_label": "Setup code",
         "paypal_client_id_label": "PayPal Client ID",
         "paypal_doc_text": "How to create a PayPal pay button and get your credentials.",
         "paypal_doc_title": "PayPal",
@@ -3556,14 +3574,113 @@
         "stripe_doc_text": "How to connect Stripe and find your API key.",
         "stripe_doc_title": "Stripe",
         "stripe_doc_url": "https://expofp.com/pages/stripe",
-        "success_text": "Saved. Your payment gateway is connected.",
         "stripe_key_text": "Use your Stripe secret key - it starts with sk_test_ or sk_live_. The publishable key (pk_) will not work.",
-        "passcode_label": "Setup code",
-        "passcode_error_text": "That setup code is not right. Ask your developer for it."
+        "success_text": "Saved. Your payment gateway is connected."
       },
       "disabled": true,
       "blocks": {},
       "name": "t:sections.payment_gateway_setup.presets.presets_0.name"
+    },
+    "17901503266271a36d00": {
+      "type": "slideshow",
+      "settings": {
+        "auto_switch": true,
+        "desktop_height": "fit-first-image",
+        "image_full_screen": true,
+        "mobile_height": "fit-first-image",
+        "mobile_text_layout": "text-in-image",
+        "pagination_style": "progress",
+        "switch_interval": 7
+      },
+      "disabled": false,
+      "blocks": {
+        "17901503266293f5b8b5": {
+          "type": "$image",
+          "settings": {
+            "desktop_image": "shopline://files/images/img-banner01.jpg"
+          },
+          "blocks": {
+            "179015032662910cdbcb": {
+              "type": "$group",
+              "settings": {
+                "layout": {
+                  "align-items": "flex-start",
+                  "column-gap": "8px",
+                  "flex-direction": "column",
+                  "flex-wrap": "nowrap",
+                  "justify-content": "center",
+                  "row-gap": "0px"
+                },
+                "spacing": {
+                  "@media (--mobile)": {
+                    "padding-block-end": "30px",
+                    "padding-block-start": "30px",
+                    "padding-inline-end": "70px",
+                    "padding-inline-start": "70px"
+                  },
+                  "padding-block-end": "40px",
+                  "padding-block-start": "40px",
+                  "padding-inline-end": "0px",
+                  "padding-inline-start": "100px"
+                }
+              },
+              "blocks": {
+                "179015032662998b4dea": {
+                  "type": "text",
+                  "settings": {
+                    "spacing": {
+                      "padding-bottom": "8px",
+                      "padding-left": "0px",
+                      "padding-right": "0px",
+                      "padding-top": "0px"
+                    },
+                    "text": "Subtitle",
+                    "typography": "body2"
+                  },
+                  "blocks": {}
+                },
+                "1790150326629fcedb0b": {
+                  "type": "heading",
+                  "settings": {
+                    "text": "Collective Hub Center.",
+                    "text_align": "left",
+                    "text_tag": "h1",
+                    "typography": "title1"
+                  },
+                  "blocks": {}
+                },
+                "1790155452212b3fbeab": {
+                  "type": "text",
+                  "settings": {
+                    "text": "\u003cspan style=\"color: #ffffff; font-size: 50px;\"\u003eAll things collectibles.\u003c/span\u003e",
+                    "text_align": "left",
+                    "text_align_mobile": "left",
+                    "typography": "title2"
+                  },
+                  "blocks": {},
+                  "block_order": []
+                }
+              },
+              "block_order": [
+                "179015032662998b4dea",
+                "1790150326629fcedb0b",
+                "1790155452212b3fbeab"
+              ]
+            }
+          },
+          "block_order": [
+            "179015032662910cdbcb"
+          ]
+        }
+      },
+      "block_order": [
+        "17901503266293f5b8b5"
+      ],
+      "custom_css": [
+        "h1 {color: white; letter-spacing: -5.5px;}",
+        ".rte {letter-spacing: -5.5px;}"
+      ],
+      "name": "t:sections.slideshow.presets.presets_0.name"
     },
     "featured-collection-list": {
       "type": "featured-collection-list",
@@ -3644,6 +3761,7 @@
   },
   "order": [
     "1785490399070e130383",
+    "17901503266271a36d00",
     "17568931298005909d71",
     "17568931820093588261",
     "1783934979715f6d3255",

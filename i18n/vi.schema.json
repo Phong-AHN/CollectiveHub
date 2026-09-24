@@ -8053,6 +8053,31 @@
         "mobile_logo_width": {
           "label": ""
         },
+        "tagline": {
+          "label": "Dòng chữ dưới logo",
+          "info": "Một dòng hiển thị ngay dưới logo, ví dụ \"Rare Finds. Epic Collections.\" Để trống thì ẩn."
+        },
+        "tagline_typography": {
+          "label": "Cỡ chữ dòng dưới logo",
+          "options_0": {
+            "label": "Body 2"
+          },
+          "options_1": {
+            "label": "Body 3"
+          },
+          "options_2": {
+            "label": "Body 4"
+          },
+          "options_3": {
+            "label": "Body 5"
+          }
+        },
+        "tagline_font_bold": {
+          "label": "In đậm"
+        },
+        "tagline_show_on_mobile": {
+          "label": "Hiện trên mobile"
+        },
         "mobile_menu_layout": {
           "label": "",
           "options_0": {

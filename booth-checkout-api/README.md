@@ -249,7 +249,7 @@ fulfilment.
 
 ### Which booths an add-on fits
 
-Power Plugs only reaches the tables with wall space: **5, 4, 3, 2, 29, 28, 27**
+Power Plugs only reaches the tables with wall space: **2, 3, 4, 5, 30, 31, 32**
 (`POWER_PLUGS_BOOTHS`, or `booths` on a `BOOTH_EXTRAS` entry; no list means
 every booth). The limit is enforced in two places for two different reasons:
 `GET /api/extras?booth=5` decides what the checkout page shows, and
@@ -267,6 +267,40 @@ ExpoFP needs a numeric `extraId`, which `assignExtras` resolves from
 An add-on that the expo does not offer is still charged and written into the
 exhibitor's admin notes — it simply is not assigned, and the booth sale goes
 through either way. `EXPOFP_ASSIGN_EXTRAS=0` turns assignment off entirely.
+
+## Confirmation emails
+
+Once the booth is assigned and its hold cleared, two emails go out through
+Resend (`lib/email.js`, one POST each to `https://api.resend.com/emails` - no
+SDK):
+
+- **The buyer's receipt** - the booth, its type and size, every add-on, the
+  total, the payment reference and the order id, with a button to the floor
+  plan.
+- **The organiser's notice** (`ORGANISER_EMAIL`) - written for whoever runs the
+  event, not a copy of the buyer's letter: it leads with the booth and the
+  company, and carries the buyer's email and phone, the gateway, the payment
+  and transaction references and the ExpoFP exhibitor id. Its reply-to is the
+  buyer, so answering it reaches the exhibitor.
+
+- **Only after the sale is real.** It is sent at the end of `fulfil()`, so an
+  email never promises a booth that failed to land on the floor plan.
+- **Once each, tracked apart.** The record keeps `emailedAt` and
+  `organiserEmailedAt`, and each request carries its own
+  `Idempotency-Key` (`receipt-<id>` / `organiser-<id>`), which Resend honours
+  for 24 hours. The gateway's return page and its webhook cannot both mail
+  anyone, and a notice that failed is retried without re-sending a receipt that
+  went through.
+- **Never fatal.** No key, or nobody to send to, is recorded (`emailSkipped` /
+  `organiserEmailSkipped`) and the sale stands - an order without a buyer's
+  address still notifies the organiser. A 5xx or timeout goes on the same retry
+  queue as the ExpoFP writes; the retry sends only what is still owed. A 4xx
+  (bad key, unverified sender domain) is recorded rather than retried for ever -
+  `/api/health` → `receipts` says which variables are missing.
+
+Set `RESEND_API_KEY` and `EMAIL_FROM` (a sender on a domain verified in Resend);
+`ORGANISER_EMAIL`, `EMAIL_REPLY_TO`, `EMAIL_BCC`, `SHOP_NAME` and
+`FLOOR_PLAN_URL` are optional.
 
 ## Retrying
 

@@ -92,6 +92,21 @@ a.slideshow__image-link {
 .slideshow__group > * {
   pointer-events: auto;
 }
+
+/*
+ * A slide can hold two content containers - one each side. The rule only bites
+ * when a second one is there, so a slide with one container is laid out
+ * exactly as before.
+ */
+.slideshow__image-container:has(> .slideshow__group ~ .slideshow__group) {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+.slideshow__image-container:has(> .slideshow__group ~ .slideshow__group) > .slideshow__group {
+  flex: 1 1 0;
+  min-width: 0;
+}
 .slideshow__pager {
   position: absolute;
   inset-block-end: 0;
@@ -202,6 +217,10 @@ a.slideshow__image-link {
 }
 
 @media (max-width: 959px) {
+  .slideshow__image-container:has(> .slideshow__group ~ .slideshow__group) {
+    flex-direction: column;
+  }
+
   .slideshow--overlap-text .slideshow__pager--progress {
     background-color: rgb(0 0 0 / 40%);
   }

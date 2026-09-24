@@ -16,7 +16,7 @@
 // The tables with wall space - the only ones Power Plugs can be run to.
 // Override with POWER_PLUGS_BOOTHS (comma separated), or replace the whole
 // catalogue with BOOTH_EXTRAS.
-const POWER_PLUG_BOOTHS = ['5', '4', '3', '2', '29', '28', '27'];
+const POWER_PLUG_BOOTHS = ['2', '3', '4', '5', '30', '31', '32'];
 
 /**
  * Read per call, not once at import: EXPOFP_EXTRA_ID_POWER_PLUGS is how the

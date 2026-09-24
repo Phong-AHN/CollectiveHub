@@ -1,3 +1,4 @@
+import { sendOrganiserNotice, sendReceipt } from './email.js';
 import { addExhibitor, addExhibitorBooth, assignExtras, setBoothOnHold } from './expofp.js';
 import {
   claimFulfilment, clearRetry, dueHolds, dueRetries, getCheckout, patchCheckout,
@@ -61,6 +62,68 @@ async function clearHoldAfterAssignment(checkoutId, record) {
   return cleared;
 }
 
+/**
+ * A sale sends two emails: the buyer's receipt, and the organiser's notice of
+ * who bought what. Each is tracked on its own fields, so one failing never
+ * sends the other a second time.
+ */
+const MAILINGS = [
+  { name: 'receipt', send: sendReceipt, sentAt: 'emailedAt', id: 'emailId', skipped: 'emailSkipped', error: 'emailError' },
+  {
+    name: 'organiser notice',
+    send: sendOrganiserNotice,
+    sentAt: 'organiserEmailedAt',
+    id: 'organiserEmailId',
+    skipped: 'organiserEmailSkipped',
+    error: 'organiserEmailError',
+  },
+];
+
+/**
+ * Sends one of them, once.
+ *
+ * Returns true when there is nothing left to do - sent, or nothing we can send
+ * (no Resend key, nobody to send it to). A failure that could pass on its own
+ * goes back on the retry queue: the booth is already theirs, only the paperwork
+ * is late.
+ */
+async function sendMailingOnce(checkoutId, record, mailing) {
+  if (record[mailing.sentAt] || record[mailing.skipped]) return true;
+
+  const result = await mailing.send(record);
+  if (result.sent) {
+    await patchCheckout(checkoutId, {
+      [mailing.sentAt]: Date.now(), [mailing.id]: result.id, [mailing.error]: null,
+    });
+    return true;
+  }
+
+  if (result.reason === 'not_configured' || result.reason === 'no_address' || result.reason === 'rejected') {
+    console.error('[fulfil] no', mailing.name, 'sent for', checkoutId, '-', result.reason, result.error || '');
+    await patchCheckout(checkoutId, { [mailing.skipped]: result.reason, [mailing.error]: result.error ?? null });
+    return true;
+  }
+
+  console.error('[fulfil]', mailing.name, 'failed for', checkoutId, result.error || result.reason);
+  await patchCheckout(checkoutId, { [mailing.error]: result.error || result.reason });
+  await scheduleRetry(checkoutId, Date.now() + 5 * 60_000);
+  return false;
+}
+
+/** Both emails. Returns true only when neither has anything left to try. */
+async function sendReceiptOnce(checkoutId, record) {
+  let done = true;
+  let current = record;
+  for (const mailing of MAILINGS) {
+    // Re-read between sends: the first one just wrote its own flags, and the
+    // second must not overwrite them from a stale copy.
+    const sent = await sendMailingOnce(checkoutId, current, mailing);
+    done = done && sent;
+    current = { ...current, ...(await getCheckout(checkoutId)) };
+  }
+  return done;
+}
+
 export async function fulfil(checkoutId, payment = {}) {
   const record = await getCheckout(checkoutId);
   if (!record) return { ok: false, reason: 'unknown_checkout' };
@@ -70,10 +133,11 @@ export async function fulfil(checkoutId, payment = {}) {
     const holdCleared = !record.held || record.holdCleared
       ? true
       : await clearHoldAfterAssignment(checkoutId, record);
+    const emailed = await sendReceiptOnce(checkoutId, record);
 
     // Only stop retrying once there is nothing left to do.
-    if (holdCleared) await clearRetry(checkoutId);
-    return { ok: true, already: true, record, holdCleared };
+    if (holdCleared && emailed) await clearRetry(checkoutId);
+    return { ok: true, already: true, record, holdCleared, emailed };
   }
 
   const claimed = await claimFulfilment(checkoutId);
@@ -112,14 +176,21 @@ export async function fulfil(checkoutId, payment = {}) {
     // Assigned - now, and only now, the booth can stop reading as On Hold.
     const holdCleared = record.held ? await clearHoldAfterAssignment(checkoutId, record) : true;
 
-    if (holdCleared) await clearRetry(checkoutId);
+    // The booth is theirs: tell them so, with what they bought.
+    const emailed = await sendReceiptOnce(checkoutId, {
+      ...record,
+      exhibitorId,
+      paymentReference: payment.reference || record.paymentReference || null,
+    });
+
+    if (holdCleared && emailed) await clearRetry(checkoutId);
     await patchCheckout(checkoutId, {
       status: 'fulfilled',
       fulfilledAt: Date.now(),
       // Keep the pending attempt when only the hold flag is left to clear.
-      ...(holdCleared ? { nextAttemptAt: null } : {}),
+      ...(holdCleared && emailed ? { nextAttemptAt: null } : {}),
     });
-    return { ok: true, exhibitorId, holdCleared };
+    return { ok: true, exhibitorId, holdCleared, emailed };
   } catch (error) {
     const giveUp = attempts >= MAX_ATTEMPTS;
     const delay = RETRY_BACKOFF_MIN[Math.min(attempts - 1, RETRY_BACKOFF_MIN.length - 1)] * 60_000;
