@@ -29,7 +29,7 @@ function defaultExtras() {
     {
       id: 'power-plugs',
       name: 'Power Plugs',
-      price: 20,
+      price: 25,
       description: 'A powered outlet at your table. Available for wall tables only.',
       booths,
       ...(Number.isInteger(expofpExtraId) && expofpExtraId > 0 ? { expofpExtraId } : {}),

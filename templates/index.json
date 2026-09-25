@@ -3642,7 +3642,7 @@
                 "1790150326629fcedb0b": {
                   "type": "heading",
                   "settings": {
-                    "text": "Collective Hub Center.",
+                    "text": "Collective Hub Center",
                     "text_align": "left",
                     "text_tag": "h1",
                     "typography": "title1"
@@ -3652,9 +3652,10 @@
                 "1790155452212b3fbeab": {
                   "type": "text",
                   "settings": {
-                    "text": "\u003cspan style=\"color: #ffffff; font-size: 50px;\"\u003eAll things collectibles.\u003c/span\u003e",
+                    "text": "\u003cspan style=\"color: #ffffff; font-size: 50px;\"\u003eAll things collectibles\u003c/span\u003e",
                     "text_align": "left",
                     "text_align_mobile": "left",
+                    "text_mobile": "",
                     "typography": "title2"
                   },
                   "blocks": {},

@@ -229,7 +229,7 @@ its own to hand out or free a booth.
 ## Add-ons
 
 `lib/extras.js` holds the catalogue — by default one entry, **Power Plugs at
-$20**. Replace it with `BOOTH_EXTRAS`, a JSON array of
+$25**. Replace it with `BOOTH_EXTRAS`, a JSON array of
 `{ id, name, price, description }` (add `expofpName` when ExpoFP spells the
 extra differently). The checkout page reads `/api/extras` rather than carrying
 its own list, so a price is set in one place and what the page shows is what
@@ -255,14 +255,17 @@ every booth). The limit is enforced in two places for two different reasons:
 `GET /api/extras?booth=5` decides what the checkout page shows, and
 `checkout/start` re-checks against the booth ExpoFP confirmed, so a request
 that asks for Power Plugs on booth 7 gets the booth and no add-on rather than
-a $20 line nobody can install.
+a $25 line nobody can install.
 
 ### Add-ons on the floor plan
 
 The catalogue in `lib/extras.js` is ours (the page sends ids, never prices);
 ExpoFP needs a numeric `extraId`, which `assignExtras` resolves from
 `list-extras` by name, or from `expofpExtraId` in `BOOTH_EXTRAS`. On expo
-36986 "Power Plugs" is a **booth extra**, id `17477`, $20.
+36986 "Power Plugs" is a **booth extra**, id `17477`. Note that ExpoFP keeps
+its own price for it (20 at the time of writing) - what the buyer is charged is
+this catalogue's price, and the ExpoFP figure is only what the floor plan shows,
+so change it there too if the two should agree.
 
 An add-on that the expo does not offer is still charged and written into the
 exhibitor's admin notes — it simply is not assigned, and the booth sale goes
