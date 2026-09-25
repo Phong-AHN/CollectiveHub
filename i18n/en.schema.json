@@ -14895,11 +14895,26 @@
         "booth_label": {
           "label": "Booth number label"
         },
-        "amount_label": {
-          "label": "Amount label"
+        "picker_hint": {
+          "label": "Picker hint"
         },
-        "amount_hint": {
-          "label": "Amount hint"
+        "reload_text": {
+          "label": "Load booths button"
+        },
+        "status_available": {
+          "label": "Status: available"
+        },
+        "status_on_hold": {
+          "label": "Status: on hold"
+        },
+        "status_booked": {
+          "label": "Status: booked"
+        },
+        "booths_error_text": {
+          "label": "Booth list error message"
+        },
+        "booths_loading_text": {
+          "label": "Booth list loading message"
         },
         "extras_title": {
           "label": "Add-ons title"

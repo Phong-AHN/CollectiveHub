@@ -83,6 +83,28 @@ export async function countAttempt(name, windowSeconds) {
   return entry.count;
 }
 
+/**
+ * A short-lived copy of something expensive - the admin booth list, which is
+ * 54 calls to ExpoFP. Missing or stale reads as nothing, never as an error.
+ */
+export async function writeCache(name, value, ttlSeconds) {
+  const { kv: k, memory: m } = await client();
+  if (k) await k.set(`cache:${name}`, value, { ex: ttlSeconds });
+  else m.records.set(`cache:${name}`, { value, until: Date.now() + ttlSeconds * 1000 });
+}
+
+export async function readCache(name) {
+  const { kv: k, memory: m } = await client();
+  if (k) return (await k.get(`cache:${name}`)) || null;
+  const entry = m.records.get(`cache:${name}`);
+  if (!entry) return null;
+  if (entry.until <= Date.now()) {
+    m.records.delete(`cache:${name}`);
+    return null;
+  }
+  return entry.value;
+}
+
 /** How many attempts are on the clock, without adding one. */
 export async function attemptCount(name) {
   const { kv: k, memory: m } = await client();

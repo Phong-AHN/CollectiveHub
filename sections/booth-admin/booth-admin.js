@@ -3,10 +3,13 @@ defineModule('theme-booth-admin', () => {
 
   class ThemeBoothAdmin extends BaseElement {
     handleSubmit;
-    handleBoothChange;
+    handleReload;
+    handlePasscode;
     handleAgain;
     extrasController;
+    boothsController;
     extras = [];
+    booths = [];
 
     get formEl() {
       return this.querySelector('[data-role="form"]');
@@ -35,11 +38,16 @@ defineModule('theme-booth-admin', () => {
       };
       this.formEl?.addEventListener('submit', this.handleSubmit);
 
-      // The add-ons a booth can have are the service's answer, not the page's:
-      // Power Plugs only reaches the tables with wall space.
-      this.handleBoothChange = () => this.#loadExtras();
-      this.field('booth')?.addEventListener('change', this.handleBoothChange);
-      this.field('booth')?.addEventListener('blur', this.handleBoothChange);
+      this.handleReload = () => this.loadBooths({ refresh: true });
+      this.querySelector('[data-role="reload"]')?.addEventListener('click', this.handleReload);
+
+      // The list is behind the admin code, so it can only load once there is
+      // one. Typing it is the natural moment to fetch.
+      this.handlePasscode = () => {
+        if (this.value('passcode') && !this.booths.length) this.loadBooths();
+      };
+      this.field('passcode')?.addEventListener('change', this.handlePasscode);
+      this.field('passcode')?.addEventListener('blur', this.handlePasscode);
 
       this.handleAgain = () => this.#reset();
       this.querySelector('[data-role="again"]')?.addEventListener('click', this.handleAgain);
@@ -49,10 +57,120 @@ defineModule('theme-booth-admin', () => {
 
     unmounted() {
       this.formEl?.removeEventListener('submit', this.handleSubmit);
-      this.field('booth')?.removeEventListener('change', this.handleBoothChange);
-      this.field('booth')?.removeEventListener('blur', this.handleBoothChange);
+      this.querySelector('[data-role="reload"]')?.removeEventListener('click', this.handleReload);
+      this.field('passcode')?.removeEventListener('change', this.handlePasscode);
+      this.field('passcode')?.removeEventListener('blur', this.handlePasscode);
       this.querySelector('[data-role="again"]')?.removeEventListener('click', this.handleAgain);
       this.extrasController?.abort();
+      this.boothsController?.abort();
+    }
+
+    /**
+     * The floor plan as it stands: which booths are free, which are on hold
+     * while someone pays, and which already belong to an exhibitor. Only the
+     * free ones can be picked - the rest are shown so nobody wonders where
+     * they went.
+     */
+    async loadBooths({ refresh = false } = {}) {
+      const passcode = this.value('passcode');
+      if (!passcode) {
+        this.#message(this.dataset.requiredText, 'error');
+        this.field('passcode')?.focus();
+        return;
+      }
+
+      this.boothsController?.abort();
+      this.boothsController = new AbortController();
+      this.#note(this.dataset.boothsLoadingText);
+
+      try {
+        const response = await fetch(`${this.#endpoint('/admin/booths')}${refresh ? '?refresh=1' : ''}`, {
+          headers: { 'X-Admin-Passcode': passcode },
+          signal: this.boothsController.signal,
+        });
+        const body = await response.json().catch(() => null);
+        if (!response.ok) {
+          const error = new Error(`Request failed with ${response.status}`);
+          error.code = body?.error;
+          error.reason = body?.reason || body?.detail;
+          throw error;
+        }
+
+        this.booths = Array.isArray(body?.booths) ? body.booths : [];
+        this.#renderBooths();
+        const counts = body?.counts || {};
+        this.#note(`${counts.available || 0} available · ${counts.on_hold || 0} on hold · ${counts.booked || 0} booked`);
+        this.#message('', null);
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error('[theme-booth-admin]', error.code || '', error);
+        this.booths = [];
+        this.#renderBooths();
+        this.#note('');
+        this.#message(error.code === 'passcode_wrong' || error.code === 'too_many_attempts'
+          ? this.dataset.passcodeErrorText
+          : this.dataset.boothsErrorText, 'error');
+      }
+    }
+
+    #renderBooths() {
+      const box = this.querySelector('[data-role="booths"]');
+      if (!box) return;
+
+      box.innerHTML = '';
+      for (const booth of this.booths) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'booth-admin__booth';
+        button.dataset.status = booth.status;
+        button.dataset.booth = booth.name;
+
+        const name = document.createElement('span');
+        name.className = 'booth-admin__booth-name body3';
+        name.textContent = booth.name;
+
+        const note = document.createElement('span');
+        note.className = 'booth-admin__booth-note body5';
+        note.textContent = booth.status === 'booked' ? (booth.exhibitors[0] || this.dataset.statusBooked)
+          : booth.status === 'on_hold' ? this.dataset.statusOnHold
+            : booth.status === 'available' ? `${booth.price ?? ''}`
+              : '—';
+
+        button.append(name, note);
+        button.title = [booth.name, booth.type, booth.size, booth.exhibitors.join(', ')]
+          .filter(Boolean).join(' · ');
+
+        if (booth.status === 'available') {
+          button.addEventListener('click', () => this.#select(booth));
+        } else {
+          button.disabled = true;
+        }
+
+        box.append(button);
+      }
+    }
+
+    #select(booth) {
+      const field = this.field('booth');
+      if (field) field.value = booth.name;
+
+      for (const button of this.querySelectorAll('.booth-admin__booth')) {
+        button.classList.toggle('is-selected', button.dataset.booth === booth.name);
+      }
+
+      const selected = this.querySelector('[data-role="selected"]');
+      if (selected) {
+        selected.textContent = [`Booth ${booth.name}`, booth.type, booth.size,
+          booth.price != null ? `${booth.price}` : null].filter(Boolean).join(' · ');
+        selected.hidden = false;
+      }
+
+      this.#loadExtras();
+    }
+
+    #note(text) {
+      const note = this.querySelector('[data-role="picker-note"]');
+      if (note) note.textContent = text || '';
     }
 
     async book() {
@@ -66,7 +184,9 @@ defineModule('theme-booth-admin', () => {
       for (const name of REQUIRED) {
         if (!this.value(name)) {
           this.#message(this.dataset.requiredText, 'error');
-          this.field(name)?.focus();
+          // The booth is picked, not typed - point at the list instead.
+          if (name === 'booth') this.querySelector('[data-role="booths"]')?.scrollIntoView({ block: 'nearest' });
+          else this.field(name)?.focus();
           return;
         }
       }
@@ -81,8 +201,6 @@ defineModule('theme-booth-admin', () => {
         website: this.value('website'),
         bookedBy: this.value('bookedBy'),
         note: this.value('note'),
-        // Empty means "whatever the booth and its add-ons cost"; 0 is a comp.
-        amount: this.value('amount'),
         extras: this.#selectedExtras(),
         sendEmails: this.querySelector('[data-role="send-emails"]')?.checked !== false,
       };
@@ -169,15 +287,19 @@ defineModule('theme-booth-admin', () => {
 
     #reset() {
       // Keep the admin code and the name: whoever is booking is still here.
-      for (const name of ['booth', 'company', 'contactName', 'email', 'phone', 'website', 'note', 'amount']) {
+      for (const name of ['booth', 'company', 'contactName', 'email', 'phone', 'website', 'note']) {
         const field = this.field(name);
         if (field) field.value = '';
       }
       this.#renderExtras([]);
+      const selected = this.querySelector('[data-role="selected"]');
+      if (selected) selected.hidden = true;
       this.dataset.state = 'form';
       if (this.formEl) this.formEl.hidden = false;
       if (this.resultEl) this.resultEl.hidden = true;
-      this.field('booth')?.focus();
+      // The booth just booked is no longer free: ask again rather than show a
+      // list that is already wrong.
+      this.loadBooths({ refresh: true });
     }
 
     #selectedExtras() {

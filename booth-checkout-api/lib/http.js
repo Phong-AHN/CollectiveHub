@@ -27,7 +27,7 @@ export function corsHeaders(request) {
   const headers = {
     Vary: 'Origin',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Passcode',
     'Access-Control-Max-Age': '86400',
   };
   if (allow) headers['Access-Control-Allow-Origin'] = allow;

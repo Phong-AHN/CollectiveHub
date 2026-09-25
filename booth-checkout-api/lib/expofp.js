@@ -98,6 +98,71 @@ export async function checkBoothForSale(booth) {
 }
 
 /**
+ * Every booth on the plan with what an organiser needs to choose one: its
+ * price and whether it is free, on hold, or already someone's.
+ *
+ * list-booths gives the names and the exhibitors but neither the price nor the
+ * hold flag, so each booth is read individually - in parallel, because 54
+ * round trips one after another is a long wait for a page.
+ */
+export async function listBoothsWithStatus({ concurrency = 8 } = {}) {
+  const booths = await listBooths();
+  const detailed = new Array(booths.length);
+
+  let next = 0;
+  const workers = Array.from({ length: Math.min(concurrency, booths.length) }, async () => {
+    while (next < booths.length) {
+      const index = next;
+      next += 1;
+      const booth = booths[index];
+      try {
+        detailed[index] = describeBooth(booth, await getBooth(booth.name));
+      } catch (error) {
+        // One unreadable booth must not cost the organiser the whole list.
+        console.error('[expofp] could not read booth', booth.name, error.message);
+        detailed[index] = describeBooth(booth, null);
+      }
+    }
+  });
+  await Promise.all(workers);
+
+  return detailed.filter(Boolean).sort(byBoothName);
+}
+
+/** "2" before "10", and names without a number last. */
+function byBoothName(a, b) {
+  const left = Number(a.name);
+  const right = Number(b.name);
+  if (Number.isFinite(left) && Number.isFinite(right)) return left - right;
+  if (Number.isFinite(left)) return -1;
+  if (Number.isFinite(right)) return 1;
+  return String(a.name).localeCompare(String(b.name));
+}
+
+function describeBooth(listed, full) {
+  const exhibitors = (full?.exhibitors || listed.exhibitors || [])
+    .map((one) => String(one?.name || one?.company || one?.id || '').trim())
+    .filter(Boolean);
+
+  const price = Number(full?.price);
+  const status = !full ? 'unknown'
+    : exhibitors.length ? 'booked'
+      : full.isOnHold ? 'on_hold'
+        : full.isSpecialSection || !Number.isFinite(price) || price <= 0 ? 'not_for_sale'
+          : 'available';
+
+  return {
+    name: String(full?.name || listed.name),
+    title: String(full?.title || listed.title || ''),
+    type: full?.type || null,
+    size: full?.size || null,
+    price: Number.isFinite(price) ? price : null,
+    status,
+    exhibitors,
+  };
+}
+
+/**
  * update-booth { token, eventId, name, isOnHold }. ExpoFP creates no
  * reservation when it hands the visitor over, so the booth reads Available for
  * the whole checkout unless we hold it. Best effort: a failure is recorded on

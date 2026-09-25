@@ -14895,11 +14895,26 @@
         "booth_label": {
           "label": "Nhãn số booth"
         },
-        "amount_label": {
-          "label": "Nhãn số tiền"
+        "picker_hint": {
+          "label": "Ghi chú phần chọn booth"
         },
-        "amount_hint": {
-          "label": "Ghi chú số tiền"
+        "reload_text": {
+          "label": "Chữ nút tải danh sách"
+        },
+        "status_available": {
+          "label": "Trạng thái: còn trống"
+        },
+        "status_on_hold": {
+          "label": "Trạng thái: đang giữ"
+        },
+        "status_booked": {
+          "label": "Trạng thái: đã đặt"
+        },
+        "booths_error_text": {
+          "label": "Thông báo lỗi tải danh sách"
+        },
+        "booths_loading_text": {
+          "label": "Thông báo đang tải danh sách"
         },
         "extras_title": {
           "label": "Tiêu đề add-on"

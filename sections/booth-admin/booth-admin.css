@@ -156,3 +156,103 @@ theme-booth-admin[data-state='working'] .booth-admin__form {
   margin: 0;
   word-break: break-word;
 }
+
+/* ---- the booth picker ---------------------------------------------------- */
+.booth-admin__picker-head {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.booth-admin__legend-list {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgba(var(--color-text), 0.7);
+}
+
+.booth-admin__legend-list li {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.booth-admin__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(var(--color-text), 0.25);
+}
+
+.booth-admin__dot[data-status='available'] {
+  background-color: rgb(21, 128, 61);
+}
+
+.booth-admin__dot[data-status='on_hold'] {
+  background-color: rgb(217, 119, 6);
+}
+
+.booth-admin__dot[data-status='booked'] {
+  background-color: rgba(var(--color-text), 0.35);
+}
+
+/* Auto-fill, so 54 booths wrap into as many columns as the screen allows. */
+.booth-admin__booths {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 8px;
+}
+
+.booth-admin__booth {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border: 1px solid rgba(var(--color-text), 0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(var(--color-text));
+  text-align: start;
+  cursor: pointer;
+}
+
+.booth-admin__booth[data-status='available'] {
+  border-color: rgba(21, 128, 61, 0.5);
+}
+
+.booth-admin__booth[data-status='on_hold'] {
+  border-color: rgba(217, 119, 6, 0.5);
+}
+
+.booth-admin__booth:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.booth-admin__booth.is-selected {
+  border-color: rgb(var(--color-text));
+  background-color: rgba(var(--color-text), 0.08);
+}
+
+.booth-admin__booth-name {
+  font-weight: 600;
+}
+
+.booth-admin__booth-note {
+  overflow: hidden;
+  width: 100%;
+  color: rgba(var(--color-text), 0.6);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booth-admin__selected {
+  margin: 0;
+  font-weight: 600;
+}

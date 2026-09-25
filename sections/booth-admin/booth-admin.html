@@ -13,6 +13,11 @@
       data-unknown-booth-text="{{ section.settings.unknown_booth_text }}"
       data-error-text="{{ section.settings.error_text }}"
       data-no-extras-text="{{ section.settings.no_extras_text }}"
+      data-booths-error-text="{{ section.settings.booths_error_text }}"
+      data-booths-loading-text="{{ section.settings.booths_loading_text }}"
+      data-status-available="{{ section.settings.status_available }}"
+      data-status-on-hold="{{ section.settings.status_on_hold }}"
+      data-status-booked="{{ section.settings.status_booked }}"
       data-working-text="{{ section.settings.working_text }}"
       {{#if request.design_mode }}data-design-mode="true"{{/if}}
     >
@@ -34,20 +39,24 @@
         <fieldset class="booth-admin__fieldset">
           <legend class="booth-admin__legend body2">{{ section.settings.booth_group_label }}</legend>
 
-          <div class="field__group booth-admin__row booth-admin__row--split">
-            <label class="field">
-              <input class="field__input" type="text" name="booth" data-required="true"
-                inputmode="numeric" autocomplete="off" placeholder="{{ section.settings.booth_label }}" />
-              <span class="field__label">{{ section.settings.booth_label }}</span>
-            </label>
-
-            <label class="field">
-              <input class="field__input" type="number" name="amount" min="0" step="0.01"
-                autocomplete="off" placeholder="{{ section.settings.amount_label }}" />
-              <span class="field__label">{{ section.settings.amount_label }}</span>
-            </label>
+          <div class="booth-admin__picker-head">
+            <p class="booth-admin__hint body5" data-role="picker-note">{{ section.settings.picker_hint }}</p>
+            <button class="button button--secondary booth-admin__reload" type="button" data-role="reload">
+              {{ section.settings.reload_text }}
+            </button>
           </div>
-          <p class="booth-admin__hint body5">{{ section.settings.amount_hint }}</p>
+
+          <ul class="booth-admin__legend-list body5">
+            <li><span class="booth-admin__dot" data-status="available"></span>{{ section.settings.status_available }}</li>
+            <li><span class="booth-admin__dot" data-status="on_hold"></span>{{ section.settings.status_on_hold }}</li>
+            <li><span class="booth-admin__dot" data-status="booked"></span>{{ section.settings.status_booked }}</li>
+          </ul>
+
+          <div class="booth-admin__booths" data-role="booths" role="group"
+            aria-label="{{ section.settings.booth_label }}"></div>
+
+          <input type="hidden" name="booth" data-required="true" />
+          <p class="booth-admin__selected body3" data-role="selected" hidden></p>
 
           <div class="booth-admin__extras" data-role="extras">
             <span class="booth-admin__extras-title body3">{{ section.settings.extras_title }}</span>
@@ -159,10 +168,22 @@
       "label": "t:sections.booth_admin.settings.heading_typography.label",
       "default": "title2",
       "options": [
-        { "value": "title1", "label": "Title 1" },
-        { "value": "title2", "label": "Title 2" },
-        { "value": "title3", "label": "Title 3" },
-        { "value": "title4", "label": "Title 4" }
+        {
+          "value": "title1",
+          "label": "Title 1"
+        },
+        {
+          "value": "title2",
+          "label": "Title 2"
+        },
+        {
+          "value": "title3",
+          "label": "Title 3"
+        },
+        {
+          "value": "title4",
+          "label": "Title 4"
+        }
       ]
     },
     {
@@ -196,15 +217,45 @@
     },
     {
       "type": "text",
-      "id": "amount_label",
-      "label": "t:sections.booth_admin.settings.amount_label.label",
-      "default": "Amount"
+      "id": "picker_hint",
+      "label": "t:sections.booth_admin.settings.picker_hint.label",
+      "default": "Enter the admin code, then pick a booth. Only free booths can be chosen."
     },
     {
       "type": "text",
-      "id": "amount_hint",
-      "label": "t:sections.booth_admin.settings.amount_hint.label",
-      "default": "Leave empty to record the booth price plus add-ons. Enter 0 for a complimentary booth."
+      "id": "reload_text",
+      "label": "t:sections.booth_admin.settings.reload_text.label",
+      "default": "Load booths"
+    },
+    {
+      "type": "text",
+      "id": "status_available",
+      "label": "t:sections.booth_admin.settings.status_available.label",
+      "default": "Available"
+    },
+    {
+      "type": "text",
+      "id": "status_on_hold",
+      "label": "t:sections.booth_admin.settings.status_on_hold.label",
+      "default": "On hold"
+    },
+    {
+      "type": "text",
+      "id": "status_booked",
+      "label": "t:sections.booth_admin.settings.status_booked.label",
+      "default": "Booked"
+    },
+    {
+      "type": "text",
+      "id": "booths_error_text",
+      "label": "t:sections.booth_admin.settings.booths_error_text.label",
+      "default": "The booth list could not be loaded. Check the admin code and try again."
+    },
+    {
+      "type": "text",
+      "id": "booths_loading_text",
+      "label": "t:sections.booth_admin.settings.booths_loading_text.label",
+      "default": "Loading the floor plan…"
     },
     {
       "type": "text",
@@ -379,7 +430,10 @@
       "type": "style.size",
       "id": "size",
       "label": "t:sections.booth_admin.settings.size.label",
-      "default": { "width": "100%", "height": "auto" }
+      "default": {
+        "width": "100%",
+        "height": "auto"
+      }
     }
   ],
   "presets": [
