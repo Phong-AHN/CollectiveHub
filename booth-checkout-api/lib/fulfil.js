@@ -1,5 +1,6 @@
 import { sendOrganiserNotice, sendReceipt } from './email.js';
 import { defaultEvent, keyPrefix, resolveEvent } from './events.js';
+import { readCache, writeCache } from './store.js';
 import { addExhibitor, addExhibitorBooth, assignExtras, setBoothOnHold } from './expofp.js';
 import {
   claimFulfilment, clearRetry, dueHolds, dueRetries, getCheckout, patchCheckout,
@@ -276,6 +277,34 @@ export async function releaseHold(checkoutId) {
     await patchCheckout(checkoutId, { status: 'expired', held: false, expiredAt: Date.now() });
   }
   return { ok: true, released };
+}
+
+/**
+ * A sweep that any request can ask for, at most once every `everySeconds`.
+ *
+ * A booth left On Hold reads as unavailable to everyone, so the plan should be
+ * swept by traffic rather than only by the clock: every visit to the checkout
+ * page and every look at the admin picker gives abandoned booths a chance to
+ * go back on sale. The throttle lives in Redis, so all the functions share one
+ * clock and a busy minute costs one sweep, not one per visitor.
+ *
+ * Deliberately small and awaited: a handful of ExpoFP calls, not a backlog.
+ * The cron (and any external scheduler) still does the thorough pass.
+ */
+export async function sweepIfDue({ limit = 3, everySeconds = 60, force = false } = {}) {
+  try {
+    // `force` is for someone who asked for fresh data in so many words - the
+    // admin pressing Load the floor plan - and still leaves a stamp behind, so
+    // holding the button down does not turn into a stream of ExpoFP calls.
+    if (!force && await readCache('sweep:last')) return { skipped: 'too_soon' };
+    await writeCache('sweep:last', Date.now(), everySeconds);
+    const released = await sweepExpiredHolds(limit);
+    return { released: released.length };
+  } catch (error) {
+    // Housekeeping must never break the page that triggered it.
+    console.error('[sweep] opportunistic sweep failed:', error.message);
+    return { error: error.message };
+  }
 }
 
 /**

@@ -1,5 +1,6 @@
 import { corsHeaders, json, preflight } from '../lib/http.js';
 import { resolveEvent } from '../lib/events.js';
+import { sweepIfDue } from '../lib/fulfil.js';
 import { extrasCatalogue, extrasForBooth } from '../lib/extras.js';
 
 export const config = { runtime: 'nodejs' };
@@ -30,6 +31,10 @@ async function handler(request) {
   } catch (error) {
     return json({ error: error.code, detail: error.detail }, error.status || 400, cors);
   }
+
+  // Someone is looking at a booth: a good moment to put abandoned ones back
+  // on sale. Throttled in Redis, so this costs nothing on a busy page.
+  await sweepIfDue({ limit: 3, everySeconds: 60 });
 
   const extras = booth ? extrasForBooth(booth, event) : extrasCatalogue(event);
 

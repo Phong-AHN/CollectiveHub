@@ -170,32 +170,31 @@ than fall back to the editable price.
 
 ## Releasing holds
 
-A booth held for a visitor who walks away has to be put back on sale, and
-nothing on ExpoFP's side does that for us. Three triggers share the job:
+A booth left On Hold reads as unavailable to everyone, so five things release
+one, in the order they usually get there first:
 
-1. **Every checkout.** `POST /api/checkout/start` sweeps up to 5 expired holds
-   before it takes its own. While people are buying, abandoned booths come back
-   within one checkout of expiring. The sweep runs *before* the new hold, never
-   after, so it cannot release the booth it is about to hold.
-2. **Vercel Cron, daily** (`0 10 * * *`, about 3 AM Pacific). This is the most
-   the **Hobby plan** allows — a more frequent schedule is rejected at deploy
-   with "Hobby accounts are limited to daily cron jobs". It is the backstop for
-   quiet days.
-3. **Optional: an external scheduler** for a tighter cadence without Pro. Point
-   any of these at `https://<deployment>/api/cron/release-holds` every 5-10
-   minutes, sending `Authorization: Bearer <CRON_SECRET>`:
-   - [cron-job.org](https://cron-job.org) — free, set the header in "Advanced";
-   - Upstash QStash schedules — same account as the Redis store.
+1. **The buyer cancels or comes back unpaid** - released on the spot.
+2. **Stripe's `checkout.session.expired` webhook**, about 31 minutes after the
+   session opened. This is the main automatic path, and it depends on
+   `STRIPE_WEBHOOK_SECRET` being the one from the endpoint in *this* Stripe
+   mode: a webhook that never verifies is a hold that never lifts. PayPal has
+   no equivalent event, so PayPal holds wait for the sweeps below.
+3. **Every new checkout** sweeps up to 5 due holds before it starts.
+4. **Every look at the add-on list or the admin picker** sweeps up to 3 (10 for
+   the picker), through `sweepIfDue()` - throttled to once a minute across all
+   functions by a stamp in Redis, and `force`d when the admin presses reload.
+   Traffic, rather than a clock, is what keeps an abandoned booth moving.
+5. **The cron**, thoroughly, up to 100 at a time. On Vercel Hobby that runs
+   daily, which is only a backstop; an external scheduler (cron-job.org and the
+   like are free) calling
+   `GET /api/cron/release-holds` with the `CRON_SECRET` bearer every few
+   minutes is what makes it prompt. Redis cannot do this itself - an expiring
+   key deletes a value, it does not call ExpoFP - and a worker on Railway or
+   similar is the same endpoint on a paid plan.
 
-   On the Pro plan, change `vercel.json` to `*/10 * * * *` instead.
-
-All three may overlap. `releaseHold()` only acts for the caller that removes the
-hold from the schedule, and that removal is a single atomic `ZREM`, so a booth
-is released on ExpoFP at most once.
-
-Without (3), on a quiet day an abandoned booth can read On Hold on the floor
-plan for up to a day. With `HOLD_MINUTES=30` and a 10-minute scheduler, it is
-back on sale within 40 minutes.
+A paid checkout is never swept: `releaseHold` keeps the hold on anything in
+`paid`, `fulfilment_failed` or `fulfilled`, so a booth whose ExpoFP write is
+still being retried cannot go back on sale under the buyer.
 
 ## Choosing the gateway
 

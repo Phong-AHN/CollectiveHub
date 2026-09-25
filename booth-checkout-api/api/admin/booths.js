@@ -2,6 +2,7 @@ import { HttpError, corsHeaders, json, preflight } from '../../lib/http.js';
 import { envValue } from '../../lib/config.js';
 import { resolveEvent } from '../../lib/events.js';
 import { listBoothsWithStatus } from '../../lib/expofp.js';
+import { sweepIfDue } from '../../lib/fulfil.js';
 import { sameSecret } from '../../lib/secrets.js';
 import { attemptCount, countAttempt, readCache, writeCache } from '../../lib/store.js';
 
@@ -53,6 +54,8 @@ async function handler(request) {
 
     const event = resolveEvent(url.searchParams.get('event'));
     const fresh = url.searchParams.get('refresh') === '1';
+    // The picker is about to show what is free, so free what should be first.
+    await sweepIfDue({ limit: 10, everySeconds: fresh ? 5 : 60, force: fresh });
     const cacheKey = `admin:booths:${event.key}`;
     const cached = fresh ? null : await readCache(cacheKey);
     const booths = cached || await listBoothsWithStatus({ event });
