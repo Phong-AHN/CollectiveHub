@@ -1,0 +1,270 @@
+defineModule('theme-booth-admin', () => {
+  const REQUIRED = ['booth', 'company', 'contactName', 'passcode'];
+
+  class ThemeBoothAdmin extends BaseElement {
+    handleSubmit;
+    handleBoothChange;
+    handleAgain;
+    extrasController;
+    extras = [];
+
+    get formEl() {
+      return this.querySelector('[data-role="form"]');
+    }
+
+    get messageEl() {
+      return this.querySelector('[data-role="message"]');
+    }
+
+    get resultEl() {
+      return this.querySelector('[data-role="result"]');
+    }
+
+    field(name) {
+      return this.querySelector(`[name="${name}"]`);
+    }
+
+    value(name) {
+      return this.field(name)?.value.trim() || '';
+    }
+
+    mounted() {
+      this.handleSubmit = (event) => {
+        event.preventDefault();
+        this.book();
+      };
+      this.formEl?.addEventListener('submit', this.handleSubmit);
+
+      // The add-ons a booth can have are the service's answer, not the page's:
+      // Power Plugs only reaches the tables with wall space.
+      this.handleBoothChange = () => this.#loadExtras();
+      this.field('booth')?.addEventListener('change', this.handleBoothChange);
+      this.field('booth')?.addEventListener('blur', this.handleBoothChange);
+
+      this.handleAgain = () => this.#reset();
+      this.querySelector('[data-role="again"]')?.addEventListener('click', this.handleAgain);
+
+      this.#renderExtras([]);
+    }
+
+    unmounted() {
+      this.formEl?.removeEventListener('submit', this.handleSubmit);
+      this.field('booth')?.removeEventListener('change', this.handleBoothChange);
+      this.field('booth')?.removeEventListener('blur', this.handleBoothChange);
+      this.querySelector('[data-role="again"]')?.removeEventListener('click', this.handleAgain);
+      this.extrasController?.abort();
+    }
+
+    async book() {
+      if (this.dataset.state === 'working') return;
+
+      if (this.dataset.designMode === 'true') {
+        this.#message('Booking is disabled inside the theme editor preview.', 'error');
+        return;
+      }
+
+      for (const name of REQUIRED) {
+        if (!this.value(name)) {
+          this.#message(this.dataset.requiredText, 'error');
+          this.field(name)?.focus();
+          return;
+        }
+      }
+
+      const payload = {
+        passcode: this.value('passcode'),
+        booth: this.value('booth'),
+        company: this.value('company'),
+        contactName: this.value('contactName'),
+        email: this.value('email'),
+        phone: this.value('phone'),
+        website: this.value('website'),
+        bookedBy: this.value('bookedBy'),
+        note: this.value('note'),
+        // Empty means "whatever the booth and its add-ons cost"; 0 is a comp.
+        amount: this.value('amount'),
+        extras: this.#selectedExtras(),
+        sendEmails: this.querySelector('[data-role="send-emails"]')?.checked !== false,
+      };
+
+      this.dataset.state = 'working';
+      this.#message(this.dataset.workingText, 'info');
+
+      try {
+        const response = await fetch(this.#endpoint('/admin/book'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const body = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          const error = new Error(`Request failed with ${response.status}`);
+          error.code = body?.error;
+          error.reason = body?.reason || body?.detail;
+          throw error;
+        }
+
+        this.#showResult(body);
+      } catch (error) {
+        console.error('[theme-booth-admin]', error.code || '', error.reason || '', error);
+        this.dataset.state = 'form';
+        this.#message(this.#errorText(error), 'error');
+      }
+    }
+
+    #errorText(error) {
+      switch (error.code) {
+        case 'passcode_wrong':
+        case 'too_many_attempts':
+          return this.dataset.passcodeErrorText;
+        case 'booth_unknown':
+          return this.dataset.unknownBoothText;
+        case 'booth_unavailable':
+          return this.dataset.unavailableText;
+        case 'admin_passcode_missing':
+          return 'No ADMIN_PASSCODE is set on the checkout service, so booking is switched off.';
+        case 'booth_check_failed':
+          return `The floor plan did not answer (${error.reason || 'unknown'}). Try again in a moment.`;
+        case 'expofp_write_failed':
+          return `The booth could not be assigned on the floor plan: ${error.reason || 'unknown error'}.`;
+        default:
+          return this.dataset.errorText;
+      }
+    }
+
+    #showResult(body) {
+      const lines = [
+        ['Booth', body.booth],
+        ['Exhibitor id', body.exhibitorId],
+        ['Recorded amount', `${body.amount} ${body.currency}`],
+        ['Add-ons', body.extras?.length ? body.extras.map((extra) => extra.name).join(', ') : 'none'],
+        ['Confirmation to exhibitor', body.emails?.buyer],
+        ['Notice to organiser', body.emails?.organiser],
+        ['Order reference', body.checkoutId],
+      ].filter(([, value]) => String(value ?? '').trim());
+
+      const list = this.querySelector('[data-role="result-lines"]');
+      if (list) {
+        list.innerHTML = '';
+        for (const [label, value] of lines) {
+          const dt = document.createElement('dt');
+          dt.className = 'body4';
+          dt.textContent = label;
+          const dd = document.createElement('dd');
+          dd.className = 'body3';
+          dd.textContent = value;
+          list.append(dt, dd);
+        }
+      }
+
+      const title = this.querySelector('[data-role="result-title"]');
+      if (title) title.textContent = `Booth ${body.booth} is booked`;
+
+      this.#message('', null);
+      this.dataset.state = 'done';
+      if (this.formEl) this.formEl.hidden = true;
+      if (this.resultEl) this.resultEl.hidden = false;
+    }
+
+    #reset() {
+      // Keep the admin code and the name: whoever is booking is still here.
+      for (const name of ['booth', 'company', 'contactName', 'email', 'phone', 'website', 'note', 'amount']) {
+        const field = this.field(name);
+        if (field) field.value = '';
+      }
+      this.#renderExtras([]);
+      this.dataset.state = 'form';
+      if (this.formEl) this.formEl.hidden = false;
+      if (this.resultEl) this.resultEl.hidden = true;
+      this.field('booth')?.focus();
+    }
+
+    #selectedExtras() {
+      return Array.from(this.querySelectorAll('[data-role="extra"]:checked')).map((input) => input.value);
+    }
+
+    async #loadExtras() {
+      const booth = this.value('booth');
+      if (!booth) {
+        this.#renderExtras([]);
+        return;
+      }
+
+      this.extrasController?.abort();
+      this.extrasController = new AbortController();
+
+      try {
+        const response = await fetch(`${this.#endpoint('/extras')}?booth=${encodeURIComponent(booth)}`,
+          { signal: this.extrasController.signal });
+        if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+
+        const payload = await response.json();
+        this.extras = Array.isArray(payload?.extras) ? payload.extras : [];
+        this.#renderExtras(this.extras, payload.currency);
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error('[theme-booth-admin]', error);
+        this.#renderExtras([]);
+      }
+    }
+
+    #renderExtras(extras, currency = 'USD') {
+      const list = this.querySelector('[data-role="extras-list"]');
+      if (!list) return;
+
+      list.innerHTML = '';
+      if (!extras.length) {
+        const note = document.createElement('p');
+        note.className = 'booth-admin__hint body5';
+        note.textContent = this.dataset.noExtrasText;
+        list.append(note);
+        return;
+      }
+
+      for (const extra of extras) {
+        const row = document.createElement('label');
+        row.className = 'booth-admin__extra body3';
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = extra.id;
+        input.dataset.role = 'extra';
+
+        const name = document.createElement('span');
+        name.textContent = extra.name;
+
+        const price = document.createElement('span');
+        price.className = 'booth-admin__extra-price body4';
+        price.textContent = `${extra.price} ${currency}`;
+
+        row.append(input, name, price);
+        list.append(row);
+      }
+    }
+
+    #endpoint(path) {
+      const base = (this.dataset.apiBase || '').trim().replace(/\/+$/, '');
+      if (!base) throw new Error('This section has no checkout API address set');
+      return `${base}${path}`;
+    }
+
+    #message(text, type) {
+      const el = this.messageEl;
+      if (!el) return;
+
+      if (!text) {
+        el.hidden = true;
+        el.textContent = '';
+        el.removeAttribute('data-type');
+        return;
+      }
+
+      el.textContent = text;
+      el.dataset.type = type || 'error';
+      el.hidden = false;
+    }
+  }
+
+  customElements.define('theme-booth-admin', ThemeBoothAdmin);
+});

@@ -56,6 +56,7 @@ PayPal retries.
 | `GET /api/gateway/keys` | Whether payment keys are saved, and a hint (`sk_live_****4242`) — never a key |
 | `POST /api/gateway/keys` | Saves the client's keys from the storefront setup section; needs `SETUP_PASSCODE` when one is set |
 | `DELETE /api/gateway/keys` | Forgets the saved keys so the setup section reappears; needs the `CRON_SECRET` bearer |
+| `POST /api/admin/book` | Books a booth with no payment: exhibitor, booth, add-ons and both emails, as a sale would. Needs `ADMIN_PASSCODE` |
 | `GET /api/extras` | The add-on catalogue the checkout page offers (ids, names, prices) |
 | `GET /api/health` | Configuration report — what is set, never the values; `?deep=1` (cron secret) proves the ExpoFP token |
 
@@ -270,6 +271,30 @@ so change it there too if the two should agree.
 An add-on that the expo does not offer is still charged and written into the
 exhibitor's admin notes — it simply is not assigned, and the booth sale goes
 through either way. `EXPOFP_ASSIGN_EXTRAS=0` turns assignment off entirely.
+
+## Booking without a payment
+
+The admin page (`/pages/admin`, section **Booth Admin Booking**) posts to
+`POST /api/admin/book` for a sponsor, a comp, or a booth already paid for by
+bank transfer.
+
+It skips the money, not the work: the same `fulfil()` the gateways use creates
+the exhibitor, assigns the booth on ExpoFP, assigns the add-ons and sends both
+emails, so an admin booking is indistinguishable from a paid one afterwards and
+the retry queue covers it if ExpoFP is briefly down.
+
+- **The booth decides the price.** ExpoFP's price plus the add-ons from our
+  catalogue. `amount` overrides it - `0` for a complimentary booth - and an
+  add-on the booth cannot have (Power Plugs on a booth without wall space) is
+  dropped here exactly as it is in the shop.
+- **It cannot take a booth someone is buying.** It runs the same availability
+  check and takes the same per-booth claim as `checkout/start`, so a booth that
+  is sold, on hold, or mid-payment is refused with `409 booth_unavailable`.
+- **`sendEmails: false`** books quietly, for a booth whose paperwork went by
+  hand. Everything else still happens.
+- **`ADMIN_PASSCODE` or nothing.** Without it the endpoint answers
+  `503 admin_passcode_missing`. Only wrong codes count towards the ten-an-hour
+  limit, so an organiser booking twenty booths cannot lock themselves out.
 
 ## Confirmation emails
 

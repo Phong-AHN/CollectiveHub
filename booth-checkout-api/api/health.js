@@ -66,6 +66,7 @@ async function handler(request) {
         ? { legacyKeyStore: 'GATEWAY_KEYS_URL is still set and no longer used - unset it' }
         : {}),
     },
+    adminBooking: has('ADMIN_PASSCODE') ? 'on (ADMIN_PASSCODE set)' : 'off - set ADMIN_PASSCODE to book booths without paying',
     receipts: {
       resendKey: has('RESEND_API_KEY') ? 'set' : 'not set - buyers get no confirmation email',
       from: envValue('EMAIL_FROM') || 'MISSING - nothing can be sent without it',

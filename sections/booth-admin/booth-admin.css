@@ -1,0 +1,158 @@
+.booth-admin {
+  background-color: rgb(var(--color-background));
+}
+
+.booth-admin__inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.booth-admin__heading,
+.booth-admin__description {
+  margin: 0;
+}
+
+.booth-admin__description p {
+  margin: 0;
+}
+
+.booth-admin__form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.booth-admin__fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid rgba(var(--color-text), 0.15);
+  border-radius: 8px;
+}
+
+.booth-admin__legend {
+  padding-inline: 6px;
+  margin-inline-start: -6px;
+  font-weight: 600;
+}
+
+.booth-admin__row {
+  display: grid;
+  gap: 16px;
+}
+
+.booth-admin__row--split {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 749px) {
+  .booth-admin__row--split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booth-admin__hint {
+  margin: 0;
+  color: rgba(var(--color-text), 0.6);
+}
+
+.booth-admin__extras {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-block-start: 8px;
+  border-block-start: 1px solid rgba(var(--color-text), 0.12);
+}
+
+.booth-admin__extras-title {
+  font-weight: 600;
+}
+
+.booth-admin__extras-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.booth-admin__extra {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.booth-admin__extra-price {
+  color: rgba(var(--color-text), 0.7);
+  white-space: nowrap;
+}
+
+.booth-admin__switch {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.booth-admin__submit {
+  align-self: flex-start;
+}
+
+.booth-admin__message {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background-color: rgba(var(--color-text), 0.06);
+}
+
+.booth-admin__message[data-type='error'] {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: rgb(185, 28, 28);
+}
+
+.booth-admin__message[data-type='success'] {
+  background-color: rgba(21, 128, 61, 0.1);
+  color: rgb(21, 128, 61);
+}
+
+/* Booking takes a few seconds - ExpoFP, the add-ons and two emails. */
+theme-booth-admin[data-state='working'] .booth-admin__form {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.booth-admin__result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  border: 1px solid rgba(var(--color-text), 0.15);
+  border-radius: 8px;
+}
+
+.booth-admin__result-title {
+  margin: 0;
+}
+
+.booth-admin__lines {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 20px;
+  width: 100%;
+  margin: 0;
+}
+
+.booth-admin__lines dt {
+  margin: 0;
+  color: rgba(var(--color-text), 0.6);
+}
+
+.booth-admin__lines dd {
+  margin: 0;
+  word-break: break-word;
+}

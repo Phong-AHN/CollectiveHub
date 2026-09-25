@@ -14864,6 +14864,129 @@
           "category": "Event"
         }
       }
+    },
+    "booth_admin": {
+      "name": "Booth Admin Booking",
+      "presets": {
+        "presets_0": {
+          "name": "Booth Admin Booking"
+        }
+      },
+      "settings": {
+        "heading": {
+          "label": "Heading"
+        },
+        "heading_typography": {
+          "label": "Heading size"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "api_base_url": {
+          "label": "Checkout API address",
+          "info": "The same address as the booth checkout section, ending in /api."
+        },
+        "group_header_0": {
+          "label": "Booth fields"
+        },
+        "booth_group_label": {
+          "label": "Booth section title"
+        },
+        "booth_label": {
+          "label": "Booth number label"
+        },
+        "amount_label": {
+          "label": "Amount label"
+        },
+        "amount_hint": {
+          "label": "Amount hint"
+        },
+        "extras_title": {
+          "label": "Add-ons title"
+        },
+        "no_extras_text": {
+          "label": "No add-ons message"
+        },
+        "group_header_1": {
+          "label": "Exhibitor fields"
+        },
+        "exhibitor_group_label": {
+          "label": "Exhibitor section title"
+        },
+        "company_label": {
+          "label": "Company label"
+        },
+        "contact_label": {
+          "label": "Contact name label"
+        },
+        "email_label": {
+          "label": "Email label"
+        },
+        "phone_label": {
+          "label": "Phone label"
+        },
+        "website_label": {
+          "label": "Website label"
+        },
+        "group_header_2": {
+          "label": "Admin fields"
+        },
+        "admin_group_label": {
+          "label": "Admin section title"
+        },
+        "booked_by_label": {
+          "label": "Booked by label"
+        },
+        "passcode_label": {
+          "label": "Admin code label",
+          "info": "The code is ADMIN_PASSCODE on the checkout service. Without it nothing can be booked."
+        },
+        "note_label": {
+          "label": "Internal note label"
+        },
+        "send_emails_label": {
+          "label": "Send emails switch label"
+        },
+        "button_text": {
+          "label": "Button text"
+        },
+        "again_text": {
+          "label": "Book another button"
+        },
+        "group_header_3": {
+          "label": "Messages"
+        },
+        "working_text": {
+          "label": "Working message"
+        },
+        "required_text": {
+          "label": "Missing fields message"
+        },
+        "passcode_error_text": {
+          "label": "Wrong admin code message"
+        },
+        "unknown_booth_text": {
+          "label": "Unknown booth message"
+        },
+        "unavailable_text": {
+          "label": "Booth unavailable message"
+        },
+        "error_text": {
+          "label": "Generic error message"
+        },
+        "color_scheme": {
+          "label": "Color scheme"
+        },
+        "layout": {
+          "label": "Layout"
+        },
+        "spacing": {
+          "label": "Spacing"
+        },
+        "size": {
+          "label": "Size"
+        }
+      }
     }
   },
   "settings_schema": {

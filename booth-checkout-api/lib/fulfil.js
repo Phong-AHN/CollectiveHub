@@ -21,6 +21,7 @@ function adminNoteFor(record, payment) {
   return [
     `Booth ${b.booth} paid ${record.amount ?? b.price} ${b.currency} via ${record.gateway || 'paypal'}`,
     extras ? `add-ons: ${extras}` : null,
+    record.adminNote || null,
     payment.reference || record.paymentReference ? `ref ${payment.reference || record.paymentReference}` : null,
     `contact ${e.contactName || '-'} <${e.email || '-'}>${e.phone ? ` ${e.phone}` : ''}`,
     `checkout ${record.id}`,

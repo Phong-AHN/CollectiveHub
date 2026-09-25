@@ -14864,6 +14864,129 @@
           "category": "Event"
         }
       }
+    },
+    "booth_admin": {
+      "name": "Đặt booth cho admin",
+      "presets": {
+        "presets_0": {
+          "name": "Đặt booth cho admin"
+        }
+      },
+      "settings": {
+        "heading": {
+          "label": "Tiêu đề"
+        },
+        "heading_typography": {
+          "label": "Cỡ tiêu đề"
+        },
+        "description": {
+          "label": "Mô tả"
+        },
+        "api_base_url": {
+          "label": "Địa chỉ API checkout",
+          "info": "Cùng địa chỉ với section booth checkout, kết thúc bằng /api."
+        },
+        "group_header_0": {
+          "label": "Phần booth"
+        },
+        "booth_group_label": {
+          "label": "Tiêu đề nhóm booth"
+        },
+        "booth_label": {
+          "label": "Nhãn số booth"
+        },
+        "amount_label": {
+          "label": "Nhãn số tiền"
+        },
+        "amount_hint": {
+          "label": "Ghi chú số tiền"
+        },
+        "extras_title": {
+          "label": "Tiêu đề add-on"
+        },
+        "no_extras_text": {
+          "label": "Thông báo không có add-on"
+        },
+        "group_header_1": {
+          "label": "Phần đơn vị thuê"
+        },
+        "exhibitor_group_label": {
+          "label": "Tiêu đề nhóm đơn vị thuê"
+        },
+        "company_label": {
+          "label": "Nhãn tên công ty"
+        },
+        "contact_label": {
+          "label": "Nhãn người liên hệ"
+        },
+        "email_label": {
+          "label": "Nhãn email"
+        },
+        "phone_label": {
+          "label": "Nhãn số điện thoại"
+        },
+        "website_label": {
+          "label": "Nhãn website"
+        },
+        "group_header_2": {
+          "label": "Phần admin"
+        },
+        "admin_group_label": {
+          "label": "Tiêu đề nhóm admin"
+        },
+        "booked_by_label": {
+          "label": "Nhãn người đặt"
+        },
+        "passcode_label": {
+          "label": "Nhãn mã admin",
+          "info": "Mã lấy từ ADMIN_PASSCODE trên dịch vụ checkout. Không có mã thì không đặt được booth nào."
+        },
+        "note_label": {
+          "label": "Nhãn ghi chú nội bộ"
+        },
+        "send_emails_label": {
+          "label": "Nhãn công tắc gửi email"
+        },
+        "button_text": {
+          "label": "Chữ trên nút"
+        },
+        "again_text": {
+          "label": "Chữ nút đặt tiếp"
+        },
+        "group_header_3": {
+          "label": "Thông báo"
+        },
+        "working_text": {
+          "label": "Thông báo đang xử lý"
+        },
+        "required_text": {
+          "label": "Thông báo thiếu thông tin"
+        },
+        "passcode_error_text": {
+          "label": "Thông báo sai mã admin"
+        },
+        "unknown_booth_text": {
+          "label": "Thông báo không có booth"
+        },
+        "unavailable_text": {
+          "label": "Thông báo booth đã có người"
+        },
+        "error_text": {
+          "label": "Thông báo lỗi chung"
+        },
+        "color_scheme": {
+          "label": "Bảng màu"
+        },
+        "layout": {
+          "label": "Bố cục"
+        },
+        "spacing": {
+          "label": "Khoảng cách"
+        },
+        "size": {
+          "label": "Kích thước"
+        }
+      }
     }
   },
   "settings_schema": {

@@ -83,6 +83,16 @@ export async function countAttempt(name, windowSeconds) {
   return entry.count;
 }
 
+/** How many attempts are on the clock, without adding one. */
+export async function attemptCount(name) {
+  const { kv: k, memory: m } = await client();
+  const name_ = `attempts:${name}`;
+  if (k) return Number(await k.get(name_)) || 0;
+  const entry = m.records.get(name_);
+  if (!entry || entry.until <= Date.now()) return 0;
+  return entry.count;
+}
+
 /**
  * Paid checkouts whose ExpoFP write failed, scored by when to try again.
  * The cron (and any external scheduler) works through them.
