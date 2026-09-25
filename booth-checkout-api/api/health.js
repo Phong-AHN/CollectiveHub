@@ -2,7 +2,7 @@ import { allowedOrigins, json } from '../lib/http.js';
 import {
   HOLD_MINUTES, activeGateway, envValue, gatewayStatus, paypalCredentials, stripeSecretKey,
 } from '../lib/config.js';
-import { listEvents } from '../lib/events.js';
+import { eventsStatus, listEvents } from '../lib/events.js';
 import { listBooths } from '../lib/expofp.js';
 
 export const config = { runtime: 'nodejs' };
@@ -50,6 +50,7 @@ async function handler(request) {
 
   const events = listEvents();
   const report = {
+    eventsConfig: eventsStatus(),
     events: events.map((event) => [
       event.key, event.expoId || 'MISSING expo id', event.name, event.isDefault ? '(default)' : '',
     ].filter(Boolean).join(' · ')),

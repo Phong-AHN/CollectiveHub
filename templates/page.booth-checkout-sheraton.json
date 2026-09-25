@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "booth-checkout": {
+      "type": "booth-checkout",
+      "settings": {
+        "api_base_url": "https://collective-hub-umber.vercel.app/api",
+        "color_scheme": "scheme-2",
+        "currency": "USD",
+        "floorplan_url": "https://collectivehub2.expofp.com",
+        "param_booth": "booth",
+        "param_currency": "currency",
+        "param_price": "price",
+        "param_size": "size",
+        "param_type": "type",
+        "show_debug": true,
+        "event_key": "ch26"
+      },
+      "disabled": false,
+      "blocks": {},
+      "custom_css": [],
+      "name": "t:sections.booth_checkout.presets.presets_0.name"
+    },
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "spacing": {
+          "@media (--mobile)": {
+            "padding-bottom": "0px",
+            "padding-left": "0",
+            "padding-right": "0",
+            "padding-top": "40px"
+          },
+          "padding-bottom": "0px",
+          "padding-left": "0",
+          "padding-right": "0",
+          "padding-top": "60px"
+        }
+      },
+      "disabled": false,
+      "blocks": {}
+    }
+  },
+  "order": [
+    "main-page",
+    "booth-checkout"
+  ]
+}
