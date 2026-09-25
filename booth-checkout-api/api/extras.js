@@ -1,4 +1,5 @@
 import { corsHeaders, json, preflight } from '../lib/http.js';
+import { resolveEvent } from '../lib/events.js';
 import { extrasCatalogue, extrasForBooth } from '../lib/extras.js';
 
 export const config = { runtime: 'nodejs' };
@@ -20,11 +21,21 @@ async function handler(request) {
   const cors = corsHeaders(request);
   if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405, cors);
 
-  const booth = new URL(request.url).searchParams.get('booth');
-  const extras = booth ? extrasForBooth(booth) : extrasCatalogue();
+  const params = new URL(request.url).searchParams;
+  const booth = params.get('booth');
+
+  let event;
+  try {
+    event = resolveEvent(params.get('event'));
+  } catch (error) {
+    return json({ error: error.code, detail: error.detail }, error.status || 400, cors);
+  }
+
+  const extras = booth ? extrasForBooth(booth, event) : extrasCatalogue(event);
 
   return json({
     currency: (process.env.DEFAULT_CURRENCY || 'USD').toUpperCase(),
+    event: event.key,
     booth: booth || null,
     extras,
   }, 200, { ...cors, 'Cache-Control': 'public, max-age=60' });

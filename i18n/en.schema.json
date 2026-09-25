@@ -14743,6 +14743,10 @@
           "label": "API base URL",
           "info": "Base address of your checkout service, e.g. https://api.example.com. The page posts to <base>/checkout/start."
         },
+        "event_key": {
+          "label": "Event key",
+          "info": "Leave empty unless the checkout service sells for more than one expo. Then use the key from EVENTS, e.g. ch26."
+        },
         "floorplan_url": {
           "label": "Floor plan URL"
         },
@@ -14886,6 +14890,9 @@
           "label": "Checkout API address",
           "info": "The same address as the booth checkout section, ending in /api."
         },
+        "event_label": {
+          "label": "Event field label"
+        },
         "group_header_0": {
           "label": "Booth fields"
         },
@@ -14949,15 +14956,9 @@
         "admin_group_label": {
           "label": "Admin section title"
         },
-        "booked_by_label": {
-          "label": "Booked by label"
-        },
         "passcode_label": {
           "label": "Admin code label",
           "info": "The code is ADMIN_PASSCODE on the checkout service. Without it nothing can be booked."
-        },
-        "note_label": {
-          "label": "Internal note label"
         },
         "send_emails_label": {
           "label": "Send emails switch label"
@@ -14973,6 +14974,9 @@
         },
         "working_text": {
           "label": "Working message"
+        },
+        "locked_text": {
+          "label": "Locked message"
         },
         "required_text": {
           "label": "Missing fields message"

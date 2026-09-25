@@ -1,5 +1,6 @@
 import { HttpError, corsHeaders, json, preflight } from '../../lib/http.js';
 import { envValue } from '../../lib/config.js';
+import { resolveEvent } from '../../lib/events.js';
 import { listBoothsWithStatus } from '../../lib/expofp.js';
 import { sameSecret } from '../../lib/secrets.js';
 import { attemptCount, countAttempt, readCache, writeCache } from '../../lib/store.js';
@@ -50,14 +51,18 @@ async function handler(request) {
       throw new HttpError(401, 'passcode_wrong', 'That admin code is not right.');
     }
 
+    const event = resolveEvent(url.searchParams.get('event'));
     const fresh = url.searchParams.get('refresh') === '1';
-    const cached = fresh ? null : await readCache('admin:booths');
-    const booths = cached || await listBoothsWithStatus();
-    if (!cached) await writeCache('admin:booths', booths, CACHE_SECONDS);
+    const cacheKey = `admin:booths:${event.key}`;
+    const cached = fresh ? null : await readCache(cacheKey);
+    const booths = cached || await listBoothsWithStatus({ event });
+    if (!cached) await writeCache(cacheKey, booths, CACHE_SECONDS);
 
     const counts = booths.reduce((all, booth) => ({ ...all, [booth.status]: (all[booth.status] || 0) + 1 }), {});
 
-    return json({ booths, counts, cached: Boolean(cached) }, 200, { ...cors, 'Cache-Control': 'no-store' });
+    return json({
+      event: event.key, eventName: event.name, booths, counts, cached: Boolean(cached),
+    }, 200, { ...cors, 'Cache-Control': 'no-store' });
   } catch (error) {
     if (error instanceof HttpError) {
       console.error('[admin/booths]', error.code, error.detail || '');

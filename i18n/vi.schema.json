@@ -14743,6 +14743,10 @@
           "label": "API base URL",
           "info": "Địa chỉ gốc của service checkout, ví dụ https://api.example.com. Trang sẽ POST tới <base>/checkout/start."
         },
+        "event_key": {
+          "label": "Mã event",
+          "info": "Để trống nếu dịch vụ checkout chỉ bán cho một expo. Nhiều expo thì điền mã trong EVENTS, ví dụ ch26."
+        },
         "floorplan_url": {
           "label": "Link floor plan"
         },
@@ -14886,6 +14890,9 @@
           "label": "Địa chỉ API checkout",
           "info": "Cùng địa chỉ với section booth checkout, kết thúc bằng /api."
         },
+        "event_label": {
+          "label": "Nhãn ô chọn event"
+        },
         "group_header_0": {
           "label": "Phần booth"
         },
@@ -14949,15 +14956,9 @@
         "admin_group_label": {
           "label": "Tiêu đề nhóm admin"
         },
-        "booked_by_label": {
-          "label": "Nhãn người đặt"
-        },
         "passcode_label": {
           "label": "Nhãn mã admin",
           "info": "Mã lấy từ ADMIN_PASSCODE trên dịch vụ checkout. Không có mã thì không đặt được booth nào."
-        },
-        "note_label": {
-          "label": "Nhãn ghi chú nội bộ"
         },
         "send_emails_label": {
           "label": "Nhãn công tắc gửi email"
@@ -14973,6 +14974,9 @@
         },
         "working_text": {
           "label": "Thông báo đang xử lý"
+        },
+        "locked_text": {
+          "label": "Thông báo chưa mở khoá"
         },
         "required_text": {
           "label": "Thông báo thiếu thông tin"

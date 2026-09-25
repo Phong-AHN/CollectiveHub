@@ -56,6 +56,7 @@ PayPal retries.
 | `GET /api/gateway/keys` | Whether payment keys are saved, and a hint (`sk_live_****4242`) — never a key |
 | `POST /api/gateway/keys` | Saves the client's keys from the storefront setup section; needs `SETUP_PASSCODE` when one is set |
 | `DELETE /api/gateway/keys` | Forgets the saved keys so the setup section reappears; needs the `CRON_SECRET` bearer |
+| `GET /api/events` | The expos this deployment sells for (key, name, floor plan) - what the admin page's picker offers |
 | `GET /api/admin/booths` | Every booth with its status (available / on_hold / booked / not_for_sale), for the admin picker. Needs `ADMIN_PASSCODE` in `X-Admin-Passcode` |
 | `POST /api/admin/book` | Books a booth with no payment: exhibitor, booth, add-ons and both emails, as a sale would. Needs `ADMIN_PASSCODE` |
 | `GET /api/extras` | The add-on catalogue the checkout page offers (ids, names, prices) |
@@ -272,6 +273,48 @@ so change it there too if the two should agree.
 An add-on that the expo does not offer is still charged and written into the
 exhibitor's admin notes — it simply is not assigned, and the booth sale goes
 through either way. `EXPOFP_ASSIGN_EXTRAS=0` turns assignment off entirely.
+
+## More than one expo
+
+One expo needs no configuration: `EXPOFP_EXPO_ID` and the other single-expo
+variables *are* the event, called `default`, and nothing behaves differently
+from before events existed.
+
+A second expo is declared in `EVENTS`, a JSON object keyed by a short name that
+travels in URLs and in Redis keys:
+
+```
+EVENTS={"ch25":{"expoId":36986,"name":"Collective Hub 9/25","floorPlan":"https://eventcollectivehub9-25.expofp.com","powerPlugsBooths":["2","3","4","5","30","31","32"]},
+        "ch26":{"expoId":37078,"name":"Collective Hub 2026","floorPlan":"https://…","organiser":"btc2026@…"}}
+DEFAULT_EVENT=ch25
+```
+
+An entry may carry `expoId` (required), `name`, `floorPlan`, `organiser`,
+`extras` and `powerPlugsBooths`; anything it leaves out falls back to the
+single-expo variable, so settings two expos share are written once.
+
+Every request carries the key - `?event=ch26` on `GET /api/extras`,
+`/api/admin/booths` and `/api/events`, `event` in the body of
+`checkout/start` and `admin/book` - and nothing carries it on a one-expo
+deployment. The checkout record keeps its `eventKey`, so a fulfilment or a
+retry weeks later still writes to the floor plan the booth was sold on.
+
+Three things this fixes that a second expo would otherwise break:
+
+- **Booth numbers repeat.** The per-booth claim in Redis is
+  `booth:<event>:<name>` for every event but the default, whose keys keep
+  their old names so a checkout running across the upgrade is unaffected.
+  Booth 5 can be in checkout on both floor plans at once.
+- **Add-ons are per expo.** "The tables with wall space" is a different list in
+  each hall, so `powerPlugsBooths` (or a whole `extras` catalogue) lives on the
+  event.
+- **Receipts link to a floor plan.** Each event has its own `floorPlan`, `name`
+  and `organiser`, so a 2026 buyer is not sent to the 2025 plan and the 2026
+  organiser hears about 2026 sales.
+
+In the theme: the **Booth Checkout** section gets an *Event key* setting (one
+checkout page per expo), and the **Booth Admin Booking** section shows an event
+picker automatically whenever `/api/events` reports more than one.
 
 ## Booking without a payment
 

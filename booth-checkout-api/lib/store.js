@@ -229,9 +229,12 @@ export async function consumeAssigned(pairKey) {
  * it free; this claim (SET NX) lets only the first one through. It expires on
  * its own, so a crashed checkout cannot lock a booth for good.
  */
-export async function claimBooth(boothName, checkoutId, ttlSeconds) {
+export async function claimBooth(boothName, checkoutId, ttlSeconds, prefix = '') {
   const { kv: k, memory: m } = await client();
-  const name = `booth:${String(boothName).toLowerCase()}`;
+  // The prefix is the event's, and empty for the default one: booth "5" in a
+  // second expo must not claim booth "5" in the first, and the keys a running
+  // checkout already holds must keep their names.
+  const name = `booth:${prefix}${String(boothName).toLowerCase()}`;
   if (k) {
     const won = await k.set(name, checkoutId, { nx: true, ex: ttlSeconds });
     return won === 'OK' || won === true;
@@ -243,9 +246,9 @@ export async function claimBooth(boothName, checkoutId, ttlSeconds) {
 }
 
 /** Frees the booth claim, but only if this checkout still owns it. */
-export async function releaseBoothClaim(boothName, checkoutId) {
+export async function releaseBoothClaim(boothName, checkoutId, prefix = '') {
   const { kv: k, memory: m } = await client();
-  const name = `booth:${String(boothName).toLowerCase()}`;
+  const name = `booth:${prefix}${String(boothName).toLowerCase()}`;
   if (k) {
     if ((await k.get(name)) === checkoutId) await k.del(name);
     return;

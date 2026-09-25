@@ -1,4 +1,5 @@
 import { envValue } from './config.js';
+import { defaultEvent } from './events.js';
 
 /**
  * The two emails a sale sends: the buyer's receipt, and the organiser's
@@ -19,8 +20,8 @@ export function emailConfigured() {
 }
 
 /** Who at the event gets told about a sale. Empty = nobody, and that is fine. */
-export function organiserAddresses() {
-  return addresses(envValue('ORGANISER_EMAIL'));
+export function organiserAddresses(event) {
+  return addresses((event || defaultEvent())?.organiser || envValue('ORGANISER_EMAIL'));
 }
 
 /** "a@b.test, c@d.test" -> ['a@b.test', 'c@d.test'] */
@@ -68,11 +69,14 @@ function receiptRows(record) {
   ].filter(Boolean).filter(([, value]) => String(value ?? '').trim());
 }
 
-export function receiptMessage(record) {
+export function receiptMessage(record, event) {
   const booth = record.booth || {};
   const exhibitor = record.exhibitor || {};
-  const shop = envValue('SHOP_NAME') || 'Collective Hub';
-  const floorPlan = envValue('FLOOR_PLAN_URL');
+  const where = event || defaultEvent();
+  // Two expos, two floor plans: a receipt that links to the wrong one sends
+  // the exhibitor to a plan their booth is not on.
+  const shop = where?.name || envValue('SHOP_NAME') || 'Collective Hub';
+  const floorPlan = where?.floorPlan || envValue('FLOOR_PLAN_URL');
   const rows = receiptRows(record);
   const subject = `Booth ${booth.booth} is confirmed - ${shop}`;
 
@@ -137,12 +141,12 @@ export function receiptMessage(record) {
  * Written for someone running the event, not for the buyer - so it leads with
  * the booth and the company, and carries the contact details in full.
  */
-export function organiserMessage(record) {
+export function organiserMessage(record, event) {
   const booth = record.booth || {};
   const exhibitor = record.exhibitor || {};
   const currency = booth.currency || 'USD';
   const total = formatMoney(record.amount ?? booth.price, currency);
-  const shop = envValue('SHOP_NAME') || 'Collective Hub';
+  const shop = (event || defaultEvent())?.name || envValue('SHOP_NAME') || 'Collective Hub';
   const extras = (record.extras || []).map((extra) => `${extra.name} (${formatMoney(extra.price, currency)})`);
 
   const subject = `Booth ${booth.booth} sold - ${exhibitor.company || 'unknown company'} - ${total}`;
@@ -253,7 +257,7 @@ async function post({ to, message, idempotencyKey, replyTo = [], bcc = [] }) {
 }
 
 /** The buyer's receipt. */
-export async function sendReceipt(record) {
+export async function sendReceipt(record, event) {
   if (!emailConfigured()) return { sent: false, reason: 'not_configured' };
 
   const to = addresses(record.exhibitor?.email);
@@ -261,7 +265,7 @@ export async function sendReceipt(record) {
 
   return post({
     to,
-    message: receiptMessage(record),
+    message: receiptMessage(record, event),
     idempotencyKey: `receipt-${record.id}`,
     replyTo: addresses(envValue('EMAIL_REPLY_TO')),
     bcc: addresses(envValue('EMAIL_BCC')),
@@ -272,15 +276,15 @@ export async function sendReceipt(record) {
  * The organiser's notice. Its reply-to is the buyer, so answering a question
  * about a sale reaches the exhibitor without anyone copying an address out.
  */
-export async function sendOrganiserNotice(record) {
+export async function sendOrganiserNotice(record, event) {
   if (!emailConfigured()) return { sent: false, reason: 'not_configured' };
 
-  const to = organiserAddresses();
+  const to = organiserAddresses(event);
   if (!to.length) return { sent: false, reason: 'no_address' };
 
   return post({
     to,
-    message: organiserMessage(record),
+    message: organiserMessage(record, event),
     idempotencyKey: `organiser-${record.id}`,
     replyTo: addresses(record.exhibitor?.email),
   });

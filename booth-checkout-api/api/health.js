@@ -2,6 +2,7 @@ import { allowedOrigins, json } from '../lib/http.js';
 import {
   HOLD_MINUTES, activeGateway, envValue, gatewayStatus, paypalCredentials, stripeSecretKey,
 } from '../lib/config.js';
+import { listEvents } from '../lib/events.js';
 import { listBooths } from '../lib/expofp.js';
 
 export const config = { runtime: 'nodejs' };
@@ -47,11 +48,15 @@ async function handler(request) {
   const expoId = envValue('EXPOFP_EXPO_ID');
   const stripeKey = envValue('STRIPE_SECRET_KEY');
 
+  const events = listEvents();
   const report = {
+    events: events.map((event) => [
+      event.key, event.expoId || 'MISSING expo id', event.name, event.isDefault ? '(default)' : '',
+    ].filter(Boolean).join(' · ')),
     expofp: {
       token: has('EXPOFP_API_TOKEN') ? 'set' : 'MISSING',
-      expoId: expoId || 'MISSING',
-      expoIdIsNumber: /^\d+$/.test(expoId),
+      expoId: expoId || (events.length > 1 ? `per event (${events.length})` : 'MISSING'),
+      expoIdIsNumber: events.every((event) => Number.isInteger(Number(event.expoId)) && Number(event.expoId) > 0),
       webhookSecret: has('EXPOFP_WEBHOOK_SECRET') ? 'set' : 'not set (deliveries are not verified)',
     },
     gateway: {

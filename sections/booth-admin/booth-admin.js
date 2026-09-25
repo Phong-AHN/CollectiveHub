@@ -8,6 +8,7 @@ defineModule('theme-booth-admin', () => {
     handleAgain;
     extrasController;
     boothsController;
+    events = [];
     extras = [];
     booths = [];
 
@@ -43,16 +44,64 @@ defineModule('theme-booth-admin', () => {
 
       // The list is behind the admin code, so it can only load once there is
       // one. Typing it is the natural moment to fetch.
-      this.handlePasscode = () => {
+      this.handlePasscode = (event) => {
+        if (event?.type === 'keydown') {
+          if (event.key !== 'Enter') return;
+          event.preventDefault();
+          this.loadBooths();
+          return;
+        }
         if (this.value('passcode') && !this.booths.length) this.loadBooths();
       };
       this.field('passcode')?.addEventListener('change', this.handlePasscode);
       this.field('passcode')?.addEventListener('blur', this.handlePasscode);
+      this.field('passcode')?.addEventListener('keydown', this.handlePasscode);
 
       this.handleAgain = () => this.#reset();
       this.querySelector('[data-role="again"]')?.addEventListener('click', this.handleAgain);
 
       this.#renderExtras([]);
+      this.#loadEvents();
+    }
+
+    /**
+     * More than one expo on this service means the first thing to choose is
+     * which one. With a single expo the field never appears.
+     */
+    async #loadEvents() {
+      try {
+        const response = await fetch(this.#endpoint('/events'));
+        if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+
+        const payload = await response.json();
+        this.events = Array.isArray(payload?.events) ? payload.events : [];
+        if (this.events.length < 2) return;
+
+        const select = this.querySelector('[data-role="event"]');
+        const field = this.querySelector('[data-role="event-field"]');
+        if (!select || !field) return;
+
+        select.innerHTML = '';
+        for (const event of this.events) {
+          const option = document.createElement('option');
+          option.value = event.key;
+          option.textContent = event.name || event.key;
+          option.selected = Boolean(event.isDefault);
+          select.append(option);
+        }
+        field.hidden = false;
+
+        // Switching expo invalidates the booths on screen.
+        select.addEventListener('change', () => {
+          this.booths = [];
+          this.dataset.locked = 'true';
+          this.#renderBooths();
+          if (this.value('passcode')) this.loadBooths();
+        });
+      } catch (error) {
+        // One expo, or the service is down - either way the page still works.
+        console.error('[theme-booth-admin]', error);
+      }
     }
 
     unmounted() {
@@ -60,6 +109,7 @@ defineModule('theme-booth-admin', () => {
       this.querySelector('[data-role="reload"]')?.removeEventListener('click', this.handleReload);
       this.field('passcode')?.removeEventListener('change', this.handlePasscode);
       this.field('passcode')?.removeEventListener('blur', this.handlePasscode);
+      this.field('passcode')?.removeEventListener('keydown', this.handlePasscode);
       this.querySelector('[data-role="again"]')?.removeEventListener('click', this.handleAgain);
       this.extrasController?.abort();
       this.boothsController?.abort();
@@ -84,7 +134,9 @@ defineModule('theme-booth-admin', () => {
       this.#note(this.dataset.boothsLoadingText);
 
       try {
-        const response = await fetch(`${this.#endpoint('/admin/booths')}${refresh ? '?refresh=1' : ''}`, {
+        const query = [refresh ? 'refresh=1' : null, this.#event() ? `event=${encodeURIComponent(this.#event())}` : null]
+          .filter(Boolean).join('&');
+        const response = await fetch(`${this.#endpoint('/admin/booths')}${query ? `?${query}` : ''}`, {
           headers: { 'X-Admin-Passcode': passcode },
           signal: this.boothsController.signal,
         });
@@ -97,6 +149,7 @@ defineModule('theme-booth-admin', () => {
         }
 
         this.booths = Array.isArray(body?.booths) ? body.booths : [];
+        this.dataset.locked = 'false';
         this.#renderBooths();
         const counts = body?.counts || {};
         this.#note(`${counts.available || 0} available · ${counts.on_hold || 0} on hold · ${counts.booked || 0} booked`);
@@ -105,6 +158,7 @@ defineModule('theme-booth-admin', () => {
         if (error.name === 'AbortError') return;
         console.error('[theme-booth-admin]', error.code || '', error);
         this.booths = [];
+        this.dataset.locked = 'true';
         this.#renderBooths();
         this.#note('');
         this.#message(error.code === 'passcode_wrong' || error.code === 'too_many_attempts'
@@ -181,6 +235,12 @@ defineModule('theme-booth-admin', () => {
         return;
       }
 
+      if (this.dataset.locked !== 'false') {
+        this.#message(this.dataset.lockedText, 'error');
+        this.field('passcode')?.focus();
+        return;
+      }
+
       for (const name of REQUIRED) {
         if (!this.value(name)) {
           this.#message(this.dataset.requiredText, 'error');
@@ -193,14 +253,13 @@ defineModule('theme-booth-admin', () => {
 
       const payload = {
         passcode: this.value('passcode'),
+        event: this.#event() || undefined,
         booth: this.value('booth'),
         company: this.value('company'),
         contactName: this.value('contactName'),
         email: this.value('email'),
         phone: this.value('phone'),
         website: this.value('website'),
-        bookedBy: this.value('bookedBy'),
-        note: this.value('note'),
         extras: this.#selectedExtras(),
         sendEmails: this.querySelector('[data-role="send-emails"]')?.checked !== false,
       };
@@ -287,7 +346,7 @@ defineModule('theme-booth-admin', () => {
 
     #reset() {
       // Keep the admin code and the name: whoever is booking is still here.
-      for (const name of ['booth', 'company', 'contactName', 'email', 'phone', 'website', 'note']) {
+      for (const name of ['booth', 'company', 'contactName', 'email', 'phone', 'website']) {
         const field = this.field(name);
         if (field) field.value = '';
       }
@@ -300,6 +359,11 @@ defineModule('theme-booth-admin', () => {
       // The booth just booked is no longer free: ask again rather than show a
       // list that is already wrong.
       this.loadBooths({ refresh: true });
+    }
+
+    /** The chosen expo, or nothing when this service sells for one. */
+    #event() {
+      return this.querySelector('[data-role="event"]')?.value || '';
     }
 
     #selectedExtras() {
@@ -317,7 +381,9 @@ defineModule('theme-booth-admin', () => {
       this.extrasController = new AbortController();
 
       try {
-        const response = await fetch(`${this.#endpoint('/extras')}?booth=${encodeURIComponent(booth)}`,
+        const query = [`booth=${encodeURIComponent(booth)}`,
+          this.#event() ? `event=${encodeURIComponent(this.#event())}` : null].filter(Boolean).join('&');
+        const response = await fetch(`${this.#endpoint('/extras')}?${query}`,
           { signal: this.extrasController.signal });
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 

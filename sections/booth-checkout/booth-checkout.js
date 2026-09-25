@@ -112,6 +112,8 @@ defineModule('theme-booth-checkout', () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            // Which expo this page sells for. Empty on a one-expo shop.
+            event: this.dataset.eventKey || undefined,
             booth: this.booth.values,
             // Forward everything ExpoFP sent, so the backend keeps whatever we
             // did not map into a named field.
@@ -241,8 +243,11 @@ defineModule('theme-booth-checkout', () => {
 
       try {
         const booth = this.booth.values.booth || '';
-        const query = booth ? `?booth=${encodeURIComponent(booth)}` : '';
-        const response = await fetch(`${base.replace(/\/+$/, '')}/extras${query}`);
+        const query = [
+          booth ? `booth=${encodeURIComponent(booth)}` : null,
+          this.dataset.eventKey ? `event=${encodeURIComponent(this.dataset.eventKey)}` : null,
+        ].filter(Boolean).join('&');
+        const response = await fetch(`${base.replace(/\/+$/, '')}/extras${query ? `?${query}` : ''}`);
         if (!response.ok) throw new Error(`Request failed with ${response.status}`);
 
         const payload = await response.json();

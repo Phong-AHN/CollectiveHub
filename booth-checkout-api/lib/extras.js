@@ -8,6 +8,10 @@
  * `booths` limits an add-on to certain booths - Power Plugs only fits the
  * tables against a wall. An empty or missing list means every booth.
  *
+ * With more than one expo, an event's own `extras` and `powerPlugsBooths` in
+ * EVENTS win: booth numbers repeat across expos, so one list of wall tables
+ * cannot serve both.
+ *
  * `expofpExtraId` is the numeric id from ExpoFP's list-extras, and is how a
  * paid add-on is assigned on the floor plan. Without it we fall back to
  * matching the extra by name; if the expo has no such extra, the add-on is
@@ -22,9 +26,11 @@ const POWER_PLUG_BOOTHS = ['2', '3', '4', '5', '30', '31', '32'];
  * Read per call, not once at import: EXPOFP_EXTRA_ID_POWER_PLUGS is how the
  * expo's own extra is pointed at, and POWER_PLUGS_BOOTHS which booths it fits.
  */
-function defaultExtras() {
+function defaultExtras(event) {
   const expofpExtraId = Number(process.env.EXPOFP_EXTRA_ID_POWER_PLUGS);
-  const booths = parseBooths(process.env.POWER_PLUGS_BOOTHS) || POWER_PLUG_BOOTHS;
+  const booths = parseBooths(event?.powerPlugsBooths)
+    || parseBooths(process.env.POWER_PLUGS_BOOTHS)
+    || POWER_PLUG_BOOTHS;
   return [
     {
       id: 'power-plugs',
@@ -58,8 +64,8 @@ export function extraFitsBooth(extra, boothName) {
 }
 
 /** The add-ons that can be sold for one booth. */
-export function extrasForBooth(boothName) {
-  return extrasCatalogue().filter((extra) => extraFitsBooth(extra, boothName));
+export function extrasForBooth(boothName, event) {
+  return extrasCatalogue(event).filter((extra) => extraFitsBooth(extra, boothName));
 }
 
 const clean = (value, max) => String(value ?? '').trim().slice(0, max);
@@ -82,9 +88,18 @@ function parseCatalogue(raw) {
     .filter((extra) => extra.id && extra.name && Number.isFinite(extra.price) && extra.price >= 0);
 }
 
-export function extrasCatalogue() {
+export function extrasCatalogue(event) {
+  // An event carries its catalogue as data; BOOTH_EXTRAS is the single-expo
+  // way of saying the same thing.
+  if (Array.isArray(event?.extras)) {
+    const list = parseCatalogue(JSON.stringify(event.extras));
+    if (list.length) return list;
+    console.error(`[extras] event "${event.key}" lists no usable add-ons - using the built-in catalogue`);
+    return defaultExtras(event);
+  }
+
   const raw = (process.env.BOOTH_EXTRAS || '').trim();
-  if (!raw) return defaultExtras();
+  if (!raw) return defaultExtras(event);
 
   try {
     const list = parseCatalogue(raw);
@@ -93,7 +108,7 @@ export function extrasCatalogue() {
   } catch (error) {
     console.error('[extras] BOOTH_EXTRAS is not valid JSON - using the built-in catalogue:', error.message);
   }
-  return defaultExtras();
+  return defaultExtras(event);
 }
 
 /**
@@ -103,9 +118,9 @@ export function extrasCatalogue() {
  * request that asks for Power Plugs on a booth without wall space gets a booth
  * and no add-on.
  */
-export function priceSelectedExtras(ids, boothName) {
+export function priceSelectedExtras(ids, boothName, event) {
   const wanted = [...new Set((Array.isArray(ids) ? ids : []).map((id) => String(id).trim()).filter(Boolean))];
-  const catalogue = extrasForBooth(boothName);
+  const catalogue = extrasForBooth(boothName, event);
 
   const items = catalogue.filter((extra) => wanted.includes(extra.id));
   const unknown = wanted.filter((id) => !items.some((extra) => extra.id === id));

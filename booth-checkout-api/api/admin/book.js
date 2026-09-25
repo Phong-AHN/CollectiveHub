@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { HttpError, corsHeaders, json, preflight } from '../../lib/http.js';
 import { envValue } from '../../lib/config.js';
+import { keyPrefix, resolveEvent } from '../../lib/events.js';
 import { checkBoothForSale } from '../../lib/expofp.js';
 import { priceSelectedExtras } from '../../lib/extras.js';
 import { fulfil } from '../../lib/fulfil.js';
@@ -39,6 +40,7 @@ async function handler(request) {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, cors);
 
   let claimedBooth = null;
+  let claimedPrefix = '';
   let checkoutId = null;
 
   try {
@@ -67,6 +69,7 @@ async function handler(request) {
       throw new HttpError(401, 'passcode_wrong', 'That admin code is not right.');
     }
 
+    const event = resolveEvent(body.event);
     const boothName = clean(body.booth, 60);
     if (!boothName) throw new HttpError(400, 'booth_missing', 'Which booth?');
 
@@ -84,7 +87,7 @@ async function handler(request) {
     // The booth, and its price, as ExpoFP has them - never as the form says.
     let check;
     try {
-      check = await checkBoothForSale({ booth: boothName });
+      check = await checkBoothForSale({ booth: boothName }, event);
     } catch (error) {
       const failure = new HttpError(503, 'booth_check_failed', 'Could not confirm the booth with ExpoFP.');
       failure.reason = error.envName ? `missing_env:${error.envName}`
@@ -96,7 +99,7 @@ async function handler(request) {
       throw new HttpError(409, 'booth_unavailable', check.reason);
     }
 
-    const extras = priceSelectedExtras(body.extras, check.name);
+    const extras = priceSelectedExtras(body.extras, check.name, event);
     const currency = (clean(body.currency, 3) || 'USD').toUpperCase();
 
     // Blank means "what it costs"; 0 is a real answer, for a comp or a sponsor.
@@ -110,10 +113,11 @@ async function handler(request) {
     // One booking per booth at a time: this is the same claim a paying
     // checkout takes, so an admin cannot book a booth someone is paying for.
     checkoutId = crypto.randomUUID();
-    if (!(await claimBooth(check.name, checkoutId, CLAIM_SECONDS))) {
+    if (!(await claimBooth(check.name, checkoutId, CLAIM_SECONDS, keyPrefix(event)))) {
       throw new HttpError(409, 'booth_unavailable', 'in_checkout');
     }
     claimedBooth = check.name;
+    claimedPrefix = keyPrefix(event);
 
     const bookedBy = clean(body.bookedBy, 80);
     const note = clean(body.note, 300);
@@ -122,6 +126,7 @@ async function handler(request) {
     await putCheckout(checkoutId, {
       status: 'paid',
       gateway: 'admin',
+      eventKey: event.key,
       held: false,
       booth: {
         booth: check.name,
@@ -145,7 +150,7 @@ async function handler(request) {
     const result = await fulfil(checkoutId, { reference: bookedBy ? `admin:${bookedBy}` : 'admin', transaction: note || null });
     if (!result.ok) {
       // The booth is not assigned, so let the next attempt have it back.
-      await releaseBoothClaim(check.name, checkoutId);
+      await releaseBoothClaim(check.name, checkoutId, keyPrefix(event));
       claimedBooth = null;
       throw new HttpError(502, 'expofp_write_failed', result.error || result.reason);
     }
@@ -156,6 +161,7 @@ async function handler(request) {
     return json({
       ok: true,
       checkoutId,
+      event: event.key,
       booth: check.name,
       exhibitorId: result.exhibitorId ?? saved.exhibitorId ?? null,
       amount,
@@ -169,7 +175,7 @@ async function handler(request) {
       },
     }, 200, cors);
   } catch (error) {
-    if (claimedBooth && checkoutId) await releaseBoothClaim(claimedBooth, checkoutId).catch(() => {});
+    if (claimedBooth && checkoutId) await releaseBoothClaim(claimedBooth, checkoutId, claimedPrefix).catch(() => {});
 
     if (error instanceof HttpError) {
       console.error('[admin/book]', error.code, error.detail || error.reason || '');

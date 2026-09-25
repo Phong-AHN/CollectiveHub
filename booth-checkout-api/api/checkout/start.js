@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { HttpError, corsHeaders, json, preflight, safeReturnUrl } from '../../lib/http.js';
 import { HOLD_MINUTES, activeGateway, paypalCredentials, stripeSecretKey } from '../../lib/config.js';
+import { keyPrefix, resolveEvent } from '../../lib/events.js';
 import { checkBoothForSale, setBoothOnHold } from '../../lib/expofp.js';
 import { priceSelectedExtras } from '../../lib/extras.js';
 import { sweepExpiredHolds } from '../../lib/fulfil.js';
@@ -43,6 +44,9 @@ async function handler(request) {
     const body = await request.json();
     const booth = body.booth || {};
     const exhibitor = body.exhibitor || {};
+    // Which expo this booth is on. One-expo deployments send nothing and get
+    // the only event there is.
+    const event = resolveEvent(body.event || booth.event);
 
     // The floor plan hands over a booth; without one there is nothing to sell.
     if (!clean(booth.booth) && !clean(booth.boothId)) {
@@ -75,6 +79,7 @@ async function handler(request) {
     const record = {
       status: 'pending',
       gateway,
+      eventKey: event.key,
       booth: {
         booth: clean(booth.booth),
         boothId: clean(booth.boothId),
@@ -106,7 +111,7 @@ async function handler(request) {
     // Ask ExpoFP, not the visitor: is the booth still for sale, and for how much?
     let check;
     try {
-      check = await checkBoothForSale(record.booth);
+      check = await checkBoothForSale(record.booth, event);
     } catch (error) {
       // Without ExpoFP's price the only price left is the editable one on the
       // link - so refuse rather than guess.
@@ -132,7 +137,7 @@ async function handler(request) {
 
     // Add-ons: the page sends ids, the prices come from our own catalogue -
     // and so does the answer to whether this booth may have them at all.
-    const extras = priceSelectedExtras(body.extras, check.name);
+    const extras = priceSelectedExtras(body.extras, check.name, event);
     if (extras.unknown.length) {
       console.warn('[checkout/start] ignoring add-ons not offered for booth', check.name + ':',
         extras.unknown.join(', '));
@@ -146,13 +151,13 @@ async function handler(request) {
     // One checkout per booth: the ExpoFP check and the hold below are two
     // calls, so two buyers could both pass the check - only one gets the claim.
     const claimSeconds = Math.max(HOLD_MINUTES * 60, STRIPE_MIN_EXPIRY_S) + HOLD_GRACE_MS / 1000 + 60;
-    if (!(await claimBooth(check.name, checkoutId, claimSeconds))) {
+    if (!(await claimBooth(check.name, checkoutId, claimSeconds, keyPrefix(event)))) {
       throw new HttpError(409, 'booth_unavailable', 'booth_in_checkout');
     }
 
     // Hold the booth: ExpoFP leaves it Available during checkout, so without
     // this other visitors still see it as free on the floor plan.
-    const hold = await setBoothOnHold(record.booth, true);
+    const hold = await setBoothOnHold(record.booth, true, event);
     record.held = hold.held;
     record.holdSkipped = hold.reason || null;
 
@@ -202,11 +207,11 @@ async function handler(request) {
     } catch (error) {
       // No record will be saved, so nothing would ever release this hold.
       if (record.held) {
-        await setBoothOnHold(record.booth, false).catch((releaseError) => {
+        await setBoothOnHold(record.booth, false, event).catch((releaseError) => {
           console.error('[checkout/start] could not release hold after failure', releaseError.message);
         });
       }
-      await releaseBoothClaim(check.name, checkoutId).catch(() => {});
+      await releaseBoothClaim(check.name, checkoutId, keyPrefix(event)).catch(() => {});
       throw error;
     }
 

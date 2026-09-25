@@ -19,6 +19,8 @@
       data-status-on-hold="{{ section.settings.status_on_hold }}"
       data-status-booked="{{ section.settings.status_booked }}"
       data-working-text="{{ section.settings.working_text }}"
+      data-locked-text="{{ section.settings.locked_text }}"
+      data-locked="true"
       {{#if request.design_mode }}data-design-mode="true"{{/if}}
     >
       {{#if section.settings.heading | trim() }}
@@ -36,15 +38,31 @@
       <p class="booth-admin__message body3" data-role="message" role="status" hidden></p>
 
       <form class="booth-admin__form" data-role="form" novalidate>
-        <fieldset class="booth-admin__fieldset">
-          <legend class="booth-admin__legend body2">{{ section.settings.booth_group_label }}</legend>
+        <fieldset class="booth-admin__fieldset booth-admin__fieldset--code">
+          <legend class="booth-admin__legend body2">{{ section.settings.admin_group_label }}</legend>
 
-          <div class="booth-admin__picker-head">
-            <p class="booth-admin__hint body5" data-role="picker-note">{{ section.settings.picker_hint }}</p>
-            <button class="button button--secondary booth-admin__reload" type="button" data-role="reload">
+          <div class="booth-admin__unlock">
+            <label class="field booth-admin__event" data-role="event-field" hidden>
+              <select class="field__input" name="event" data-role="event"></select>
+              <span class="field__label">{{ section.settings.event_label }}</span>
+            </label>
+
+            <label class="field">
+              <input class="field__input" type="password" name="passcode" data-required="true"
+                autocomplete="off" spellcheck="false" placeholder="{{ section.settings.passcode_label }}" />
+              <span class="field__label">{{ section.settings.passcode_label }}</span>
+            </label>
+
+            <button class="button booth-admin__reload" type="button" data-role="reload">
               {{ section.settings.reload_text }}
             </button>
           </div>
+
+          <p class="booth-admin__hint body5" data-role="picker-note">{{ section.settings.picker_hint }}</p>
+        </fieldset>
+
+        <fieldset class="booth-admin__fieldset booth-admin__fieldset--gated">
+          <legend class="booth-admin__legend body2">{{ section.settings.booth_group_label }}</legend>
 
           <ul class="booth-admin__legend-list body5">
             <li><span class="booth-admin__dot" data-status="available"></span>{{ section.settings.status_available }}</li>
@@ -64,7 +82,7 @@
           </div>
         </fieldset>
 
-        <fieldset class="booth-admin__fieldset">
+        <fieldset class="booth-admin__fieldset booth-admin__fieldset--gated">
           <legend class="booth-admin__legend body2">{{ section.settings.exhibitor_group_label }}</legend>
 
           <div class="field__group booth-admin__row booth-admin__row--split">
@@ -104,40 +122,16 @@
           </div>
         </fieldset>
 
-        <fieldset class="booth-admin__fieldset">
-          <legend class="booth-admin__legend body2">{{ section.settings.admin_group_label }}</legend>
-
-          <div class="field__group booth-admin__row booth-admin__row--split">
-            <label class="field">
-              <input class="field__input" type="text" name="bookedBy"
-                autocomplete="off" placeholder="{{ section.settings.booked_by_label }}" />
-              <span class="field__label">{{ section.settings.booked_by_label }}</span>
-            </label>
-
-            <label class="field">
-              <input class="field__input" type="password" name="passcode" data-required="true"
-                autocomplete="off" spellcheck="false" placeholder="{{ section.settings.passcode_label }}" />
-              <span class="field__label">{{ section.settings.passcode_label }}</span>
-            </label>
-          </div>
-
-          <div class="field__group booth-admin__row">
-            <label class="field">
-              <input class="field__input" type="text" name="note"
-                autocomplete="off" placeholder="{{ section.settings.note_label }}" />
-              <span class="field__label">{{ section.settings.note_label }}</span>
-            </label>
-          </div>
-
+        <div class="booth-admin__actions booth-admin__fieldset--gated">
           <label class="booth-admin__switch body3">
             <input type="checkbox" name="sendEmails" data-role="send-emails" checked />
             <span>{{ section.settings.send_emails_label }}</span>
           </label>
-        </fieldset>
 
-        <button class="button booth-admin__submit" type="submit" data-role="submit">
-          {{ section.settings.button_text }}
-        </button>
+          <button class="button booth-admin__submit" type="submit" data-role="submit">
+            {{ section.settings.button_text }}
+          </button>
+        </div>
       </form>
 
       <div class="booth-admin__result" data-role="result" hidden>
@@ -200,6 +194,12 @@
       "default": ""
     },
     {
+      "type": "text",
+      "id": "event_label",
+      "label": "t:sections.booth_admin.settings.event_label.label",
+      "default": "Event"
+    },
+    {
       "type": "header",
       "label": "t:sections.booth_admin.settings.group_header_0.label"
     },
@@ -219,13 +219,13 @@
       "type": "text",
       "id": "picker_hint",
       "label": "t:sections.booth_admin.settings.picker_hint.label",
-      "default": "Enter the admin code, then pick a booth. Only free booths can be chosen."
+      "default": "Enter the admin code to load the floor plan. Only free booths can be picked."
     },
     {
       "type": "text",
       "id": "reload_text",
       "label": "t:sections.booth_admin.settings.reload_text.label",
-      "default": "Load booths"
+      "default": "Load the floor plan"
     },
     {
       "type": "text",
@@ -321,22 +321,10 @@
     },
     {
       "type": "text",
-      "id": "booked_by_label",
-      "label": "t:sections.booth_admin.settings.booked_by_label.label",
-      "default": "Your name"
-    },
-    {
-      "type": "text",
       "id": "passcode_label",
       "label": "t:sections.booth_admin.settings.passcode_label.label",
       "info": "t:sections.booth_admin.settings.passcode_label.info",
       "default": "Admin code"
-    },
-    {
-      "type": "text",
-      "id": "note_label",
-      "label": "t:sections.booth_admin.settings.note_label.label",
-      "default": "Internal note (bank transfer, sponsor…)"
     },
     {
       "type": "text",
@@ -359,6 +347,12 @@
     {
       "type": "header",
       "label": "t:sections.booth_admin.settings.group_header_3.label"
+    },
+    {
+      "type": "text",
+      "id": "locked_text",
+      "label": "t:sections.booth_admin.settings.locked_text.label",
+      "default": "Enter the admin code first."
     },
     {
       "type": "text",

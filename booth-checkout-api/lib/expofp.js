@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { BASE_URL, FIELDS, PATHS, RESPONSE_PATHS, assertConfigured, isConfigured } from './expofp-endpoints.js';
 import { requiredEnv } from './config.js';
+import { defaultEvent, expoIdOf } from './events.js';
 
 async function call(operation, body) {
   const path = assertConfigured(operation);
@@ -43,14 +44,17 @@ function dig(object, pathParts) {
 // add-exhibitor-booth's exhibitorId, which the reference wants as a string.
 const asId = (value) => (/^\d+$/.test(String(value ?? '').trim()) ? Number(value) : value);
 
-const expoId = () => asId(requiredEnv('EXPOFP_EXPO_ID'));
+// Every call belongs to one expo. Callers that have not been told which pass
+// nothing and get the default event, which is how a single-expo deployment
+// behaves - and how it behaved before events existed.
+const expoId = (event) => asId(expoIdOf(event || defaultEvent()));
 
 // ---- booths: documented bodies ---------------------------------------------
 
 /** get-booth { token, eventId, name }. Null when the expo has no such booth. */
-export async function getBooth(name) {
+export async function getBooth(name, event) {
   try {
-    return await call('getBooth', { eventId: expoId(), name: String(name) });
+    return await call('getBooth', { eventId: expoId(event), name: String(name) });
   } catch (error) {
     if (error.status === 404) return null;
     throw error;
@@ -58,8 +62,8 @@ export async function getBooth(name) {
 }
 
 /** list-booths { token, expoId } - note expoId here, eventId on the others. */
-export async function listBooths() {
-  const payload = await call('listBooths', { expoId: expoId() });
+export async function listBooths(event) {
+  const payload = await call('listBooths', { expoId: expoId(event) });
   return Array.isArray(payload) ? payload : [];
 }
 
@@ -68,10 +72,10 @@ export async function listBooths() {
  * update-booth look booths up by. Taken from the hand-over link when it
  * carries one; otherwise mapped from ExpoFP's numeric booth id.
  */
-export async function resolveBoothName(booth) {
+export async function resolveBoothName(booth, event) {
   if (booth.booth) return String(booth.booth);
   if (!booth.boothId) return null;
-  const match = (await listBooths()).find((b) => String(b.id) === String(booth.boothId));
+  const match = (await listBooths(event)).find((b) => String(b.id) === String(booth.boothId));
   return match ? String(match.name) : null;
 }
 
@@ -81,11 +85,11 @@ export async function resolveBoothName(booth) {
  * The price comes from ExpoFP, never from the visitor: the hand-over link puts
  * the price on the query string, where anyone can edit it.
  */
-export async function checkBoothForSale(booth) {
-  const name = await resolveBoothName(booth);
+export async function checkBoothForSale(booth, event) {
+  const name = await resolveBoothName(booth, event);
   if (!name) return { ok: false, reason: 'booth_unknown' };
 
-  const info = await getBooth(name);
+  const info = await getBooth(name, event);
   if (!info) return { ok: false, reason: 'booth_unknown', name };
   if (info.isSpecialSection) return { ok: false, reason: 'booth_not_for_sale', name };
   if (info.isOnHold) return { ok: false, reason: 'booth_on_hold', name };
@@ -105,8 +109,8 @@ export async function checkBoothForSale(booth) {
  * hold flag, so each booth is read individually - in parallel, because 54
  * round trips one after another is a long wait for a page.
  */
-export async function listBoothsWithStatus({ concurrency = 8 } = {}) {
-  const booths = await listBooths();
+export async function listBoothsWithStatus({ concurrency = 8, event } = {}) {
+  const booths = await listBooths(event);
   const detailed = new Array(booths.length);
 
   let next = 0;
@@ -116,7 +120,7 @@ export async function listBoothsWithStatus({ concurrency = 8 } = {}) {
       next += 1;
       const booth = booths[index];
       try {
-        detailed[index] = describeBooth(booth, await getBooth(booth.name));
+        detailed[index] = describeBooth(booth, await getBooth(booth.name, event));
       } catch (error) {
         // One unreadable booth must not cost the organiser the whole list.
         console.error('[expofp] could not read booth', booth.name, error.message);
@@ -168,7 +172,7 @@ function describeBooth(listed, full) {
  * the whole checkout unless we hold it. Best effort: a failure is recorded on
  * the checkout rather than blocking the sale.
  */
-export async function setBoothOnHold(booth, onHold) {
+export async function setBoothOnHold(booth, onHold, event) {
   if (!isConfigured('setBoothStatus')) {
     console.warn('[expofp] setBoothStatus is not configured - booth stays Available during checkout');
     return { held: false, reason: 'not_configured' };
@@ -181,7 +185,7 @@ export async function setBoothOnHold(booth, onHold) {
   }
 
   try {
-    await call('setBoothStatus', { eventId: expoId(), name, isOnHold: Boolean(onHold) });
+    await call('setBoothStatus', { eventId: expoId(event), name, isOnHold: Boolean(onHold) });
     return { held: Boolean(onHold) };
   } catch (error) {
     console.error('[expofp] hold failed', error.message, error.payload || '');
@@ -204,9 +208,9 @@ function normalizeWebsite(value) {
 }
 
 /** get-exhibitor-id { token, eventId, externalId } -> id, or null when unknown (404). */
-export async function getExhibitorId(externalId) {
+export async function getExhibitorId(externalId, event) {
   try {
-    const payload = await call('getExhibitorId', { eventId: expoId(), externalId: String(externalId) });
+    const payload = await call('getExhibitorId', { eventId: expoId(event), externalId: String(externalId) });
     return payload?.id ?? null;
   } catch (error) {
     if (error.status === 404) return null;
@@ -224,9 +228,9 @@ export async function getExhibitorId(externalId) {
  * The contact's email goes to privateEmail, which visitors never see -
  * publicEmail is left for the exhibitor to fill in themselves.
  */
-export async function addExhibitor(exhibitor, externalId, { adminNotes } = {}) {
+export async function addExhibitor(exhibitor, externalId, { adminNotes, event } = {}) {
   const body = {
-    eventId: expoId(),
+    eventId: expoId(event),
     name: String(exhibitor.company || '').trim().slice(0, 100),
     externalId: String(externalId),
     contactName: exhibitor.contactName || undefined,
@@ -259,10 +263,10 @@ export async function addExhibitor(exhibitor, externalId, { adminNotes } = {}) {
  * "Already added" when the exhibitor is on the booth already; that makes a
  * retry harmless.
  */
-export async function addExhibitorBooth(exhibitorId, booth) {
+export async function addExhibitorBooth(exhibitorId, booth, event) {
   if (!booth.booth) throw new Error('No booth name to assign - add-exhibitor-booth takes the booth key');
   return call('addExhibitorBooth', {
-    eventId: expoId(),
+    eventId: expoId(event),
     boothName: String(booth.booth),
     exhibitorId: String(exhibitorId),
   });
@@ -276,8 +280,8 @@ export async function addExhibitorBooth(exhibitorId, booth) {
  * power). Either id is the `extraId` that add-exhibitor-extra takes, so the
  * two are merged here - Power Plugs, for one, is a booth extra.
  */
-export async function listExtras() {
-  const data = await call('listExtras', { eventId: expoId() });
+export async function listExtras(event) {
+  const data = await call('listExtras', { eventId: expoId(event) });
   if (Array.isArray(data)) return data;
   return [
     ...(Array.isArray(data?.extras) ? data.extras.map((e) => ({ ...e, kind: 'exhibitor' })) : []),
@@ -324,14 +328,14 @@ async function resolveExtraId(extra, catalogue) {
  * more, and what was bought is written into the exhibitor's admin notes either
  * way. Set EXPOFP_ASSIGN_EXTRAS=0 to stop assigning altogether.
  */
-export async function assignExtras(exhibitorId, extras = []) {
+export async function assignExtras(exhibitorId, extras = [], event) {
   if (!extras.length) return { assigned: 0, skipped: 'none' };
   if (process.env.EXPOFP_ASSIGN_EXTRAS === '0') return { assigned: 0, skipped: 'disabled' };
 
   let catalogue = [];
   let held = [];
   try {
-    [catalogue, held] = await Promise.all([listExtras(), listExhibitorExtras(exhibitorId)]);
+    [catalogue, held] = await Promise.all([listExtras(event), listExhibitorExtras(exhibitorId)]);
   } catch (error) {
     console.error('[expofp] could not read the expo extras:', error.message);
     return { assigned: 0, skipped: 'lookup_failed' };

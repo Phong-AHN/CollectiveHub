@@ -1,4 +1,5 @@
 import { sendOrganiserNotice, sendReceipt } from './email.js';
+import { defaultEvent, keyPrefix, resolveEvent } from './events.js';
 import { addExhibitor, addExhibitorBooth, assignExtras, setBoothOnHold } from './expofp.js';
 import {
   claimFulfilment, clearRetry, dueHolds, dueRetries, getCheckout, patchCheckout,
@@ -12,6 +13,21 @@ const MAX_ATTEMPTS = 12;
 
 // Money is in (or the booth is being assigned): never put these back on sale.
 const PAID_STATES = new Set(['paid', 'fulfilment_failed', 'fulfilled']);
+
+/**
+ * The expo a checkout belongs to. Kept on the record at checkout time, so a
+ * fulfilment months later still writes to the right floor plan even if the
+ * default event has moved on. An event that no longer exists falls back to the
+ * default rather than stranding a paid booth.
+ */
+function eventOf(record) {
+  try {
+    return resolveEvent(record?.eventKey);
+  } catch (error) {
+    console.error('[fulfil] unknown event on checkout', record?.id, record?.eventKey, '- using the default');
+    return defaultEvent();
+  }
+}
 
 /** Internal note on the exhibitor - adminNotes is never shown to visitors. */
 function adminNoteFor(record, payment) {
@@ -51,8 +67,8 @@ function adminNoteFor(record, payment) {
  * Best effort: the booth is already assigned and paid for, so a failure here
  * is cosmetic - record it and let the retry queue come back to it.
  */
-async function clearHoldAfterAssignment(checkoutId, record) {
-  const result = await setBoothOnHold(record.booth, false);
+async function clearHoldAfterAssignment(checkoutId, record, event) {
+  const result = await setBoothOnHold(record.booth, false, event);
   const cleared = !result.reason;
 
   await patchCheckout(checkoutId, { holdCleared: cleared });
@@ -88,10 +104,10 @@ const MAILINGS = [
  * goes back on the retry queue: the booth is already theirs, only the paperwork
  * is late.
  */
-async function sendMailingOnce(checkoutId, record, mailing) {
+async function sendMailingOnce(checkoutId, record, mailing, event) {
   if (record[mailing.sentAt] || record[mailing.skipped]) return true;
 
-  const result = await mailing.send(record);
+  const result = await mailing.send(record, event);
   if (result.sent) {
     await patchCheckout(checkoutId, {
       [mailing.sentAt]: Date.now(), [mailing.id]: result.id, [mailing.error]: null,
@@ -112,13 +128,13 @@ async function sendMailingOnce(checkoutId, record, mailing) {
 }
 
 /** Both emails. Returns true only when neither has anything left to try. */
-async function sendReceiptOnce(checkoutId, record) {
+async function sendReceiptOnce(checkoutId, record, event) {
   let done = true;
   let current = record;
   for (const mailing of MAILINGS) {
     // Re-read between sends: the first one just wrote its own flags, and the
     // second must not overwrite them from a stale copy.
-    const sent = await sendMailingOnce(checkoutId, current, mailing);
+    const sent = await sendMailingOnce(checkoutId, current, mailing, event);
     done = done && sent;
     current = { ...current, ...(await getCheckout(checkoutId)) };
   }
@@ -128,13 +144,14 @@ async function sendReceiptOnce(checkoutId, record) {
 export async function fulfil(checkoutId, payment = {}) {
   const record = await getCheckout(checkoutId);
   if (!record) return { ok: false, reason: 'unknown_checkout' };
+  const event = eventOf(record);
   if (record.status === 'fulfilled') {
     // Everything is done except, possibly, clearing the hold flag - so a
     // booth left reading On Hold heals itself on the next retry sweep.
     const holdCleared = !record.held || record.holdCleared
       ? true
-      : await clearHoldAfterAssignment(checkoutId, record);
-    const emailed = await sendReceiptOnce(checkoutId, record);
+      : await clearHoldAfterAssignment(checkoutId, record, event);
+    const emailed = await sendReceiptOnce(checkoutId, record, event);
 
     // Only stop retrying once there is nothing left to do.
     if (holdCleared && emailed) await clearRetry(checkoutId);
@@ -161,28 +178,28 @@ export async function fulfil(checkoutId, payment = {}) {
     await untrackHold(checkoutId);
 
     const exhibitorId = record.exhibitorId
-      || await addExhibitor(record.exhibitor, checkoutId, { adminNotes: adminNoteFor(record, payment) });
+      || await addExhibitor(record.exhibitor, checkoutId, { adminNotes: adminNoteFor(record, payment), event });
 
     // Keep the id before assigning, so a failure halfway does not create a
     // second exhibitor on the next retry.
     await patchCheckout(checkoutId, { exhibitorId });
 
-    await addExhibitorBooth(exhibitorId, record.booth);
+    await addExhibitorBooth(exhibitorId, record.booth, event);
 
     // Add-ons are recorded in the exhibitor's admin notes regardless; this
     // also puts them on the ExpoFP record where that is switched on.
-    const extras = await assignExtras(exhibitorId, record.extras);
+    const extras = await assignExtras(exhibitorId, record.extras, event);
     if (record.extras?.length) await patchCheckout(checkoutId, { extrasAssigned: extras.assigned });
 
     // Assigned - now, and only now, the booth can stop reading as On Hold.
-    const holdCleared = record.held ? await clearHoldAfterAssignment(checkoutId, record) : true;
+    const holdCleared = record.held ? await clearHoldAfterAssignment(checkoutId, record, event) : true;
 
     // The booth is theirs: tell them so, with what they bought.
     const emailed = await sendReceiptOnce(checkoutId, {
       ...record,
       exhibitorId,
       paymentReference: payment.reference || record.paymentReference || null,
-    });
+    }, event);
 
     if (holdCleared && emailed) await clearRetry(checkoutId);
     await patchCheckout(checkoutId, {
@@ -249,10 +266,11 @@ export async function releaseHold(checkoutId) {
   // Paid - even if the ExpoFP write is still pending - means the booth is sold.
   if (PAID_STATES.has(record.status)) return { ok: true, kept: true };
 
+  const event = eventOf(record);
   const released = claimed && record.held;
-  if (released) await setBoothOnHold(record.booth, false);
+  if (released) await setBoothOnHold(record.booth, false, event);
   // Let the next buyer start a checkout for this booth straight away.
-  if (record.booth?.booth) await releaseBoothClaim(record.booth.booth, checkoutId);
+  if (record.booth?.booth) await releaseBoothClaim(record.booth.booth, checkoutId, keyPrefix(event));
 
   if (record.status !== 'expired') {
     await patchCheckout(checkoutId, { status: 'expired', held: false, expiredAt: Date.now() });

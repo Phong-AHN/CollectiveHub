@@ -7,6 +7,7 @@
       class="booth-checkout__inner {{ section.settings | class_list() }}"
       data-section-id="{{ section.id }}"
       data-api-base="{{ section.settings.api_base_url }}"
+      data-event-key="{{ section.settings.event_key }}"
       data-param-booth="{{ section.settings.param_booth }}"
       data-param-type="{{ section.settings.param_type }}"
       data-param-size="{{ section.settings.param_size }}"
@@ -140,11 +141,26 @@
       "label": "t:sections.booth_checkout.settings.heading_typography.label",
       "default": "title2",
       "options": [
-        { "value": "title0", "label": "Title 0" },
-        { "value": "title1", "label": "Title 1" },
-        { "value": "title2", "label": "Title 2" },
-        { "value": "title3", "label": "Title 3" },
-        { "value": "title4", "label": "Title 4" }
+        {
+          "value": "title0",
+          "label": "Title 0"
+        },
+        {
+          "value": "title1",
+          "label": "Title 1"
+        },
+        {
+          "value": "title2",
+          "label": "Title 2"
+        },
+        {
+          "value": "title3",
+          "label": "Title 3"
+        },
+        {
+          "value": "title4",
+          "label": "Title 4"
+        }
       ]
     },
     {
@@ -163,6 +179,13 @@
       "id": "api_base_url",
       "label": "t:sections.booth_checkout.settings.api_base_url.label",
       "info": "t:sections.booth_checkout.settings.api_base_url.info",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "event_key",
+      "label": "t:sections.booth_checkout.settings.event_key.label",
+      "info": "t:sections.booth_checkout.settings.event_key.info",
       "default": ""
     },
     {

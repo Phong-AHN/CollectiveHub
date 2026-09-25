@@ -256,3 +256,28 @@ theme-booth-admin[data-state='working'] .booth-admin__form {
   margin: 0;
   font-weight: 600;
 }
+
+/* ---- nothing before the code -------------------------------------------- */
+.booth-admin__unlock {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 749px) {
+  .booth-admin__unlock {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booth-admin__actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+theme-booth-admin[data-locked='true'] .booth-admin__fieldset--gated {
+  display: none;
+}
