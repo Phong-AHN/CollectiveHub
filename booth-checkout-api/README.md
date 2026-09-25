@@ -285,13 +285,16 @@ travels in URLs and in Redis keys:
 
 ```
 EVENTS={"ch25":{"expoId":36986,"name":"Collective Hub 9/25","floorPlan":"https://eventcollectivehub9-25.expofp.com","powerPlugsBooths":["2","3","4","5","30","31","32"]},
-        "ch26":{"expoId":37078,"name":"Collective Hub 2026","floorPlan":"https://…","organiser":"btc2026@…"}}
+        "ch2":{"expoId":37078,"name":"Collective Hub 2","floorPlan":"https://collectivehub2.expofp.com","extras":[]}}
 DEFAULT_EVENT=ch25
 ```
 
 An entry may carry `expoId` (required), `name`, `floorPlan`, `organiser`,
 `extras` and `powerPlugsBooths`; anything it leaves out falls back to the
-single-expo variable, so settings two expos share are written once.
+single-expo variable, so settings two expos share are written once. An empty
+`extras: []` is an answer rather than an omission: that expo sells no add-ons -
+which is right for one whose ExpoFP extras have not been set up, since ExpoFP
+only assigns an extra that exists on the expo.
 
 Every request carries the key - `?event=ch26` on `GET /api/extras`,
 `/api/admin/booths` and `/api/events`, `event` in the body of

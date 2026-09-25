@@ -92,6 +92,10 @@ export function extrasCatalogue(event) {
   // An event carries its catalogue as data; BOOTH_EXTRAS is the single-expo
   // way of saying the same thing.
   if (Array.isArray(event?.extras)) {
+    // An empty list is an answer, not an omission: an expo that sells no
+    // add-ons says so with [] and gets none.
+    if (!event.extras.length) return [];
+
     const list = parseCatalogue(JSON.stringify(event.extras));
     if (list.length) return list;
     console.error(`[extras] event "${event.key}" lists no usable add-ons - using the built-in catalogue`);
