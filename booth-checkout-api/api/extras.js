@@ -36,6 +36,9 @@ async function handler(request) {
   // on sale. Throttled in Redis, so this costs nothing on a busy page.
   await sweepIfDue({ limit: 3, everySeconds: 60 });
 
+  // Not cached, for two reasons: a price change has to show at once - a cached
+  // list is a price the page quotes and the server will not charge - and an
+  // edge cache hit skips the sweep above, wasting the visit.
   const extras = booth ? extrasForBooth(booth, event) : extrasCatalogue(event);
 
   return json({
@@ -43,7 +46,7 @@ async function handler(request) {
     event: event.key,
     booth: booth || null,
     extras,
-  }, 200, { ...cors, 'Cache-Control': 'public, max-age=60' });
+  }, 200, { ...cors, 'Cache-Control': 'no-store' });
 }
 
 // Vercel runs /api files as Web handlers only through this shape (or named

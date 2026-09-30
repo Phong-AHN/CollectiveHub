@@ -150,7 +150,9 @@ async function handler(request) {
 
     // One checkout per booth: the ExpoFP check and the hold below are two
     // calls, so two buyers could both pass the check - only one gets the claim.
-    const claimSeconds = Math.max(HOLD_MINUTES * 60, STRIPE_MIN_EXPIRY_S) + HOLD_GRACE_MS / 1000 + 60;
+    // The claim lasts exactly as long as the hold, so a booth that is free on
+    // the floor plan is free here too.
+    const claimSeconds = HOLD_MINUTES * 60 + HOLD_GRACE_MS / 1000;
     if (!(await claimBooth(check.name, checkoutId, claimSeconds, keyPrefix(event)))) {
       throw new HttpError(409, 'booth_unavailable', 'booth_in_checkout');
     }
@@ -187,9 +189,11 @@ async function handler(request) {
         });
         record.stripeSessionId = session.id;
         paymentUrl = session.url;
-        // Stripe refuses payment once the session expires, so holding until
-        // just after that makes a late payment on a released booth impossible.
-        holdUntil = (session.expiresAt || expiresAt) * 1000 + HOLD_GRACE_MS;
+        // Stripe will not open a session for less than 30 minutes, so the
+        // payment window outlives a shorter hold. Remember when it really
+        // closes: releasing the booth means expiring this session first.
+        record.paymentWindowEndsAt = (session.expiresAt || expiresAt) * 1000;
+        holdUntil = Date.now() + HOLD_MINUTES * 60_000;
       } else {
         const order = await createOrder({
           checkoutId,

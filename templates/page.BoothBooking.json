@@ -12,7 +12,7 @@
         "embed_mode": "iframe",
         "error_text": "The floor plan could not be loaded.",
         "fallback_text": "Open the floor plan in a new tab",
-        "floorplan_url": "https://eventcollectivehub9-25.expofp.com",
+        "floorplan_url": "https://eventcollectivehub3.expofp.com",
         "full_width": false,
         "heading": "Pick Your Booth",
         "heading_typography": "title2",
@@ -54,6 +54,7 @@
       },
       "disabled": false,
       "blocks": {},
+      "custom_css": [],
       "name": "t:sections.booth_booking.presets.presets_0.name"
     },
     "178938804928726d012a": {

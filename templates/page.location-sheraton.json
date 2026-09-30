@@ -104,12 +104,12 @@
             "17890238875303b8abb2": {
               "type": "button",
               "settings": {
-                "link": "shopline://url/pages/boothbooking",
+                "link": "shopline://url/pages/boothbooking-sheraton",
                 "open_in_new_tab": false,
                 "style": "primary",
                 "text": "VIEW AND BOOK TABLES"
               },
-              "disabled": true,
+              "disabled": false,
               "blocks": {}
             },
             "1789023887530baa7b81": {
@@ -133,7 +133,7 @@
             "1789023887530f2e4d30": {
               "type": "description",
               "settings": {
-                "content": "Prime spots are selling out fast. Lock in your table now to showcase your inventory to thousands of ready-to-buy collectors.",
+                "content": "Prime spots at the Grand Imperial Ballroom are selling out fast. Lock in your table now to showcase your inventory to thousands of ready-to-buy collectors.",
                 "spacing": {
                   "@media (--mobile)": {
                     "padding-block-end": "0px",

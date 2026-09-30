@@ -3587,7 +3587,7 @@
         "auto_switch": true,
         "desktop_height": "fit-first-image",
         "image_full_screen": true,
-        "mobile_height": "fit-first-image",
+        "mobile_height": "500px",
         "mobile_text_layout": "text-in-image",
         "pagination_style": "progress",
         "switch_interval": 7
@@ -3616,7 +3616,7 @@
                     "padding-block-end": "30px",
                     "padding-block-start": "30px",
                     "padding-inline-end": "70px",
-                    "padding-inline-start": "70px"
+                    "padding-inline-start": "30px"
                   },
                   "padding-block-end": "40px",
                   "padding-block-start": "40px",
@@ -3644,6 +3644,7 @@
                   "settings": {
                     "text": "Collective Hub Center",
                     "text_align": "left",
+                    "text_align_mobile": "left",
                     "text_tag": "h1",
                     "typography": "title1"
                   },
@@ -3678,8 +3679,8 @@
         "17901503266293f5b8b5"
       ],
       "custom_css": [
-        "h1 {color: white; letter-spacing: -5.5px;}",
-        ".rte {letter-spacing: -5.5px;}"
+        " h1 {color: white; }",
+        "@media (min-width 959px) {h1 {color: white; letter-spacing: -5.5px; } .rte {letter-spacing: -5.5px; }}"
       ],
       "name": "t:sections.slideshow.presets.presets_0.name"
     },

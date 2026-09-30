@@ -173,6 +173,15 @@ than fall back to the editable price.
 A booth left On Hold reads as unavailable to everyone, so five things release
 one, in the order they usually get there first:
 
+`HOLD_MINUTES` (10) is the whole of it, whatever the gateway's own clock says.
+Stripe refuses to open a Checkout Session for less than 30 minutes, so a
+shorter hold would otherwise leave a session that can still be paid for a booth
+already back on sale: releasing a Stripe checkout therefore **expires its
+session first**, and keeps the booth if Stripe says the session was paid in the
+meantime, or if Stripe cannot be reached while the session is still alive.
+PayPal has no expiry to set, so a late approval is caught at capture time: the
+booth is checked again and the money is not taken if it has gone.
+
 1. **The buyer cancels or comes back unpaid** - released on the spot.
 2. **Stripe's `checkout.session.expired` webhook**, about 31 minutes after the
    session opened. This is the main automatic path, and it depends on

@@ -1,4 +1,5 @@
 import { redirect, withParam } from '../../lib/http.js';
+import { resolveEvent } from '../../lib/events.js';
 import { checkBoothForSale, setBoothOnHold } from '../../lib/expofp.js';
 import { captureIdOf, captureOrder } from '../../lib/paypal.js';
 import { expireSession, retrieveSession } from '../../lib/stripe.js';
@@ -85,12 +86,15 @@ async function settlePaypal(checkoutId, record) {
   // Nothing is taken until we capture, so if the hold already ran out, check
   // the booth again and refuse to capture when someone else has it now.
   if (record.status === 'expired') {
-    const check = await checkBoothForSale(record.booth);
+    // The booth belongs to one expo; a late approval must be checked against
+    // that one, not against whichever event happens to be the default.
+    const event = resolveEvent(record.eventKey);
+    const check = await checkBoothForSale(record.booth, event);
     if (!check.ok) {
       console.warn('[checkout/return] late PayPal approval, booth gone:', checkoutId, check.reason);
       return 'unavailable';
     }
-    const hold = await setBoothOnHold(record.booth, true);
+    const hold = await setBoothOnHold(record.booth, true, event);
     await patchCheckout(checkoutId, { status: 'pending', held: hold.held });
     // If the capture below fails, the sweep releases this again.
     if (hold.held) await trackHold(checkoutId, Date.now() + 10 * 60_000);

@@ -1,10 +1,11 @@
 import { sendOrganiserNotice, sendReceipt } from './email.js';
 import { defaultEvent, keyPrefix, resolveEvent } from './events.js';
 import { readCache, writeCache } from './store.js';
+import { expireSession, retrieveSession } from './stripe.js';
 import { addExhibitor, addExhibitorBooth, assignExtras, setBoothOnHold } from './expofp.js';
 import {
   claimFulfilment, clearRetry, dueHolds, dueRetries, getCheckout, patchCheckout,
-  releaseBoothClaim, releaseClaim, scheduleRetry, untrackHold,
+  releaseBoothClaim, releaseClaim, scheduleRetry, trackHold, untrackHold,
 } from './store.js';
 
 // After a failed ExpoFP write: try again in 1 min, 5, 15, 1 h, 3 h, 6 h, 12 h,
@@ -255,6 +256,26 @@ export async function retryFailedFulfilments({ limit = 20, all = false } = {}) {
   return results;
 }
 
+/**
+ * Shuts the Stripe payment window before its booth goes back on sale.
+ *
+ * The hold may be shorter than the session - Stripe's minimum life is 30
+ * minutes - and a session that outlives its hold is a booth someone can still
+ * pay for after another buyer has taken it. Expiring it makes Stripe refuse
+ * the payment instead.
+ */
+async function closePaymentWindow(record) {
+  try {
+    const session = await retrieveSession(record.stripeSessionId);
+    if (session?.status === 'complete' || session?.payment_status === 'paid') return 'paid';
+    if (session?.status !== 'expired') await expireSession(record.stripeSessionId);
+    return 'closed';
+  } catch (error) {
+    console.error('[hold] could not close the Stripe session for', record.id, '-', error.message);
+    return 'unreachable';
+  }
+}
+
 /** Drops the hold for a checkout that was abandoned or failed. */
 export async function releaseHold(checkoutId) {
   // Whoever takes the hold off the schedule is the one that releases it, so
@@ -268,6 +289,25 @@ export async function releaseHold(checkoutId) {
   if (PAID_STATES.has(record.status)) return { ok: true, kept: true };
 
   const event = eventOf(record);
+
+  if (claimed && record.gateway === 'stripe' && record.stripeSessionId) {
+    const closed = await closePaymentWindow(record);
+
+    if (closed === 'paid') {
+      // Paid in the seconds before this ran: a sale, not a lapse. The webhook
+      // fulfils it; keep the hold and look again shortly in case it does not.
+      await trackHold(checkoutId, Date.now() + 5 * 60_000);
+      return { ok: true, kept: true, reason: 'paid_just_now' };
+    }
+
+    // Stripe unreachable: releasing now would leave a payable session on a
+    // booth back on sale. Wait - unless the session has run out on its own.
+    if (closed === 'unreachable' && Date.now() < Number(record.paymentWindowEndsAt || 0)) {
+      await trackHold(checkoutId, Date.now() + 2 * 60_000);
+      return { ok: true, kept: true, reason: 'payment_window_open' };
+    }
+  }
+
   const released = claimed && record.held;
   if (released) await setBoothOnHold(record.booth, false, event);
   // Let the next buyer start a checkout for this booth straight away.

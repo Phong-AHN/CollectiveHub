@@ -6,7 +6,7 @@
         "api_base_url": "https://collective-hub-umber.vercel.app/api",
         "color_scheme": "scheme-2",
         "currency": "USD",
-        "floorplan_url": "https://eventcollectivehub9-25.expofp.com",
+        "floorplan_url": "https://eventcollectivehub3.expofp.com",
         "param_booth": "booth",
         "param_currency": "currency",
         "param_price": "price",
